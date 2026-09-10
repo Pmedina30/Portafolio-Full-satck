@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In - PyStack{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>Sign In</h2>
+      <p>Enter your credentials to access your account</p>
+    </div>
+
+    <!-- Demo Credentials Helper Box -->
+    <div class="demo-box">
+      <div class="demo-header">
+        <span>Demo Credentials</span>
+        <button type="button" class="demo-fill-btn" id="fillDemoBtn">Auto-fill</button>
+      </div>
+      <div class="demo-credentials">
+        <div>Email: <strong>demo@example.com</strong></div>
+        <div>Password: <strong>password123</strong></div>
+      </div>
+    </div>
+
+    <form action="{{ url_for('login') }}{% if request.args.get('next') %}?next={{ request.args.get('next') }}{% endif %}" method="POST">
+      <div class="form-group">
+        <label for="email" class="form-label">Email Address</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          class="form-input" 
+          placeholder="name@example.com" 
+          value="{{ email or '' }}" 
+          required 
+          autocomplete="email"
+          autofocus
+        >
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Password</label>
+        <div class="input-wrapper">
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            class="form-input" 
+            placeholder="••••••••" 
+            required 
+            autocomplete="current-password"
+          >
+          <button type="button" class="password-toggle" id="togglePassword" aria-label="Toggle password visibility">👁️</button>
+        </div>
+      </div>
+
+      <div class="form-footer-actions">
+        <label class="remember-label">
+          <input type="checkbox" name="remember" value="1">
+          <span>Remember me</span>
+        </label>
+        <a href="#" style="font-size: 0.85rem;" onclick="alert('In this demo app, you can use the pre-configured demo credentials or register a new account.'); return false;">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+    </form>
+
+    <div class="auth-bottom-text">
+      Don't have an account yet? <a href="{{ url_for('register') }}">Create one here</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

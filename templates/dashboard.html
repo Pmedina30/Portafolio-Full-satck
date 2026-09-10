@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - PyStack{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+  <div class="container">
+    
+    <!-- Welcome Header -->
+    <div class="welcome-banner">
+      <h1>Hello, {{ user.name }} 👋</h1>
+      <p>You have successfully authenticated into your secure Python application session.</p>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="dash-stat-cards">
+      <div class="mini-stat">
+        <div class="mini-stat-value">Active</div>
+        <div class="mini-stat-label">Session Status</div>
+      </div>
+      <div class="mini-stat">
+        <div class="mini-stat-value">SQLite</div>
+        <div class="mini-stat-label">Database Connected</div>
+      </div>
+      <div class="mini-stat">
+        <div class="mini-stat-value">PBKDF2</div>
+        <div class="mini-stat-label">Password Protection</div>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <!-- Account Details Card -->
+      <div class="dash-card">
+        <div class="dash-card-header">
+          <h2 class="dash-card-title">User Account Profile</h2>
+          <span style="font-size: 0.8rem; background: #e0e7ff; color: var(--primary); padding: 0.2rem 0.6rem; border-radius: var(--radius-full); font-weight: 600;">Verified</span>
+        </div>
+        <div>
+          <div class="user-profile-row">
+            <span class="user-profile-label">User ID:</span>
+            <span class="user-profile-val">#{{ user.id }}</span>
+          </div>
+          <div class="user-profile-row">
+            <span class="user-profile-label">Full Name:</span>
+            <span class="user-profile-val">{{ user.name }}</span>
+          </div>
+          <div class="user-profile-row">
+            <span class="user-profile-label">Email Address:</span>
+            <span class="user-profile-val">{{ user.email }}</span>
+          </div>
+          <div class="user-profile-row">
+            <span class="user-profile-label">Registration Date:</span>
+            <span class="user-profile-val">{{ user.created_at }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions Card -->
+      <div class="dash-card">
+        <div class="dash-card-header">
+          <h2 class="dash-card-title">Quick Actions</h2>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <a href="{{ url_for('home') }}" class="btn btn-secondary btn-block">Explore Landing Page</a>
+          <a href="{{ url_for('logout') }}" class="btn btn-primary btn-block" style="background: var(--danger);">Sign Out</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to PyStack - Modern Python Web Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-badge">
+      <span>🚀</span>
+      <span>Modern Full-Stack Python Starter</span>
+    </div>
+
+    <h1 class="hero-title">
+      Build and Ship Faster with <span class="text-gradient">Python & Flask</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      A lightweight, modular, and responsive web application boilerplate featuring user authentication,
+      session security, SQLite persistence, and modern UI design.
+    </p>
+
+    <div class="hero-actions">
+      {% if current_user %}
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Go to Dashboard &rarr;</a>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="btn btn-primary">Sign In to Account &rarr;</a>
+        <a href="{{ url_for('register') }}" class="btn btn-secondary">Create Free Account</a>
+      {% endif %}
+    </div>
+
+    <!-- Code Mockup Card -->
+    <div class="mockup-card">
+      <div class="mockup-header">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+        <span style="margin-left: 0.5rem; font-size: 0.8rem; color: #64748b; font-family: monospace;">app.py</span>
+      </div>
+      <div class="mockup-body">
+<pre><code><span class="mockup-comment"># Clean, simple Python routing</span>
+<span class="mockup-keyword">from</span> flask <span class="mockup-keyword">import</span> Flask, render_template
+
+app = Flask(__name__)
+
+<span class="mockup-keyword">@app.route</span>(<span class="mockup-str">"/"</span>)
+<span class="mockup-keyword">def</span> <span class="mockup-func">home</span>():
+    <span class="mockup-keyword">return</span> render_template(<span class="mockup-str">"index.html"</span>)
+
+<span class="mockup-keyword">@app.route</span>(<span class="mockup-str">"/dashboard"</span>)
+<span class="mockup-keyword">@login_required</span>
+<span class="mockup-keyword">def</span> <span class="mockup-func">dashboard</span>():
+    <span class="mockup-keyword">return</span> render_template(<span class="mockup-str">"dashboard.html"</span>)</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Counter -->
+<section class="stats-section">
+  <div class="container stats-grid">
+    <div class="stat-item">
+      <h3>100%</h3>
+      <p>Python Standard</p>
+    </div>
+    <div class="stat-item">
+      <h3>&lt;50ms</h3>
+      <p>Response Latency</p>
+    </div>
+    <div class="stat-item">
+      <h3>SHA-256</h3>
+      <p>Password Hashing</p>
+    </div>
+    <div class="stat-item">
+      <h3>0</h3>
+      <p>Heavy JS Frameworks</p>
+    </div>
+  </div>
+</section>
+
+<!-- Features Grid -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Everything You Need to Get Started</h2>
+      <p class="section-subtitle">Engineered with clean architectural principles so you can extend, deploy, and scale effortlessly.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔐</div>
+        <h3 class="feature-title">Secure Authentication</h3>
+        <p class="feature-desc">Integrated user login, password hashing with Werkzeug security, session cookies, and route guards.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🗄️</div>
+        <h3 class="feature-title">SQLite Database</h3>
+        <p class="feature-desc">Pre-configured database layer with automatic table creation, initial data seeding, and zero external DB hassle.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <h3 class="feature-title">Responsive UI Design</h3>
+        <p class="feature-desc">Modern minimalist CSS design using flexbox, CSS grid, native variables, and fluid mobile breakpoints.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3 class="feature-title">Jinja2 Templating</h3>
+        <p class="feature-desc">Modular HTML templates with layout inheritance, flash messaging, and dynamic navigation state.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3 class="feature-title">Protected Routes</h3>
+        <p class="feature-desc">A custom <code>@login_required</code> decorator to secure sensitive endpoints like the user dashboard.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">📦</div>
+        <h3 class="feature-title">Ready for Production</h3>
+        <p class="feature-desc">Standard structure easily deployable to platforms like Render, Railway, Heroku, AWS, or Docker containers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call To Action -->
+<section class="container" id="about">
+  <div class="cta-banner">
+    <h2>Ready to Experience It?</h2>
+    <p>Sign in with our pre-configured demo account or create a brand new user profile in seconds.</p>
+    <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+      <a href="{{ url_for('login') }}" class="btn btn-primary" style="background: #ffffff; color: var(--primary);">Try Demo Login</a>
+      <a href="{{ url_for('register') }}" class="btn btn-secondary" style="background: transparent; color: #ffffff; border-color: rgba(255,255,255,0.4);">Register New User</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+

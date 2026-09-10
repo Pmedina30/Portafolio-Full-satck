@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Python Web App{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="{{ url_for('home') }}" class="nav-brand">
+        <span class="brand-icon">⚡</span>
+        <span>PyStack</span>
+      </a>
+
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+        <li><a href="{{ url_for('home') }}#features" class="nav-link">Features</a></li>
+        <li><a href="{{ url_for('home') }}#about" class="nav-link">About</a></li>
+        {% if current_user %}
+          <li><a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a></li>
+        {% endif %}
+      </ul>
+
+      <div class="nav-buttons">
+        {% if current_user %}
+          <span style="font-size: 0.9rem; font-weight: 500; color: var(--text-muted); margin-right: 0.5rem;">
+            Hi, {{ current_user.name.split()[0] }}
+          </span>
+          <a href="{{ url_for('logout') }}" class="btn btn-secondary btn-sm">Sign Out</a>
+        {% else %}
+          <a href="{{ url_for('login') }}" class="btn btn-secondary btn-sm">Sign In</a>
+          <a href="{{ url_for('register') }}" class="btn btn-primary btn-sm">Get Started</a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <!-- Flash Messages Notifications -->
+  <div class="container flash-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash-message flash-{{ category }}">
+            <span>{{ message }}</span>
+            <button class="flash-close" aria-label="Close message">&times;</button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <!-- Main Content Area -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <p>&copy; 2026 PyStack. Built with Python & Flask.</p>
+      <div style="display: flex; gap: 1.25rem;">
+        <a href="{{ url_for('home') }}">Privacy</a>
+        <a href="{{ url_for('home') }}">Terms</a>
+        <a href="https://flask.palletsprojects.com/" target="_blank" rel="noopener">Documentation</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
+
