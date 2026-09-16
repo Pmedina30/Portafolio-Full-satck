@@ -142,3 +142,4 @@ export function generateSupportSlaData(): RawDataRow[] {
 
   return rows;
 }
+
