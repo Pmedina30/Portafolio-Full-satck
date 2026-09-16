@@ -7,6 +7,7 @@ import {
   DetectedColumnInfo 
 } from './types/dashboard';
 import { generateDefaultAviationData, DEFAULT_COLUMN_MAPPING } from './data/defaultAviationData';
+import { generateLogisticsData, generateSupportSlaData } from './data/alternativeDatasets';
 import { parseDataFile, detectColumnRoles } from './services/dataParser';
 import { computeExecutiveAnalytics } from './services/daxEngine';
 
@@ -16,17 +17,19 @@ import { KpiRow } from './components/KpiRow';
 import { PunctualityTrendChart } from './components/charts/PunctualityTrendChart';
 import { DelayCausesBarChart } from './components/charts/DelayCausesBarChart';
 import { RegionalDonutChart } from './components/charts/RegionalDonutChart';
+import { RouteNetworkMap } from './components/charts/RouteNetworkMap';
 import { OperationalTables } from './components/OperationalTables';
 import { ColumnMappingModal } from './components/modals/ColumnMappingModal';
 import { BrandModal } from './components/modals/BrandModal';
 
 export const App: React.FC = () => {
-  // Pre-loaded dataset (Arajet IOCC Operations)
+  // Pre-loaded dataset (Default Arajet IOCC Operations)
   const [rawData, setRawData] = useState<RawDataRow[]>(() => generateDefaultAviationData());
   const [columnMapping, setColumnMapping] = useState<ColumnMappingConfig>(DEFAULT_COLUMN_MAPPING);
   const [activeTab, setActiveTab] = useState<ActiveNavTab>('overview');
   const [searchQuery, setSearchQuery] = useState('');
   const [fileName, setFileName] = useState('Arajet_IOCC_Ops_Sept2026.csv');
+  const [activeDatasetId, setActiveDatasetId] = useState<'aviation' | 'logistics' | 'support'>('aviation');
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -50,6 +53,76 @@ export const App: React.FC = () => {
     const cols = Object.keys(sample[0] || {});
     return detectColumnRoles(cols, sample).detectedColumns;
   });
+
+  // Dataset Preset Switcher
+  const handleSelectDataset = (id: 'aviation' | 'logistics' | 'support') => {
+    setActiveDatasetId(id);
+
+    if (id === 'aviation') {
+      const data = generateDefaultAviationData();
+      setRawData(data);
+      setFileName('Arajet_IOCC_Ops_Sept2026.csv');
+      setColumnMapping(DEFAULT_COLUMN_MAPPING);
+      setTheme({
+        companyName: 'Arajet Airlines',
+        logoUrl: '',
+        primaryColor: '#0B1340',
+        accentColor: '#6B21A8',
+        highlightColor: '#00C3DE',
+        dashboardTitle: 'DASHBOARD OPERATIVO EJECUTIVO',
+        dashboardSubtitle: 'Centro de Control de Operaciones (IOCC) · Puntualidad & Desvíos',
+        periodLabel: '1 - 15 Septiembre 2026'
+      });
+    } else if (id === 'logistics') {
+      const data = generateLogisticsData();
+      setRawData(data);
+      setFileName('TransCaribe_Freight_Logistics_2026.csv');
+      setColumnMapping({
+        dateCol: 'DispatchDate',
+        statusCol: 'DeliveryStatus',
+        delayMinutesCol: 'DelayMinutes',
+        causeCol: 'DelayReason',
+        regionCol: 'Region',
+        routeCol: 'RouteCode',
+        resourceCol: 'FleetVehicle',
+        otpThreshold: 15
+      });
+      setTheme({
+        companyName: 'TransCaribe Logistics & Cargo',
+        logoUrl: '',
+        primaryColor: '#1E1B4B',
+        accentColor: '#C026D3',
+        highlightColor: '#F59E0B',
+        dashboardTitle: 'LOGÍSTICA & CADENA DE SUMINISTRO',
+        dashboardSubtitle: 'Torre de Control de Despachos · Desvíos de Tráfico y Aduanas',
+        periodLabel: 'Septiembre 2026'
+      });
+    } else if (id === 'support') {
+      const data = generateSupportSlaData();
+      setRawData(data);
+      setFileName('CloudOps_SLA_Incidents_2026.csv');
+      setColumnMapping({
+        dateCol: 'CreatedDate',
+        statusCol: 'SlaStatus',
+        delayMinutesCol: 'ResolutionDelayMin',
+        causeCol: 'IncidentCause',
+        regionCol: 'Region',
+        routeCol: 'ServiceQueue',
+        resourceCol: 'AssignedEngineer',
+        otpThreshold: 15
+      });
+      setTheme({
+        companyName: 'Apex Cloud Systems',
+        logoUrl: '',
+        primaryColor: '#0F172A',
+        accentColor: '#2563EB',
+        highlightColor: '#38BDF8',
+        dashboardTitle: 'TABLERO DE SLA & OPERACIONES TI',
+        dashboardSubtitle: 'Centro de Comando de Incidentes · Tiempos de Resolución y Confiabilidad',
+        periodLabel: 'Q3 2026'
+      });
+    }
+  };
 
   // Filter raw data by search query if any
   const filteredData = useMemo(() => {
@@ -97,9 +170,7 @@ export const App: React.FC = () => {
   };
 
   const handleResetDemoData = () => {
-    setRawData(generateDefaultAviationData());
-    setFileName('Arajet_IOCC_Ops_Sept2026.csv');
-    setColumnMapping(DEFAULT_COLUMN_MAPPING);
+    handleSelectDataset('aviation');
   };
 
   // Change OTP threshold
@@ -129,7 +200,7 @@ export const App: React.FC = () => {
         className="hidden"
       />
 
-      {/* 1. Left Sidebar (Arajet Corporate Navy #0B1340) */}
+      {/* 1. Left Sidebar (Corporate Navy #0B1340) */}
       <div className="no-print h-full flex-shrink-0">
         <Sidebar
           brand={theme}
@@ -148,7 +219,7 @@ export const App: React.FC = () => {
 
       {/* 2. Main Executive Canvas (Widescreen 16:9 1080p container) */}
       <main className="flex-1 flex flex-col h-full overflow-y-auto custom-scrollbar">
-        {/* Top Executive Header */}
+        {/* Top Executive Header with Dataset Switcher */}
         <div className="sticky top-0 z-30 bg-[#F8FAFC]/90 backdrop-blur-md px-6 py-4 border-b border-slate-200/80">
           <Header
             brand={theme}
@@ -164,6 +235,8 @@ export const App: React.FC = () => {
             onOpenBrandModal={() => setIsBrandModalOpen(true)}
             onOpenFileUpload={handleOpenFileUpload}
             onResetDemoData={handleResetDemoData}
+            onSelectDataset={handleSelectDataset}
+            activeDatasetId={activeDatasetId}
             onExportPdf={handleExportReport}
             onExportReport={handleExportReport}
           />
@@ -220,6 +293,17 @@ export const App: React.FC = () => {
                 </div>
               </section>
 
+              {/* Row 2.5: Interactive GIS Route & Locations Network Map */}
+              <section aria-label="Route Network Map">
+                <RouteNetworkMap
+                  routes={routeMetrics}
+                  brand={theme}
+                  theme={theme}
+                  title="Mapa Geoespacial de Red & Corredores"
+                  subtitle="Tráfico y puntualidad de enlaces entre nodos y hubs operacionales"
+                />
+              </section>
+
               {/* Row 3: Operational Tables (Critical Routes + Fleet Status) */}
               <section aria-label="Operational Tables">
                 <OperationalTables
@@ -230,6 +314,25 @@ export const App: React.FC = () => {
                 />
               </section>
             </>
+          )}
+
+          {activeTab === 'routes' && (
+            <div className="space-y-6 animate-in fade-in duration-300">
+              {/* Featured Route Network Map */}
+              <RouteNetworkMap
+                routes={routeMetrics}
+                brand={theme}
+                theme={theme}
+                title="Centro de Control Geoespacial de Red de Rutas"
+                subtitle="Monitoreo interactivo de hubs principales, aeropuertos y pares origen-destino"
+              />
+              <OperationalTables
+                routes={routeMetrics}
+                fleet={fleetStatus}
+                brand={theme}
+                theme={theme}
+              />
+            </div>
           )}
 
           {activeTab === 'otp' && (
@@ -285,48 +388,17 @@ export const App: React.FC = () => {
 
           {activeTab === 'operations' && (
             <div className="space-y-6 animate-in fade-in duration-300">
+              <RouteNetworkMap
+                routes={routeMetrics}
+                brand={theme}
+                theme={theme}
+              />
               <OperationalTables
                 routes={routeMetrics}
                 fleet={fleetStatus}
                 brand={theme}
                 theme={theme}
               />
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="h-[360px]">
-                  <PunctualityTrendChart
-                    data={timeSeriesData}
-                    brand={theme}
-                    theme={theme}
-                    threshold={columnMapping.otpThreshold}
-                  />
-                </div>
-                <div className="h-[360px]">
-                  <DelayCausesBarChart
-                    data={paretoCauses}
-                    brand={theme}
-                    theme={theme}
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'routes' && (
-            <div className="space-y-6 animate-in fade-in duration-300">
-              <OperationalTables
-                routes={routeMetrics}
-                fleet={fleetStatus}
-                brand={theme}
-                theme={theme}
-              />
-              <div className="h-[360px]">
-                <RegionalDonutChart
-                  data={regionalShare}
-                  totalVolume={kpis.totalVolume}
-                  brand={theme}
-                  theme={theme}
-                />
-              </div>
             </div>
           )}
 
@@ -344,10 +416,10 @@ export const App: React.FC = () => {
           {/* Footer Info / Disclaimer */}
           <footer className="pt-6 border-t border-slate-200 text-slate-400 text-xs flex flex-col sm:flex-row items-center justify-between gap-2">
             <p>
-              Executive Dashboard Studio · Diseñado según el Estándar de Aviación Comercial Arajet IOCC
+              Executive Dashboard Studio · Motor DAX Universal para Inteligencia de Operaciones
             </p>
             <p className="font-mono text-[11px]">
-              Motor DAX v3.2 · Latencia de cálculo: &lt;12ms · 100% Client-Side Safe
+              Dataset activo: <strong className="text-slate-600">{fileName}</strong> ({rawData.length.toLocaleString()} filas) · Latencia DAX &lt;10ms
             </p>
           </footer>
         </div>

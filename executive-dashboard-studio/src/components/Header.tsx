@@ -9,7 +9,8 @@ import {
   Edit2,
   Check,
   RotateCcw,
-  Sparkles
+  Sparkles,
+  Layers
 } from 'lucide-react';
 import { BrandingTheme } from '../types/dashboard';
 
@@ -23,6 +24,8 @@ interface HeaderProps {
   onOpenFileUpload?: () => void;
   onUploadFile?: (file: File) => void;
   onResetDemoData?: () => void;
+  onSelectDataset?: (id: 'aviation' | 'logistics' | 'support') => void;
+  activeDatasetId?: string;
   onExportPdf?: () => void;
   onExportReport?: () => void;
   threshold?: number;
@@ -52,6 +55,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenBrandModal,
   onOpenFileUpload,
   onResetDemoData,
+  onSelectDataset,
+  activeDatasetId = 'aviation',
   onExportPdf,
   onExportReport,
   threshold,
@@ -164,10 +169,53 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right: Timestamp Badge & Actions */}
         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          {/* Preset Domain Switcher */}
+          {onSelectDataset && (
+            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
+              <Layers className="w-3.5 h-3.5 text-slate-500 ml-1" />
+              <button
+                type="button"
+                onClick={() => onSelectDataset('aviation')}
+                className={`px-2 py-1 rounded-lg font-bold transition text-[11px] ${
+                  activeDatasetId === 'aviation'
+                    ? 'bg-white text-navy-950 shadow-xs'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
+                title="Cargar Dataset de Aviación Comercial (Arajet IOCC)"
+              >
+                ✈️ Vuelos IOCC
+              </button>
+              <button
+                type="button"
+                onClick={() => onSelectDataset('logistics')}
+                className={`px-2 py-1 rounded-lg font-bold transition text-[11px] ${
+                  activeDatasetId === 'logistics'
+                    ? 'bg-white text-navy-950 shadow-xs'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
+                title="Cargar Dataset de Logística y Cadena de Suministro"
+              >
+                🚚 Logística
+              </button>
+              <button
+                type="button"
+                onClick={() => onSelectDataset('support')}
+                className={`px-2 py-1 rounded-lg font-bold transition text-[11px] ${
+                  activeDatasetId === 'support'
+                    ? 'bg-white text-navy-950 shadow-xs'
+                    : 'text-slate-500 hover:text-slate-900'
+                }`}
+                title="Cargar Dataset de Operaciones Tech & SLA"
+              >
+                💼 SLA Cloud
+              </button>
+            </div>
+          )}
+
           {/* Live Status Badge */}
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 border border-slate-200/80 text-xs text-slate-700 font-medium">
             <span className="w-2 h-2 rounded-full bg-corporate-emerald animate-pulse" />
-            <span className="text-slate-400 text-[11px]">Última actualización:</span>
+            <span className="text-slate-400 text-[11px]">Actualización:</span>
             <span className="font-mono font-bold text-navy-950">{currentTime || '12:00:00'}</span>
           </div>
 
@@ -181,19 +229,6 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Settings2 className="w-3.5 h-3.5 text-slate-500" />
               <span className="hidden md:inline">Mapeo DAX</span>
-            </button>
-          )}
-
-          {/* Reset Demo Data */}
-          {onResetDemoData && (
-            <button
-              type="button"
-              onClick={onResetDemoData}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition"
-              title="Restablecer dataset demo de Arajet IOCC"
-            >
-              <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
-              <span className="hidden md:inline">Demo Arajet</span>
             </button>
           )}
 
