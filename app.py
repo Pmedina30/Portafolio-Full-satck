@@ -11,8 +11,33 @@ app = Flask(__name__)
 # In a production environment, use an environment variable for SECRET_KEY
 app.secret_key = os.environ.get('SECRET_KEY', 'python-web-demo-secret-key-change-in-prod')
 
+# Security cookie hardening
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+    SESSION_COOKIE_SECURE=False, # Set to True in production HTTPS
+)
+
 # Ensure database is initialized at startup
 database.init_db()
+
+@app.before_request
+def block_sensitive_files():
+    """Prevent inspecting or downloading database files or source code."""
+    path = request.path.lower()
+    blocked_extensions = ('.db', '.sqlite', '.sqlite3', '.env', '.py', '.bat', '.log', '.git', '.json')
+    if any(path.endswith(ext) for ext in blocked_extensions):
+        return ("Access Denied: Direct database or system file inspection is blocked.", 403)
+
+@app.after_request
+def apply_security_headers(response):
+    """Add defensive security headers to prevent sniffing, framing, and XSS."""
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    return response
 
 def login_required(f):
     """Decorator to require login for protected routes."""

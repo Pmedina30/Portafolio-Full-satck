@@ -247,3 +247,4 @@ export const ColumnMappingModal: React.FC<ColumnMappingModalProps> = ({
     </div>
   );
 };
+

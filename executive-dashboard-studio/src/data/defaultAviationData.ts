@@ -114,3 +114,4 @@ export function generateDefaultAviationData(): RawDataRow[] {
 
   return rows;
 }
+

@@ -241,3 +241,4 @@ export const PunctualityTrendChart: React.FC<PunctualityTrendChartProps> = ({ da
     </div>
   );
 };
+

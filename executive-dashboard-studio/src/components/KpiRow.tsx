@@ -163,3 +163,4 @@ export const KpiRow: React.FC<KpiRowProps> = ({ kpis, brand }) => {
     </div>
   );
 };
+

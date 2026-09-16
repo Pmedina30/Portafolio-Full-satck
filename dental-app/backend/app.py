@@ -20,6 +20,23 @@ JWT_ALGORITHM = "HS256"
 # Initialize SQLite database with seed data
 database.init_db()
 
+@app.before_request
+def block_database_and_source_inspection():
+    """Block any attempt to read database files, source code, or env secrets."""
+    path = request.path.lower()
+    blocked = ('.db', '.sqlite', '.sqlite3', '.env', '.py', '.bat', '.git', '.sql')
+    if any(path.endswith(ext) for ext in blocked):
+        return jsonify({"error": "Access Denied: Direct database or system inspection is prohibited."}), 403
+
+@app.after_request
+def add_security_headers(response):
+    """Defensive HTTP headers for security and zero data sniffing."""
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    return response
+
 def create_token(user_dict):
     """Generate JWT authentication token expiring in 7 days."""
     payload = {
@@ -180,7 +197,11 @@ def book_appointment():
     return jsonify({"message": msg, "appointment_id": appt_id}), 201
 
 @app.route("/api/appointments/<int:appt_id>/status", methods=["PATCH"])
-def update_status(appt_id):
+@auth_required
+def update_status(current_user, appt_id):
+    if current_user.get("role") != "staff":
+        return jsonify({"error": "Unauthorized. Only clinic staff can update appointment status."}), 403
+
     data = request.get_json() or {}
     new_status = data.get("status")
     if new_status not in ["Pending", "Confirmed", "Completed", "Cancelled"]:
@@ -216,9 +237,14 @@ def serve_frontend(path):
     if path.startswith('api/'):
         return jsonify({"error": "Endpoint not found"}), 404
 
-    target_file = os.path.join(FRONTEND_DIST, path)
+    # Prevent directory traversal attacks
+    safe_path = os.path.normpath(path).lstrip('/\\')
+    target_file = os.path.abspath(os.path.join(FRONTEND_DIST, safe_path))
+    if not target_file.startswith(FRONTEND_DIST):
+        return jsonify({"error": "Forbidden"}), 403
+
     if path != '' and os.path.exists(target_file) and os.path.isfile(target_file):
-        return send_from_directory(FRONTEND_DIST, path)
+        return send_from_directory(FRONTEND_DIST, safe_path)
 
     index_file = os.path.join(FRONTEND_DIST, 'index.html')
     if os.path.exists(index_file):

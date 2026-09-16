@@ -253,3 +253,4 @@ export const OperationalTables: React.FC<OperationalTablesProps> = ({
     </div>
   );
 };
+

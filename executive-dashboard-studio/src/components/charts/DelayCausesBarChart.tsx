@@ -96,3 +96,4 @@ export const DelayCausesBarChart: React.FC<DelayCausesBarChartProps> = ({ data, 
     </div>
   );
 };
+
