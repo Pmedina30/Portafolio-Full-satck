@@ -5,14 +5,28 @@ import { Plane, AlertTriangle, ShieldCheck, MapPin, ArrowRight, Wrench, Clock } 
 interface OperationalTablesProps {
   routes: RouteMetric[];
   fleet: FleetStatusItem[];
-  theme: BrandingTheme;
+  theme?: BrandingTheme;
+  brand?: BrandingTheme;
 }
+
+const DEFAULT_THEME: BrandingTheme = {
+  companyName: 'Arajet Airlines',
+  logoUrl: '',
+  primaryColor: '#0B1340',
+  accentColor: '#6B21A8',
+  highlightColor: '#00C3DE',
+  dashboardTitle: 'DASHBOARD OPERATIVO EJECUTIVO',
+  dashboardSubtitle: 'Centro de Control de Operaciones (IOCC) · Puntualidad & Desvíos',
+  periodLabel: '1 - 15 Septiembre 2026'
+};
 
 export const OperationalTables: React.FC<OperationalTablesProps> = ({
   routes,
   fleet,
-  theme
+  theme,
+  brand
 }) => {
+  const currentTheme = theme || brand || DEFAULT_THEME;
   const [routeSort, setRouteSort] = useState<'delays' | 'volume' | 'otp'>('delays');
 
   // Sort routes based on state

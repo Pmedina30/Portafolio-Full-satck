@@ -29,8 +29,9 @@ export const ColumnMappingModal: React.FC<ColumnMappingModalProps> = ({
 
   if (!isOpen) return null;
 
-  const columnNames = detectedColumns.map(c => c.columnName);
-  const previewRows = rawRows.slice(0, 4);
+  const safeColumns = Array.isArray(detectedColumns) ? detectedColumns : [];
+  const columnNames = safeColumns.map(c => c.columnName);
+  const previewRows = Array.isArray(rawRows) ? rawRows.slice(0, 4) : [];
 
   const handleSelect = (field: keyof ColumnMappingConfig, value: any) => {
     setMapping(prev => ({
@@ -41,7 +42,7 @@ export const ColumnMappingModal: React.FC<ColumnMappingModalProps> = ({
 
   const handleAutoMap = () => {
     const updated = { ...mapping };
-    detectedColumns.forEach(col => {
+    safeColumns.forEach(col => {
       if (col.suggestedRole === 'date' && !updated.dateCol) updated.dateCol = col.columnName;
       if (col.suggestedRole === 'status' && !updated.statusCol) updated.statusCol = col.columnName;
       if (col.suggestedRole === 'metric' && !updated.delayMinutesCol) updated.delayMinutesCol = col.columnName;

@@ -14,31 +14,61 @@ import {
 import { BrandingTheme } from '../types/dashboard';
 
 interface HeaderProps {
-  brand: BrandingTheme;
-  setBrand: React.Dispatch<React.SetStateAction<BrandingTheme>>;
-  onOpenMappingModal: () => void;
-  onOpenBrandModal: () => void;
-  onOpenFileUpload: () => void;
-  onResetDemoData: () => void;
-  onExportPdf: () => void;
-  threshold: number;
-  setThreshold: (val: number) => void;
+  brand?: BrandingTheme;
+  theme?: BrandingTheme;
+  setBrand?: React.Dispatch<React.SetStateAction<BrandingTheme>>;
+  onUpdateTheme?: (theme: BrandingTheme) => void;
+  onOpenMappingModal?: () => void;
+  onOpenBrandModal?: () => void;
+  onOpenFileUpload?: () => void;
+  onUploadFile?: (file: File) => void;
+  onResetDemoData?: () => void;
+  onExportPdf?: () => void;
+  onExportReport?: () => void;
+  threshold?: number;
+  activeThreshold?: number;
+  setThreshold?: (val: number) => void;
+  onChangeThreshold?: (val: number) => void;
+  kpis?: any;
 }
+
+const DEFAULT_THEME: BrandingTheme = {
+  companyName: 'Arajet Airlines',
+  logoUrl: '',
+  primaryColor: '#0B1340',
+  accentColor: '#6B21A8',
+  highlightColor: '#00C3DE',
+  dashboardTitle: 'DASHBOARD OPERATIVO EJECUTIVO',
+  dashboardSubtitle: 'Centro de Control de Operaciones (IOCC) · Puntualidad & Desvíos',
+  periodLabel: '1 - 15 Septiembre 2026'
+};
 
 export const Header: React.FC<HeaderProps> = ({
   brand,
+  theme,
   setBrand,
+  onUpdateTheme,
   onOpenMappingModal,
   onOpenBrandModal,
   onOpenFileUpload,
   onResetDemoData,
   onExportPdf,
+  onExportReport,
   threshold,
-  setThreshold
+  activeThreshold,
+  setThreshold,
+  onChangeThreshold
 }) => {
+  const currentBrand = brand || theme || DEFAULT_THEME;
+  const currentThreshold = threshold ?? activeThreshold ?? 15;
+
   const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [titleInput, setTitleInput] = useState(brand.dashboardTitle);
+  const [titleInput, setTitleInput] = useState(currentBrand.dashboardTitle || 'DASHBOARD OPERATIVO EJECUTIVO');
   const [currentTime, setCurrentTime] = useState('');
+
+  useEffect(() => {
+    setTitleInput(currentBrand.dashboardTitle || 'DASHBOARD OPERATIVO EJECUTIVO');
+  }, [currentBrand.dashboardTitle]);
 
   useEffect(() => {
     const updateTime = () => {
@@ -58,9 +88,22 @@ export const Header: React.FC<HeaderProps> = ({
 
   const handleSaveTitle = () => {
     if (titleInput.trim()) {
-      setBrand((prev) => ({ ...prev, dashboardTitle: titleInput.trim() }));
+      const updated = { ...currentBrand, dashboardTitle: titleInput.trim() };
+      if (setBrand) setBrand(updated);
+      if (onUpdateTheme) onUpdateTheme(updated);
     }
     setIsEditingTitle(false);
+  };
+
+  const handleThresholdChange = (val: number) => {
+    if (setThreshold) setThreshold(val);
+    if (onChangeThreshold) onChangeThreshold(val);
+  };
+
+  const handleExport = () => {
+    if (onExportPdf) onExportPdf();
+    else if (onExportReport) onExportReport();
+    else window.print();
   };
 
   return (
@@ -80,6 +123,7 @@ export const Header: React.FC<HeaderProps> = ({
                   className="text-lg font-extrabold text-navy-950 border border-corporate-cyan rounded-lg px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-corporate-cyan"
                 />
                 <button
+                  type="button"
                   onClick={handleSaveTitle}
                   className="p-1 rounded bg-corporate-emerald text-white hover:bg-emerald-600 transition"
                 >
@@ -89,7 +133,7 @@ export const Header: React.FC<HeaderProps> = ({
             ) : (
               <div className="flex items-center gap-2 group cursor-pointer" onClick={() => setIsEditingTitle(true)}>
                 <h2 className="text-lg sm:text-xl font-black text-navy-950 tracking-tight hover:text-navy-700 transition">
-                  {brand.dashboardTitle}
+                  {currentBrand.dashboardTitle}
                 </h2>
                 <Edit2 className="w-3.5 h-3.5 text-slate-300 group-hover:text-corporate-cyan transition opacity-0 group-hover:opacity-100" />
               </div>
@@ -99,8 +143,8 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="hidden sm:flex items-center gap-1.5 ml-2 px-2.5 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-[11px] font-semibold text-slate-600">
               <span>Umbral OTP:</span>
               <select
-                value={threshold}
-                onChange={(e) => setThreshold(Number(e.target.value))}
+                value={currentThreshold}
+                onChange={(e) => handleThresholdChange(Number(e.target.value))}
                 className="bg-transparent font-bold text-navy-900 focus:outline-none cursor-pointer"
               >
                 <option value={0}>D0 (0 min)</option>
@@ -112,9 +156,9 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <p className="text-xs text-slate-500 font-medium mt-0.5 flex items-center gap-2">
-            <span>{brand.dashboardSubtitle}</span>
+            <span>{currentBrand.dashboardSubtitle}</span>
             <span className="text-slate-300">•</span>
-            <span className="text-navy-900 font-semibold">{brand.periodLabel}</span>
+            <span className="text-navy-900 font-semibold">{currentBrand.periodLabel}</span>
           </p>
         </div>
 
@@ -128,37 +172,47 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Smart Column Mapping Trigger */}
-          <button
-            onClick={onOpenMappingModal}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition"
-            title="Ajustar mapeo de columnas del dataset"
-          >
-            <Settings2 className="w-3.5 h-3.5 text-slate-500" />
-            <span className="hidden md:inline">Mapeo DAX</span>
-          </button>
+          {onOpenMappingModal && (
+            <button
+              type="button"
+              onClick={onOpenMappingModal}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition"
+              title="Ajustar mapeo de columnas del dataset"
+            >
+              <Settings2 className="w-3.5 h-3.5 text-slate-500" />
+              <span className="hidden md:inline">Mapeo DAX</span>
+            </button>
+          )}
 
           {/* Reset Demo Data */}
-          <button
-            onClick={onResetDemoData}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition"
-            title="Restablecer dataset demo de Arajet IOCC"
-          >
-            <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
-            <span className="hidden md:inline">Demo Arajet</span>
-          </button>
+          {onResetDemoData && (
+            <button
+              type="button"
+              onClick={onResetDemoData}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition"
+              title="Restablecer dataset demo de Arajet IOCC"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
+              <span className="hidden md:inline">Demo Arajet</span>
+            </button>
+          )}
 
           {/* Upload Button */}
-          <button
-            onClick={onOpenFileUpload}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-navy-950 bg-white hover:bg-slate-50 border border-slate-300 shadow-sm transition"
-          >
-            <Upload className="w-3.5 h-3.5 text-corporate-purple" />
-            <span>Subir Archivo</span>
-          </button>
+          {onOpenFileUpload && (
+            <button
+              type="button"
+              onClick={onOpenFileUpload}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-navy-950 bg-white hover:bg-slate-50 border border-slate-300 shadow-sm transition"
+            >
+              <Upload className="w-3.5 h-3.5 text-corporate-purple" />
+              <span>Subir Archivo</span>
+            </button>
+          )}
 
           {/* High-Res PDF / Print Export */}
           <button
-            onClick={onExportPdf}
+            type="button"
+            onClick={handleExport}
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black text-white bg-navy-900 hover:bg-navy-800 shadow-md shadow-navy-950/20 transition active:scale-95"
           >
             <Download className="w-3.5 h-3.5 text-corporate-cyan" />
@@ -169,4 +223,3 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
-

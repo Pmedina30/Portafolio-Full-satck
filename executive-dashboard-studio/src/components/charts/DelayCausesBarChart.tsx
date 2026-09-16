@@ -5,10 +5,32 @@ import { formatMinutesToHours } from '../../services/daxEngine';
 
 interface DelayCausesBarChartProps {
   data: ParetoCauseItem[];
-  brand: BrandingTheme;
+  brand?: BrandingTheme;
+  theme?: BrandingTheme;
+  title?: string;
+  subtitle?: string;
 }
 
-export const DelayCausesBarChart: React.FC<DelayCausesBarChartProps> = ({ data, brand }) => {
+const DEFAULT_THEME: BrandingTheme = {
+  companyName: 'Arajet Airlines',
+  logoUrl: '',
+  primaryColor: '#0B1340',
+  accentColor: '#6B21A8',
+  highlightColor: '#00C3DE',
+  dashboardTitle: 'DASHBOARD OPERATIVO EJECUTIVO',
+  dashboardSubtitle: 'Centro de Control de Operaciones (IOCC) · Puntualidad & Desvíos',
+  periodLabel: '1 - 15 Septiembre 2026'
+};
+
+export const DelayCausesBarChart: React.FC<DelayCausesBarChartProps> = ({ 
+  data, 
+  brand, 
+  theme,
+  title = 'Distribución de Causas de Delay',
+  subtitle = 'Ranking Pareto de mayor a menor impacto operacional'
+}) => {
+  const currentBrand = brand || theme || DEFAULT_THEME;
+
   if (!data || data.length === 0) {
     return (
       <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-center h-72 text-xs text-slate-400">
@@ -25,10 +47,10 @@ export const DelayCausesBarChart: React.FC<DelayCausesBarChartProps> = ({ data, 
       <div className="flex items-center justify-between mb-3">
         <div>
           <h3 className="text-sm font-extrabold text-navy-950 tracking-tight flex items-center gap-1.5">
-            <span>Distribución de Causas de Delay</span>
+            <span>{title}</span>
           </h3>
           <p className="text-[11px] text-slate-400 font-medium">
-            Ranking Pareto de mayor a menor impacto operacional
+            {subtitle}
           </p>
         </div>
 
@@ -72,8 +94,8 @@ export const DelayCausesBarChart: React.FC<DelayCausesBarChartProps> = ({ data, 
                   style={{
                     width: `${barWidth}%`,
                     background: isTopCause
-                      ? `linear-gradient(90deg, ${brand.accentColor || '#6B21A8'}, #F43F5E)`
-                      : `linear-gradient(90deg, ${brand.primaryColor || '#0B1340'}, ${brand.highlightColor || '#00C3DE'})`
+                      ? `linear-gradient(90deg, ${currentBrand.accentColor || '#6B21A8'}, #F43F5E)`
+                      : `linear-gradient(90deg, ${currentBrand.primaryColor || '#0B1340'}, ${currentBrand.highlightColor || '#00C3DE'})`
                   }}
                   className="h-full rounded-full transition-all duration-500 ease-out group-hover:brightness-110"
                 />
@@ -96,4 +118,3 @@ export const DelayCausesBarChart: React.FC<DelayCausesBarChartProps> = ({ data, 
     </div>
   );
 };
-

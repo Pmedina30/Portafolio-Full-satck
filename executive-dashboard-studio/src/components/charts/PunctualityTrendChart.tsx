@@ -4,10 +4,21 @@ import { TrendingUp, Target, Calendar } from 'lucide-react';
 
 interface PunctualityTrendChartProps {
   data: TimeSeriesPoint[];
-  brand: BrandingTheme;
+  brand?: BrandingTheme;
+  theme?: BrandingTheme;
+  threshold?: number;
+  title?: string;
+  subtitle?: string;
 }
 
-export const PunctualityTrendChart: React.FC<PunctualityTrendChartProps> = ({ data, brand }) => {
+export const PunctualityTrendChart: React.FC<PunctualityTrendChartProps> = ({ 
+  data, 
+  brand, 
+  theme,
+  threshold = 15,
+  title = 'Evolución de Puntualidad (OTP %)',
+  subtitle = 'Comportamiento diario vs Benchmark Corporativo 85%'
+}) => {
   const [hoveredPoint, setHoveredPoint] = useState<TimeSeriesPoint | null>(null);
   const [hoveredPos, setHoveredPos] = useState<{ x: number; y: number } | null>(null);
 

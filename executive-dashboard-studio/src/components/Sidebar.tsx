@@ -17,21 +17,49 @@ import { ActiveNavTab, BrandingTheme } from '../types/dashboard';
 
 interface SidebarProps {
   activeTab: ActiveNavTab;
-  setActiveTab: (tab: ActiveNavTab) => void;
-  brand: BrandingTheme;
-  onOpenBrandModal: () => void;
-  onOpenFileUpload: () => void;
-  rowCount: number;
+  setActiveTab?: (tab: ActiveNavTab) => void;
+  onTabChange?: (tab: ActiveNavTab) => void;
+  brand?: BrandingTheme;
+  theme?: BrandingTheme;
+  onOpenBrandModal?: () => void;
+  onOpenFileUpload?: () => void;
+  rowCount?: number;
+  totalOperationsCount?: number;
+  searchQuery?: string;
+  onSearchChange?: (val: string) => void;
 }
+
+const DEFAULT_THEME: BrandingTheme = {
+  companyName: 'Arajet Airlines',
+  logoUrl: '',
+  primaryColor: '#0B1340',
+  accentColor: '#6B21A8',
+  highlightColor: '#00C3DE',
+  dashboardTitle: 'DASHBOARD OPERATIVO EJECUTIVO',
+  dashboardSubtitle: 'Centro de Control de Operaciones (IOCC) · Puntualidad & Desvíos',
+  periodLabel: '1 - 15 Septiembre 2026'
+};
 
 export const Sidebar: React.FC<SidebarProps> = ({
   activeTab,
   setActiveTab,
+  onTabChange,
   brand,
+  theme,
   onOpenBrandModal,
   onOpenFileUpload,
-  rowCount
+  rowCount,
+  totalOperationsCount,
+  searchQuery = '',
+  onSearchChange
 }) => {
+  const currentBrand = brand || theme || DEFAULT_THEME;
+  const handleTabClick = (tab: ActiveNavTab) => {
+    if (setActiveTab) setActiveTab(tab);
+    if (onTabChange) onTabChange(tab);
+  };
+  const count = rowCount ?? totalOperationsCount ?? 0;
+
   const navItems: { id: ActiveNavTab; label: string; icon: React.FC<any>; badge?: string }[] = [
     { id: 'overview', label: 'Resumen Ejecutivo', icon: LayoutDashboard },
     { id: 'otp', label: 'Puntualidad (OTP)', icon: Clock, badge: 'D15' },
@@ -44,7 +72,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside
-      style={{ backgroundColor: brand.primaryColor || '#0B1340' }}
+      style={{ backgroundColor: currentBrand.primaryColor || '#0B1340' }}
       className="no-print w-64 min-h-screen text-white flex flex-col justify-between shadow-2xl border-r border-navy-800 z-30 transition-colors duration-300 select-none flex-shrink-0"
     >
       {/* Top Section */}
@@ -52,15 +80,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {/* Brand Header */}
         <div className="p-5 border-b border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {brand.logoUrl ? (
+            {currentBrand.logoUrl ? (
               <img
-                src={brand.logoUrl}
-                alt={brand.companyName}
+                src={currentBrand.logoUrl}
+                alt={currentBrand.companyName}
                 className="w-10 h-10 object-contain rounded-xl bg-white/10 p-1 border border-white/15"
               />
             ) : (
               <div 
-                style={{ background: `linear-gradient(135deg, ${brand.accentColor || '#6B21A8'}, ${brand.highlightColor || '#00C3DE'})` }}
+                style={{ background: `linear-gradient(135deg, ${currentBrand.accentColor || '#6B21A8'}, ${currentBrand.highlightColor || '#00C3DE'})` }}
                 className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-lg shadow-black/30 font-black text-lg"
               >
                 <Plane className="w-6 h-6 rotate-[-45deg]" />
@@ -68,7 +96,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             )}
             <div>
               <h1 className="font-extrabold text-base tracking-tight text-white flex items-center gap-1">
-                {brand.companyName || 'Arajet IOCC'}
+                {currentBrand.companyName || 'Arajet IOCC'}
               </h1>
               <p className="text-[10px] font-semibold text-white/60 tracking-wider uppercase">
                 Executive Studio
@@ -76,13 +104,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           </div>
 
-          <button
-            onClick={onOpenBrandModal}
-            title="Personalizar Marca y Colores"
-            className="p-1.5 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition"
-          >
-            <Palette className="w-4 h-4" />
-          </button>
+          {onOpenBrandModal && (
+            <button
+              type="button"
+              onClick={onOpenBrandModal}
+              title="Personalizar Marca y Colores"
+              className="p-1.5 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition"
+            >
+              <Palette className="w-4 h-4" />
+            </button>
+          )}
         </div>
 
         {/* Quick Search Input */}
@@ -91,7 +122,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <Search className="w-3.5 h-3.5 text-white/40 absolute left-3 top-2.5" />
             <input
               type="text"
-              placeholder="Buscar métricas, rutas..."
+              value={searchQuery}
+              onChange={(e) => onSearchChange && onSearchChange(e.target.value)}
+              placeholder="Buscar vuelos, rutas, flota..."
               className="w-full pl-9 pr-3 py-1.5 bg-white/5 hover:bg-white/10 focus:bg-white/15 border border-white/10 rounded-xl text-xs text-white placeholder:text-white/40 focus:outline-none focus:border-corporate-cyan transition"
             />
           </div>
@@ -109,7 +142,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                type="button"
+                onClick={() => handleTabClick(item.id)}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-xs transition-all duration-150 text-left group ${
                   isActive
                     ? 'bg-white/15 text-white font-semibold shadow-inner border border-white/20'
@@ -142,19 +176,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Bottom Info & Upload Status */}
       <div className="p-4 border-t border-white/10 bg-black/20 space-y-3">
         {/* Upload File CTA */}
-        <button
-          onClick={onOpenFileUpload}
-          className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-gradient-to-r from-corporate-purple to-corporate-cyan hover:opacity-95 text-white font-bold text-xs shadow-md shadow-black/20 transition active:scale-98"
-        >
-          <UploadCloud className="w-4 h-4" />
-          <span>Cargar CSV / Excel</span>
-        </button>
+        {onOpenFileUpload && (
+          <button
+            type="button"
+            onClick={onOpenFileUpload}
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-gradient-to-r from-corporate-purple to-corporate-cyan hover:opacity-95 text-white font-bold text-xs shadow-md shadow-black/20 transition active:scale-98"
+          >
+            <UploadCloud className="w-4 h-4" />
+            <span>Cargar CSV / Excel</span>
+          </button>
+        )}
 
         {/* Dataset Counter */}
         <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between text-[11px]">
           <span className="text-white/60">Registros Activos:</span>
           <span className="font-mono font-bold text-corporate-cyan">
-            {rowCount.toLocaleString()} filas
+            {count.toLocaleString()} filas
           </span>
         </div>
 
@@ -167,4 +204,3 @@ export const Sidebar: React.FC<SidebarProps> = ({
     </aside>
   );
 };
-

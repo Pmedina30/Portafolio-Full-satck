@@ -5,18 +5,32 @@ import { Globe2 } from 'lucide-react';
 interface RegionalDonutChartProps {
   data: RegionDistribution[];
   totalVolume: number;
-  theme: BrandingTheme;
+  brand?: BrandingTheme;
+  theme?: BrandingTheme;
   title?: string;
   subtitle?: string;
 }
 
+const DEFAULT_THEME: BrandingTheme = {
+  companyName: 'Arajet Airlines',
+  logoUrl: '',
+  primaryColor: '#0B1340',
+  accentColor: '#6B21A8',
+  highlightColor: '#00C3DE',
+  dashboardTitle: 'DASHBOARD OPERATIVO EJECUTIVO',
+  dashboardSubtitle: 'Centro de Control de Operaciones (IOCC) · Puntualidad & Desvíos',
+  periodLabel: '1 - 15 Septiembre 2026'
+};
+
 export const RegionalDonutChart: React.FC<RegionalDonutChartProps> = ({
   data,
   totalVolume,
+  brand,
   theme,
   title = 'Distribución Geográfica / Red',
   subtitle = 'Participación operativa por mercado'
 }) => {
+  const currentBrand = brand || theme || DEFAULT_THEME;
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
 
   // SVG Geometry Constants

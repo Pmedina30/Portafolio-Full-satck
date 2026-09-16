@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { 
   RawDataRow, 
   ColumnMappingConfig, 
@@ -28,6 +28,8 @@ export const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [fileName, setFileName] = useState('Arajet_IOCC_Ops_Sept2026.csv');
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   // Dynamic Branding Theme
   const [theme, setTheme] = useState<BrandingTheme>({
     companyName: 'Arajet Airlines',
@@ -46,7 +48,7 @@ export const App: React.FC = () => {
   const [detectedColumns, setDetectedColumns] = useState<DetectedColumnInfo[]>(() => {
     const sample = generateDefaultAviationData();
     const cols = Object.keys(sample[0] || {});
-    return detectColumnRoles(cols, sample);
+    return detectColumnRoles(cols, sample).detectedColumns;
   });
 
   // Filter raw data by search query if any
@@ -81,26 +83,23 @@ export const App: React.FC = () => {
       setRawData(result.rows);
       setFileName(file.name);
 
-      const detected = detectColumnRoles(result.columns, result.rows);
+      const { suggestedMapping, detectedColumns: detected } = detectColumnRoles(result.columns, result.rows);
       setDetectedColumns(detected);
-
-      // Auto-assign detected columns
-      const autoMapped: ColumnMappingConfig = { ...columnMapping };
-      detected.forEach(col => {
-        if (col.suggestedRole === 'date') autoMapped.dateCol = col.columnName;
-        if (col.suggestedRole === 'status') autoMapped.statusCol = col.columnName;
-        if (col.suggestedRole === 'metric') autoMapped.delayMinutesCol = col.columnName;
-        if (col.suggestedRole === 'cause') autoMapped.causeCol = col.columnName;
-        if (col.suggestedRole === 'region') autoMapped.regionCol = col.columnName;
-        if (col.suggestedRole === 'route') autoMapped.routeCol = col.columnName;
-        if (col.suggestedRole === 'resource') autoMapped.resourceCol = col.columnName;
-      });
-
-      setColumnMapping(autoMapped);
+      setColumnMapping(suggestedMapping);
       setIsMappingModalOpen(true);
     } catch (err: any) {
       alert(`Error al procesar archivo: ${err.message || err}`);
     }
+  };
+
+  const handleOpenFileUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleResetDemoData = () => {
+    setRawData(generateDefaultAviationData());
+    setFileName('Arajet_IOCC_Ops_Sept2026.csv');
+    setColumnMapping(DEFAULT_COLUMN_MAPPING);
   };
 
   // Change OTP threshold
@@ -117,16 +116,33 @@ export const App: React.FC = () => {
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#F8FAFC] font-sans text-slate-800 antialiased selection:bg-indigo-500 selection:text-white">
+      {/* Hidden File Input */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        accept=".csv,.xlsx,.xls,.txt"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) handleFileUpload(file);
+          e.target.value = '';
+        }}
+        className="hidden"
+      />
+
       {/* 1. Left Sidebar (Arajet Corporate Navy #0B1340) */}
       <div className="no-print h-full flex-shrink-0">
         <Sidebar
+          brand={theme}
           theme={theme}
           activeTab={activeTab}
+          setActiveTab={setActiveTab}
           onTabChange={setActiveTab}
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          rowCount={kpis.totalVolume}
           totalOperationsCount={kpis.totalVolume}
           onOpenBrandModal={() => setIsBrandModalOpen(true)}
+          onOpenFileUpload={handleOpenFileUpload}
         />
       </div>
 
@@ -135,14 +151,20 @@ export const App: React.FC = () => {
         {/* Top Executive Header */}
         <div className="sticky top-0 z-30 bg-[#F8FAFC]/90 backdrop-blur-md px-6 py-4 border-b border-slate-200/80">
           <Header
+            brand={theme}
             theme={theme}
+            setBrand={setTheme}
             onUpdateTheme={setTheme}
             kpis={kpis}
+            threshold={columnMapping.otpThreshold}
             activeThreshold={columnMapping.otpThreshold}
+            setThreshold={handleThresholdChange}
             onChangeThreshold={handleThresholdChange}
             onOpenMappingModal={() => setIsMappingModalOpen(true)}
             onOpenBrandModal={() => setIsBrandModalOpen(true)}
-            onUploadFile={handleFileUpload}
+            onOpenFileUpload={handleOpenFileUpload}
+            onResetDemoData={handleResetDemoData}
+            onExportPdf={handleExportReport}
             onExportReport={handleExportReport}
           />
         </div>
@@ -165,7 +187,7 @@ export const App: React.FC = () => {
 
           {/* Row 1: Executive 5 KPI Cards */}
           <section aria-label="Executive KPIs">
-            <KpiRow kpis={kpis} theme={theme} />
+            <KpiRow kpis={kpis} brand={theme} theme={theme} />
           </section>
 
           {/* Tab Views Logic */}
@@ -176,6 +198,7 @@ export const App: React.FC = () => {
                 <div className="lg:col-span-5 h-[360px]">
                   <PunctualityTrendChart
                     data={timeSeriesData}
+                    brand={theme}
                     theme={theme}
                     threshold={columnMapping.otpThreshold}
                   />
@@ -183,6 +206,7 @@ export const App: React.FC = () => {
                 <div className="lg:col-span-4 h-[360px]">
                   <DelayCausesBarChart
                     data={paretoCauses}
+                    brand={theme}
                     theme={theme}
                   />
                 </div>
@@ -190,6 +214,7 @@ export const App: React.FC = () => {
                   <RegionalDonutChart
                     data={regionalShare}
                     totalVolume={kpis.totalVolume}
+                    brand={theme}
                     theme={theme}
                   />
                 </div>
@@ -200,6 +225,7 @@ export const App: React.FC = () => {
                 <OperationalTables
                   routes={routeMetrics}
                   fleet={fleetStatus}
+                  brand={theme}
                   theme={theme}
                 />
               </section>
@@ -211,6 +237,7 @@ export const App: React.FC = () => {
               <div className="h-[420px]">
                 <PunctualityTrendChart
                   data={timeSeriesData}
+                  brand={theme}
                   theme={theme}
                   threshold={columnMapping.otpThreshold}
                   title="Análisis Detallado de Tendencia OTP (D-Rule)"
@@ -220,6 +247,7 @@ export const App: React.FC = () => {
               <OperationalTables
                 routes={routeMetrics}
                 fleet={fleetStatus}
+                brand={theme}
                 theme={theme}
               />
             </div>
@@ -231,6 +259,7 @@ export const App: React.FC = () => {
                 <div className="h-[440px]">
                   <DelayCausesBarChart
                     data={paretoCauses}
+                    brand={theme}
                     theme={theme}
                     title="Análisis Causa Raíz de Demoras (Pareto 80/20)"
                     subtitle="Distribución ponderada por minutos acumulados de desvío"
@@ -240,6 +269,7 @@ export const App: React.FC = () => {
                   <RegionalDonutChart
                     data={regionalShare}
                     totalVolume={kpis.totalVolume}
+                    brand={theme}
                     theme={theme}
                   />
                 </div>
@@ -247,6 +277,7 @@ export const App: React.FC = () => {
               <OperationalTables
                 routes={routeMetrics}
                 fleet={fleetStatus}
+                brand={theme}
                 theme={theme}
               />
             </div>
@@ -257,12 +288,14 @@ export const App: React.FC = () => {
               <OperationalTables
                 routes={routeMetrics}
                 fleet={fleetStatus}
+                brand={theme}
                 theme={theme}
               />
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="h-[360px]">
                   <PunctualityTrendChart
                     data={timeSeriesData}
+                    brand={theme}
                     theme={theme}
                     threshold={columnMapping.otpThreshold}
                   />
@@ -270,6 +303,7 @@ export const App: React.FC = () => {
                 <div className="h-[360px]">
                   <DelayCausesBarChart
                     data={paretoCauses}
+                    brand={theme}
                     theme={theme}
                   />
                 </div>
@@ -282,12 +316,14 @@ export const App: React.FC = () => {
               <OperationalTables
                 routes={routeMetrics}
                 fleet={fleetStatus}
+                brand={theme}
                 theme={theme}
               />
               <div className="h-[360px]">
                 <RegionalDonutChart
                   data={regionalShare}
                   totalVolume={kpis.totalVolume}
+                  brand={theme}
                   theme={theme}
                 />
               </div>
@@ -299,6 +335,7 @@ export const App: React.FC = () => {
               <OperationalTables
                 routes={routeMetrics}
                 fleet={fleetStatus}
+                brand={theme}
                 theme={theme}
               />
             </div>
