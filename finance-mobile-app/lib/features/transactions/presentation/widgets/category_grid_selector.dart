@@ -44,7 +44,7 @@ class CategoryGridSelector extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
             decoration: BoxDecoration(
               color: isSelected
-                  ? category.color.withOpacity(0.18)
+                  ? category.color.withValues(alpha: 0.18)
                   : Colors.transparent,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
@@ -59,7 +59,7 @@ class CategoryGridSelector extends StatelessWidget {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: category.color.withOpacity(isSelected ? 0.9 : 0.15),
+                    color: category.color.withValues(alpha: isSelected ? 0.9 : 0.15),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(

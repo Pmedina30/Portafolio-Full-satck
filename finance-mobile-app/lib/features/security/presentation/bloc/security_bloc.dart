@@ -86,3 +86,4 @@ class SecurityBloc extends Bloc<SecurityEvent, SecurityState> {
     emit(state.copyWith(biometricsEnabled: event.enabled));
   }
 }
+

@@ -25,7 +25,7 @@ class BiometricLockScreen extends StatelessWidget {
                       width: 80,
                       height: 80,
                       decoration: BoxDecoration(
-                        color: Colors.red.shade900.withOpacity(0.3),
+                        color: Colors.red.shade900.withValues(alpha: 0.3),
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.red.shade600, width: 2),
                       ),
@@ -75,10 +75,10 @@ class BiometricLockScreen extends StatelessWidget {
                     width: 90,
                     height: 90,
                     decoration: BoxDecoration(
-                      color: AppTheme.primaryColor.withOpacity(0.12),
+                      color: AppTheme.primaryColor.withValues(alpha: 0.12),
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: AppTheme.primaryColor.withOpacity(0.3),
+                        color: AppTheme.primaryColor.withValues(alpha: 0.3),
                         width: 2,
                       ),
                     ),
@@ -126,3 +126,4 @@ class BiometricLockScreen extends StatelessWidget {
     );
   }
 }
+

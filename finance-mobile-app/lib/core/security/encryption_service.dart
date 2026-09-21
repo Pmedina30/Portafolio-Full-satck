@@ -53,3 +53,4 @@ class EncryptionServiceImpl implements EncryptionService {
     return HiveAesCipher(key);
   }
 }
+

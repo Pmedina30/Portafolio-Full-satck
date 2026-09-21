@@ -314,7 +314,7 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
                     return ChoiceChip(
                       label: Text(method.displayName),
                       selected: isSelected,
-                      selectedColor: AppTheme.primaryColor.withOpacity(0.18),
+                      selectedColor: AppTheme.primaryColor.withValues(alpha: 0.18),
                       side: BorderSide(
                         color: isSelected ? AppTheme.primaryColor : Colors.transparent,
                       ),
@@ -393,7 +393,7 @@ class _TypeToggleButton extends StatelessWidget {
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: activeColor.withOpacity(0.35),
+                    color: activeColor.withValues(alpha: 0.35),
                     blurRadius: 8,
                     offset: const Offset(0, 3),
                   )

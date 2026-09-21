@@ -31,3 +31,4 @@ class UpdateBiometricsSettingEvent extends SecurityEvent {
   @override
   List<Object?> get props => [enabled];
 }
+

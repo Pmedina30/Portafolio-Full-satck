@@ -38,3 +38,4 @@ class InputSanitizer {
     return double.parse(parsed.toStringAsFixed(2));
   }
 }
+

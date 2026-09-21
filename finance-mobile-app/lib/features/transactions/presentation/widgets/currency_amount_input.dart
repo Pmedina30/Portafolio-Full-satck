@@ -26,9 +26,9 @@ class CurrencyAmountInput extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
-        color: accentColor.withOpacity(0.06),
+        color: accentColor.withValues(alpha: 0.06),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: accentColor.withOpacity(0.25), width: 1.5),
+        border: Border.all(color: accentColor.withValues(alpha: 0.25), width: 1.5),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,7 +60,7 @@ class CurrencyAmountInput extends StatelessWidget {
                 hintStyle: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.w800,
-                  color: accentColor.withOpacity(0.35),
+                  color: accentColor.withValues(alpha: 0.35),
                 ),
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,

@@ -46,3 +46,4 @@ class SecurityState extends Equatable {
         errorMessage,
       ];
 }
+

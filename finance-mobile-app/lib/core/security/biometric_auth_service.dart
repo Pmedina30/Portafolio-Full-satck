@@ -57,3 +57,4 @@ class BiometricAuthServiceImpl implements BiometricAuthService {
     }
   }
 }
+

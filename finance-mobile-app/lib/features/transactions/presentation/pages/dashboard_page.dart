@@ -5,7 +5,6 @@ import '../../../security/presentation/bloc/security_bloc.dart';
 import '../../../security/presentation/bloc/security_event.dart';
 import '../../../security/presentation/bloc/security_state.dart';
 import '../../../settings/presentation/cubit/settings_cubit.dart';
-import '../../domain/entities/transaction_type.dart';
 import '../bloc/transaction_bloc.dart';
 import '../bloc/transaction_event.dart';
 import '../bloc/transaction_state.dart';

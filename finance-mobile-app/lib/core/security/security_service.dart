@@ -74,3 +74,4 @@ class SecurityServiceImpl implements SecurityService {
     return InputSanitizer.validateAmount(raw);
   }
 }
+

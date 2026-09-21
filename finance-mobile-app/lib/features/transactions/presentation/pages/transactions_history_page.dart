@@ -182,7 +182,7 @@ class _TransactionsHistoryPageState extends State<TransactionsHistoryPage> {
                                         width: 42,
                                         height: 42,
                                         decoration: BoxDecoration(
-                                          color: tx.category.color.withOpacity(0.12),
+                                          color: tx.category.color.withValues(alpha: 0.12),
                                           borderRadius: BorderRadius.circular(12),
                                         ),
                                         child: Icon(

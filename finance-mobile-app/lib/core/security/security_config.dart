@@ -15,3 +15,4 @@ class SecurityConfig {
   static const int maxTitleLength = 80;
   static const int maxNoteLength = 250;
 }
+
