@@ -11,3 +11,4 @@ class GetCategoriesUseCase {
     return await repository.getCategories(type: type);
   }
 }
+

@@ -83,3 +83,4 @@ class CategoryModelAdapter extends TypeAdapter<CategoryModel> {
       ..write(obj.type.name);
   }
 }
+

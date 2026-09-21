@@ -27,3 +27,4 @@ class Category extends Equatable {
   @override
   List<Object?> get props => [id, name, iconCode, colorHex, type];
 }
+

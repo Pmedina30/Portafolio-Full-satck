@@ -1,5 +1,5 @@
 name: finance_tracker
-description: "Cross-platform Personal Finance & Expense Management Mobile Application built with Clean Architecture, Flutter BLoC, and Hive."
+description: "High-Security Personal Finance & Expense Management Mobile Application built with Clean Architecture, Flutter BLoC, AES-256 Encrypted Hive, Biometric Auth, and OWASP MASVS compliance."
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -17,7 +17,14 @@ dependencies:
   equatable: ^2.0.5
   get_it: ^7.7.0
 
-  # Local Persistence (Offline-First)
+  # Mobile Security & Hardware Keystore (OWASP MASVS)
+  flutter_secure_storage: ^9.2.2
+  local_auth: ^2.2.0
+  flutter_jailbreak_detection: ^1.10.0
+  screen_protector: ^1.4.1
+  crypto: ^3.0.3
+
+  # Local Persistence (Encrypted Offline-First)
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   path_provider: ^2.1.3

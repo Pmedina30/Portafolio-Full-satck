@@ -162,3 +162,4 @@ class RecentTransactionsList extends StatelessWidget {
     );
   }
 }
+

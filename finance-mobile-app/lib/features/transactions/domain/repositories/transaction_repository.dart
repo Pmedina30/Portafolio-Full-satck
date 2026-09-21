@@ -13,3 +13,4 @@ abstract class TransactionRepository {
   Future<void> addCategory(Category category);
   Future<void> initializeDefaultCategories();
 }
+

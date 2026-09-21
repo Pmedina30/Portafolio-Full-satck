@@ -58,3 +58,4 @@ class Transaction extends Equatable {
         paymentMethod,
       ];
 }
+

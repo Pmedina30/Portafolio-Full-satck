@@ -92,3 +92,4 @@ class CategoryGridSelector extends StatelessWidget {
     );
   }
 }
+

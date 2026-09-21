@@ -85,3 +85,4 @@ class TransactionState extends Equatable {
         errorMessage,
       ];
 }
+

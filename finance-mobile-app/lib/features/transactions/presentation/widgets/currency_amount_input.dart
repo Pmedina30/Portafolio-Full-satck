@@ -86,3 +86,4 @@ class CurrencyAmountInput extends StatelessWidget {
     );
   }
 }
+

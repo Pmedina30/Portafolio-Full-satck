@@ -48,3 +48,4 @@ class FilterTransactionsByTypeEvent extends TransactionEvent {
   @override
   List<Object?> get props => [type];
 }
+

@@ -23,3 +23,4 @@ class AppSettings extends Equatable {
   @override
   List<Object?> get props => [currency, themeMode];
 }
+

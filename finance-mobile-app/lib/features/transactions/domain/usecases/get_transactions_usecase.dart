@@ -10,3 +10,4 @@ class GetTransactionsUseCase {
     return await repository.getAllTransactions();
   }
 }
+

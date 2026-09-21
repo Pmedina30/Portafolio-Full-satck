@@ -7,6 +7,8 @@ class BalanceSummaryCard extends StatelessWidget {
   final double income;
   final double expense;
   final String currency;
+  final bool hideFigures;
+  final VoidCallback? onTogglePrivacy;
 
   const BalanceSummaryCard({
     super.key,
@@ -14,6 +16,8 @@ class BalanceSummaryCard extends StatelessWidget {
     required this.income,
     required this.expense,
     required this.currency,
+    this.hideFigures = false,
+    this.onTogglePrivacy,
   });
 
   @override
@@ -46,13 +50,31 @@ class BalanceSummaryCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Saldo Total Disponible',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white.withOpacity(0.8),
-                ),
+              Row(
+                children: [
+                  Text(
+                    'Saldo Total Disponible',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white.withOpacity(0.8),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  if (onTogglePrivacy != null)
+                    InkWell(
+                      onTap: onTogglePrivacy,
+                      borderRadius: BorderRadius.circular(20),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4),
+                        child: Icon(
+                          hideFigures ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                          color: Colors.white.withOpacity(0.85),
+                          size: 18,
+                        ),
+                      ),
+                    ),
+                ],
               ),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -73,7 +95,9 @@ class BalanceSummaryCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            CurrencyFormatter.format(balance, currency: currency),
+            hideFigures
+                ? '$currency ••••••••'
+                : CurrencyFormatter.format(balance, currency: currency),
             style: const TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.w800,
@@ -97,6 +121,7 @@ class BalanceSummaryCard extends StatelessWidget {
                     currency: currency,
                     icon: Icons.arrow_downward_rounded,
                     iconColor: AppTheme.incomeColor,
+                    hideFigures: hideFigures,
                   ),
                 ),
                 Container(
@@ -113,6 +138,7 @@ class BalanceSummaryCard extends StatelessWidget {
                       currency: currency,
                       icon: Icons.arrow_upward_rounded,
                       iconColor: AppTheme.expenseColor,
+                      hideFigures: hideFigures,
                     ),
                   ),
                 ),
@@ -131,6 +157,7 @@ class _MetricItem extends StatelessWidget {
   final String currency;
   final IconData icon;
   final Color iconColor;
+  final bool hideFigures;
 
   const _MetricItem({
     required this.title,
@@ -138,6 +165,7 @@ class _MetricItem extends StatelessWidget {
     required this.currency,
     required this.icon,
     required this.iconColor,
+    required this.hideFigures,
   });
 
   @override
@@ -170,7 +198,9 @@ class _MetricItem extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                CurrencyFormatter.formatCompact(amount, currency: currency),
+                hideFigures
+                    ? '••••'
+                    : CurrencyFormatter.formatCompact(amount, currency: currency),
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,

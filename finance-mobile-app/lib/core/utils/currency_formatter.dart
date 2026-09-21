@@ -14,3 +14,4 @@ class CurrencyFormatter {
     return '$symbol ${formatter.format(amount)}';
   }
 }
+

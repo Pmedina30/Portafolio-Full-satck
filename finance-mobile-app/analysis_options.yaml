@@ -14,3 +14,4 @@ linter:
     - unawaited_futures
     - avoid_print
     - always_declare_return_types
+

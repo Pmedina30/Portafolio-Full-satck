@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
+import '../../../../core/security/input_sanitizer.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/date_formatter.dart';
 import '../../../settings/presentation/cubit/settings_cubit.dart';
@@ -91,15 +92,30 @@ class _AddTransactionPageState extends State<AddTransactionPage> {
       return;
     }
 
-    final amount = double.parse(_amountController.text.trim());
+    final sanitizedAmount = InputSanitizer.validateAmount(_amountController.text);
+    if (sanitizedAmount == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Por favor ingresa un monto válido entre 0.01 y 999,999,999.99'),
+          backgroundColor: AppTheme.expenseColor,
+        ),
+      );
+      return;
+    }
+
+    final sanitizedTitle = InputSanitizer.sanitizeText(_titleController.text);
+    final sanitizedNote = _noteController.text.trim().isEmpty
+        ? null
+        : InputSanitizer.sanitizeText(_noteController.text, maxLength: 250);
+
     final newTransaction = Transaction(
       id: const Uuid().v4(),
-      title: _titleController.text.trim(),
-      amount: amount,
+      title: sanitizedTitle,
+      amount: sanitizedAmount,
       type: _selectedType,
       category: _selectedCategory!,
       date: _selectedDate,
-      note: _noteController.text.trim().isEmpty ? null : _noteController.text.trim(),
+      note: sanitizedNote,
       paymentMethod: _selectedPaymentMethod,
     );
 
@@ -407,3 +423,4 @@ class _TypeToggleButton extends StatelessWidget {
     );
   }
 }
+

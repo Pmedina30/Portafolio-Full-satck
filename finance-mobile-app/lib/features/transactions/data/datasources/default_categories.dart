@@ -84,3 +84,4 @@ final List<CategoryModel> defaultCategories = [
     type: TransactionType.income,
   ),
 ];
+

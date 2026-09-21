@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import '../security/security_service.dart';
+import '../../features/security/presentation/bloc/security_bloc.dart';
 import '../../features/settings/presentation/cubit/settings_cubit.dart';
 import '../../features/transactions/data/datasources/transaction_local_data_source.dart';
 import '../../features/transactions/data/models/category_model.dart';
@@ -15,10 +17,15 @@ import '../../features/transactions/presentation/bloc/transaction_bloc.dart';
 final sl = GetIt.instance;
 
 Future<void> initDependencies() async {
-  // 1. Initialize Hive Local Storage
+  // 1. Initialize Security Subsystem (Keychain/Keystore & Screen Protection)
+  final securityService = SecurityServiceImpl();
+  await securityService.initializeSecurity();
+  sl.registerLazySingleton<SecurityService>(() => securityService);
+
+  // 2. Initialize Hive Local Storage
   await Hive.initFlutter();
 
-  // 2. Register Hive TypeAdapters
+  // 3. Register Hive TypeAdapters
   if (!Hive.isAdapterRegistered(0)) {
     Hive.registerAdapter(CategoryModelAdapter());
   }
@@ -26,12 +33,17 @@ Future<void> initDependencies() async {
     Hive.registerAdapter(TransactionModelAdapter());
   }
 
-  // 3. Open Hive Boxes
+  // 4. Retrieve Hardware-backed AES-256 HiveCipher from Secure Storage
+  final encryptedCipher = await securityService.getEncryptedCipher();
+
+  // 5. Open Encrypted Hive Boxes
   final transactionBox = await Hive.openBox<TransactionModel>(
     TransactionLocalDataSourceImpl.transactionsBoxName,
+    cipher: encryptedCipher, // AES-256 Encrypted at Rest
   );
   final categoryBox = await Hive.openBox<CategoryModel>(
     TransactionLocalDataSourceImpl.categoriesBoxName,
+    cipher: encryptedCipher, // AES-256 Encrypted at Rest
   );
   final settingsBox = await Hive.openBox<dynamic>(
     SettingsCubit.settingsBoxName,
@@ -41,7 +53,7 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton<Box<CategoryModel>>(() => categoryBox);
   sl.registerLazySingleton<Box<dynamic>>(() => settingsBox);
 
-  // 4. Data Sources
+  // 6. Data Sources
   sl.registerLazySingleton<TransactionLocalDataSource>(
     () => TransactionLocalDataSourceImpl(
       transactionBox: sl(),
@@ -49,7 +61,7 @@ Future<void> initDependencies() async {
     ),
   );
 
-  // 5. Repositories
+  // 7. Repositories
   sl.registerLazySingleton<TransactionRepository>(
     () => TransactionRepositoryImpl(
       localDataSource: sl(),
@@ -59,13 +71,19 @@ Future<void> initDependencies() async {
   // Initialize default categories if first launch
   await sl<TransactionRepository>().initializeDefaultCategories();
 
-  // 6. Use Cases
+  // 8. Use Cases
   sl.registerLazySingleton(() => GetTransactionsUseCase(sl()));
   sl.registerLazySingleton(() => AddTransactionUseCase(sl()));
   sl.registerLazySingleton(() => DeleteTransactionUseCase(sl()));
   sl.registerLazySingleton(() => GetCategoriesUseCase(sl()));
 
-  // 7. Blocs & Cubits
+  // 9. Blocs & Cubits
+  sl.registerFactory(
+    () => SecurityBloc(
+      securityService: sl(),
+    ),
+  );
+
   sl.registerFactory(
     () => TransactionBloc(
       getTransactionsUseCase: sl(),

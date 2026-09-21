@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../security/presentation/bloc/security_bloc.dart';
+import '../../../security/presentation/bloc/security_event.dart';
+import '../../../security/presentation/bloc/security_state.dart';
 import '../../../settings/presentation/cubit/settings_cubit.dart';
 import '../../domain/entities/transaction_type.dart';
 import '../bloc/transaction_bloc.dart';
@@ -124,11 +127,19 @@ class DashboardPage extends StatelessWidget {
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: BalanceSummaryCard(
-                        balance: state.currentBalance,
-                        income: state.totalIncome,
-                        expense: state.totalExpense,
-                        currency: currency,
+                      child: BlocBuilder<SecurityBloc, SecurityState>(
+                        builder: (context, secState) {
+                          return BalanceSummaryCard(
+                            balance: state.currentBalance,
+                            income: state.totalIncome,
+                            expense: state.totalExpense,
+                            currency: currency,
+                            hideFigures: secState.hideFinancialFigures,
+                            onTogglePrivacy: () {
+                              context.read<SecurityBloc>().add(const TogglePrivacyFiguresEvent());
+                            },
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -338,3 +349,4 @@ class _FilterChip extends StatelessWidget {
     );
   }
 }
+

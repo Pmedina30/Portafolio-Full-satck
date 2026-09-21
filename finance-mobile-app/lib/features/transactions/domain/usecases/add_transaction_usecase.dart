@@ -16,3 +16,4 @@ class AddTransactionUseCase {
     return await repository.addTransaction(transaction);
   }
 }
+

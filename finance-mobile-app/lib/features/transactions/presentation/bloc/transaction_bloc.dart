@@ -176,3 +176,4 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     return result;
   }
 }
+

@@ -9,3 +9,4 @@ class DeleteTransactionUseCase {
     return await repository.deleteTransaction(id);
   }
 }
+

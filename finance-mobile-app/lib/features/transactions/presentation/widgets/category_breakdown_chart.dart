@@ -118,3 +118,4 @@ class _CategoryBreakdownChartState extends State<CategoryBreakdownChart> {
     );
   }
 }
+

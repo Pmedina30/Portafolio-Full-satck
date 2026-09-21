@@ -284,3 +284,4 @@ class _TypeFilterChip extends StatelessWidget {
     );
   }
 }
+

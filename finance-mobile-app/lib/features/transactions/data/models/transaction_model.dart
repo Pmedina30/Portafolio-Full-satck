@@ -112,3 +112,4 @@ class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
       ..write(obj.paymentMethod.name);
   }
 }
+

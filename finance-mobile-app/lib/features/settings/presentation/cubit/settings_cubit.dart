@@ -40,3 +40,4 @@ class SettingsCubit extends Cubit<AppSettings> {
     emit(state.copyWith(themeMode: newMode));
   }
 }
+

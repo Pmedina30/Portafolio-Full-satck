@@ -15,3 +15,4 @@ class CacheFailure extends Failure {
 class ValidationFailure extends Failure {
   const ValidationFailure([super.message = 'Error de validación en los datos ingresados']);
 }
+

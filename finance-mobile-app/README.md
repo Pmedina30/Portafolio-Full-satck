@@ -106,3 +106,4 @@ flutter run
 1. **Offline-First:** No requiere conexión de red; los datos se persisten en binario con Hive de forma instantánea.
 2. **Fuertemente Tipado:** Dart null-safety estricto (`analysis_options.yaml` con `strict-casts`, `strict-inference`).
 3. **Manejo de Errores Desacoplado:** Reglas de validación en usecases que previenen montos negativos o títulos vacíos.
+
