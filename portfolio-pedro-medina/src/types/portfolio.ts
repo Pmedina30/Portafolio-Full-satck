@@ -42,3 +42,4 @@ export interface SocialLink {
   label: string;
   iconName: string;
 }
+

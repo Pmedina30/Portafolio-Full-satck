@@ -31,3 +31,4 @@ export const InfiniteMarquee: React.FC = () => {
     </section>
   );
 };
+

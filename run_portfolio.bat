@@ -12,3 +12,4 @@ echo.
 start http://localhost:5177
 .\node_modules\.bin\vite.cmd --port 5177 --host
 pause
+
