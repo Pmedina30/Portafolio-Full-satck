@@ -163,3 +163,4 @@ export const InteractiveViewFilters: React.FC<InteractiveViewFiltersProps> = ({
     </div>
   );
 };
+

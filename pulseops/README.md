@@ -59,3 +59,4 @@ cd pulseops/frontend
 npm install
 npm run dev # Corre en http://localhost:3000
 ```
+

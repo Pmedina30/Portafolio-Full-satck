@@ -157,3 +157,4 @@ ON mv_hourly_shift_performance(metric_hour, team_id);
 --     ) AS previous_hour_sla
 -- FROM mv_hourly_shift_performance
 -- ORDER BY metric_hour DESC;
+

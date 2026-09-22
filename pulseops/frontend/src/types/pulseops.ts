@@ -37,3 +37,4 @@ export interface LivePulseEvent {
     timeAgo: string;
   };
 }
+
