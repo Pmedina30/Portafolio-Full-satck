@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   ShieldAlert,
   Radio,
@@ -12,160 +12,327 @@ import {
   AlertTriangle,
   Flame,
   ArrowRight,
+  Plus,
+  History,
+  ShieldCheck,
+  UserCheck,
+  Filter,
+  Eye,
 } from 'lucide-react';
 import { MetricKpiCard } from './MetricKpiCard';
-import { InteractiveViewFilters } from './InteractiveViewFilters';
 import { PulseTimeSeriesChart } from './PulseTimeSeriesChart';
+import { CreateIncidentModal } from './CreateIncidentModal';
+import { IncidentDetailModal } from './IncidentDetailModal';
+import { AuditLogDrawer } from './AuditLogDrawer';
+import { LiveSimulatorControl } from './LiveSimulatorControl';
+import { INITIAL_INCIDENTS } from '../data/initialIncidents';
 import {
-  KpiMetric,
-  TimeSeriesPoint,
-  TeamFilter,
-  ShiftFilter,
-  DateRangePreset,
-  LivePulseEvent,
+  Incident,
+  UserRole,
+  Priority,
+  TeamSquad,
+  AuditLogEntry,
+  TimeframeFilter,
 } from '../types/pulseops';
+import { calculateOperationalMetrics, generateTimeSeriesFromIncidents } from '../utils/analytics';
+import { sanitizeInput } from '../utils/security';
 
 export const PulseOpsDashboard: React.FC = () => {
-  // Filters State
-  const [selectedTeam, setSelectedTeam] = useState<TeamFilter>('ALL');
-  const [selectedShift, setSelectedShift] = useState<ShiftFilter>('ALL');
-  const [selectedRange, setSelectedRange] = useState<DateRangePreset>('LIVE');
-  const [isLiveConnected, setIsLiveConnected] = useState<boolean>(true);
-  const [lastUpdated, setLastUpdated] = useState<string>('Just now');
+  // ==============================================================================
+  // 1. REACTIVE STATE STORE
+  // ==============================================================================
 
-  // KPI Metrics State
-  const [kpis, setKpis] = useState<KpiMetric[]>([
+  const [incidents, setIncidents] = useState<Incident[]>(INITIAL_INCIDENTS);
+  const [currentUserRole, setCurrentUserRole] = useState<UserRole>('SuperAdmin');
+  const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([
     {
-      id: 'sla_compliance',
-      title: 'SLA Compliance Rate',
-      value: '99.4%',
-      rawValue: 99.4,
-      trend: '+1.8%',
-      isPositive: true,
-      comparisonText: 'vs semana previa',
-      status: 'healthy',
-      sparkline: [97.2, 97.8, 98.4, 98.1, 98.9, 99.1, 99.4],
-    },
-    {
-      id: 'active_tickets',
-      title: 'Active Incident Volume',
-      value: '42',
-      rawValue: 42,
-      trend: '-14.2%',
-      isPositive: true,
-      comparisonText: 'vs semana previa',
-      status: 'healthy',
-      sparkline: [64, 58, 52, 49, 45, 43, 42],
-    },
-    {
-      id: 'mttr_minutes',
-      title: 'Mean Time to Resolve',
-      value: '18.4m',
-      rawValue: 18.4,
-      trend: '-22.5%',
-      isPositive: true,
-      comparisonText: 'objetivo SLA: 60m',
-      status: 'healthy',
-      sparkline: [26.2, 24.0, 22.5, 21.0, 19.8, 19.0, 18.4],
-    },
-    {
-      id: 'shift_concurrency',
-      title: 'Shift Performance Load',
-      value: '94.2%',
-      rawValue: 94.2,
-      trend: '+5.1%',
-      isPositive: true,
-      comparisonText: 'capacidad en turno',
-      status: 'healthy',
-      sparkline: [88.0, 89.5, 91.0, 92.4, 93.1, 93.8, 94.2],
+      id: 'audit-01',
+      timestamp: new Date().toISOString(),
+      action: 'SYSTEM_BOOTSTRAP',
+      actor: 'system',
+      role: 'SuperAdmin',
+      details: 'Mock Data Store inicializado con 42 incidentes operativos y motor analítico.',
+      severity: 'info',
     },
   ]);
 
-  // Time-Series Analytical Data
-  const timeSeriesData: TimeSeriesPoint[] = [
-    { time: '08:00', sla: 99.8, volume: 18, mttr: 14.2, shift: 'Morning' },
-    { time: '09:00', sla: 99.4, volume: 32, mttr: 16.5, shift: 'Morning' },
-    { time: '10:00', sla: 98.9, volume: 45, mttr: 18.1, shift: 'Morning' },
-    { time: '11:00', sla: 99.1, volume: 38, mttr: 17.0, shift: 'Morning' },
-    { time: '12:00', sla: 98.7, volume: 29, mttr: 19.2, shift: 'Morning' },
-    { time: '13:00', sla: 99.5, volume: 22, mttr: 15.4, shift: 'Morning' },
-    { time: '14:00', sla: 99.2, volume: 34, mttr: 16.8, shift: 'Evening' },
-    { time: '15:00', sla: 99.6, volume: 41, mttr: 17.5, shift: 'Evening' },
-    { time: '16:00', sla: 98.5, volume: 48, mttr: 21.0, shift: 'Evening' },
-    { time: '17:00', sla: 99.0, volume: 39, mttr: 18.4, shift: 'Evening' },
-    { time: '18:00', sla: 99.7, volume: 26, mttr: 14.9, shift: 'Evening' },
-    { time: '19:00', sla: 99.9, volume: 21, mttr: 13.8, shift: 'Evening' },
+  // Simulator Controls State
+  const [isSimulating, setIsSimulating] = useState<boolean>(true);
+  const [simulatorSpeed, setSimulatorSpeed] = useState<number>(6000); // 6s per ticket
+  const [generatedCount, setGeneratedCount] = useState<number>(0);
+
+  // Filters State
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sanitizedSearchWarning, setSanitizedSearchWarning] = useState(false);
+  const [selectedPriority, setSelectedPriority] = useState<string>('ALL');
+  const [selectedTeam, setSelectedTeam] = useState<string>('ALL');
+  const [selectedStatus, setSelectedStatus] = useState<string>('ALL'); // ALL, ACTIVE, RESOLVED
+
+  // Modals & Drawers State
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [selectedIncidentForDetail, setSelectedIncidentForDetail] = useState<Incident | null>(null);
+  const [isAuditDrawerOpen, setIsAuditDrawerOpen] = useState(false);
+
+  // Sorting
+  const [sortField, setSortField] = useState<'createdAt' | 'priority' | 'status'>('createdAt');
+  const [sortAsc, setSortAsc] = useState(false);
+
+  // ==============================================================================
+  // 2. AUDIT LOGGING HELPER
+  // ==============================================================================
+
+  const logAction = (action: string, details: string, severity: 'info' | 'warning' | 'danger' = 'info') => {
+    const newEntry: AuditLogEntry = {
+      id: `audit-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+      timestamp: new Date().toISOString(),
+      action,
+      actor: currentUserRole === 'SuperAdmin' ? 'Pedro Medina' : `User (${currentUserRole})`,
+      role: currentUserRole,
+      details,
+      severity,
+    };
+    setAuditLogs((prev) => [newEntry, ...prev]);
+  };
+
+  // Switch Role Handler
+  const handleRoleChange = (newRole: UserRole) => {
+    setCurrentUserRole(newRole);
+    logAction(
+      'USER_ROLE_SWITCHED',
+      `Rol del operador cambiado a ${newRole}. Permisos actualizados según matriz RBAC.`,
+      newRole === 'Auditor' ? 'warning' : 'info'
+    );
+  };
+
+  // ==============================================================================
+  // 3. LIVE SIMULATOR ENGINE (Generates real-time incident flow)
+  // ==============================================================================
+
+  const sampleIncidentTemplates = [
+    {
+      title: 'Latencia > 150ms en servicio de autenticación JWT',
+      team: 'SRE Especialistas' as TeamSquad,
+      priority: 'P2_HIGH' as Priority,
+      slaTargetMinutes: 60,
+    },
+    {
+      title: 'Sincronización demorada en Webhook de pasarela de pagos',
+      team: 'N2 Support' as TeamSquad,
+      priority: 'P3_MEDIUM' as Priority,
+      slaTargetMinutes: 120,
+    },
+    {
+      title: 'Saturación en cola de mensajes SQS de notificaciones',
+      team: 'SRE Especialistas' as TeamSquad,
+      priority: 'P1_CRITICAL' as Priority,
+      slaTargetMinutes: 30,
+    },
+    {
+      title: 'Peticiones 429 Too Many Requests en API de exportación',
+      team: 'N1 Triage' as TeamSquad,
+      priority: 'P3_MEDIUM' as Priority,
+      slaTargetMinutes: 120,
+    },
+    {
+      title: 'Desfase temporal en lecturas de réplica secundaria MySQL',
+      team: 'SRE Especialistas' as TeamSquad,
+      priority: 'P2_HIGH' as Priority,
+      slaTargetMinutes: 60,
+    },
   ];
 
-  // Live Escalation Queue
-  const [incidents, setIncidents] = useState([
-    {
-      id: 'INC-2026-9041',
-      title: 'Database connection pool saturation on Payment Gateway',
-      priority: 'P1_CRITICAL',
-      status: 'INVESTIGATING',
-      team: 'Platform SRE',
-      slaRemaining: '14m',
-      slaBreached: false,
-      assignee: 'Pedro M.',
-    },
-    {
-      id: 'INC-2026-9038',
-      title: 'Delayed webhook callbacks for B2B partner invoice syncing',
-      priority: 'P2_HIGH',
-      status: 'MITIGATING',
-      team: 'Billing IOCC',
-      slaRemaining: '38m',
-      slaBreached: false,
-      assignee: 'Sarah C.',
-    },
-    {
-      id: 'INC-2026-9022',
-      title: 'Intermittent 502 Bad Gateway during automated shift handoff',
-      priority: 'P3_MEDIUM',
-      status: 'RESOLVED',
-      team: 'L2 Support',
-      slaRemaining: 'Resolved',
-      slaBreached: false,
-      assignee: 'Alex R.',
-    },
-  ]);
+  const injectNewIncident = () => {
+    const template = sampleIncidentTemplates[Math.floor(Math.random() * sampleIncidentTemplates.length)];
+    const ticketSeq = 9042 + generatedCount;
 
-  // Simulated WebSocket Live Telemetry Stream
+    const newTicket: Incident = {
+      id: `inc-sim-${Date.now()}`,
+      ticketNumber: `INC-2026-${ticketSeq}`,
+      title: template.title,
+      description: `Generado automáticamente por el simulador de telemetría en vivo. Verificando métricas operacionales.`,
+      priority: template.priority,
+      status: 'OPEN',
+      team: template.team,
+      createdAt: new Date().toISOString(),
+      slaTargetMinutes: template.slaTargetMinutes,
+      slaBreached: false,
+      assignee: 'Sin Asignar',
+    };
+
+    setIncidents((prev) => [newTicket, ...prev]);
+    setGeneratedCount((c) => c + 1);
+    logAction(
+      'SIMULATED_TICKET_INJECTED',
+      `Nuevo ticket entrante recibido: ${newTicket.ticketNumber} [${newTicket.priority}] asignado a ${newTicket.team}.`
+    );
+  };
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setLastUpdated('Just now');
-      // Subtle pulse oscillation on live tickets & SLA
-      setKpis((prev) =>
-        prev.map((kpi) => {
-          if (kpi.id === 'active_tickets') {
-            const jitter = Math.floor(40 + Math.random() * 5);
-            return {
-              ...kpi,
-              value: String(jitter),
-              rawValue: jitter,
-            };
-          }
-          if (kpi.id === 'sla_compliance') {
-            const jitterSLA = (99.2 + Math.random() * 0.5).toFixed(1);
-            return {
-              ...kpi,
-              value: `${jitterSLA}%`,
-              rawValue: Number(jitterSLA),
-            };
-          }
-          return kpi;
-        })
-      );
-    }, 4500);
+    if (!isSimulating) return;
 
-    return () => clearInterval(interval);
-  }, []);
+    const timer = setInterval(() => {
+      injectNewIncident();
+    }, simulatorSpeed);
+
+    return () => clearInterval(timer);
+  }, [isSimulating, simulatorSpeed, generatedCount]);
+
+  // ==============================================================================
+  // 4. INCIDENT ACTIONS (Investigate, Resolve, Create)
+  // ==============================================================================
+
+  const handleCreateIncident = (data: {
+    title: string;
+    description: string;
+    priority: Priority;
+    team: TeamSquad;
+    slaTargetMinutes: number;
+    wasSanitized: boolean;
+    rawTitle: string;
+  }) => {
+    const ticketSeq = 9042 + generatedCount;
+    const newInc: Incident = {
+      id: `inc-${Date.now()}`,
+      ticketNumber: `INC-2026-${ticketSeq}`,
+      title: data.title,
+      description: data.description,
+      priority: data.priority,
+      status: 'OPEN',
+      team: data.team,
+      createdAt: new Date().toISOString(),
+      slaTargetMinutes: data.slaTargetMinutes,
+      slaBreached: false,
+      assignee: 'Pedro Medina',
+      sanitizationTriggered: data.wasSanitized,
+      rawTitleBeforeSanitization: data.wasSanitized ? data.rawTitle : undefined,
+    };
+
+    setIncidents((prev) => [newInc, ...prev]);
+    setGeneratedCount((c) => c + 1);
+
+    if (data.wasSanitized) {
+      logAction(
+        'SECURITY_XSS_SANITIZED',
+        `Ataque XSS potencial neutralizado en creación de ticket. Entrada cruda: "${data.rawTitle}". Salida sanitizada: "${data.title}".`,
+        'danger'
+      );
+    }
+
+    logAction('INCIDENT_CREATED', `Incidente ${newInc.ticketNumber} creado manualmente por el operador.`);
+  };
+
+  const handleResolveIncident = (id: string) => {
+    setIncidents((prev) =>
+      prev.map((inc) => {
+        if (inc.id !== id) return inc;
+        const createdDate = new Date(inc.createdAt);
+        const resolvedDate = new Date();
+        const elapsedMinutes = Math.max(1, Math.floor((resolvedDate.getTime() - createdDate.getTime()) / (60 * 1000)));
+        const breached = elapsedMinutes > inc.slaTargetMinutes;
+
+        logAction(
+          'INCIDENT_RESOLVED',
+          `Incidente ${inc.ticketNumber} resuelto en ${elapsedMinutes}m. SLA Breached: ${breached ? 'SÍ' : 'NO'}.`,
+          breached ? 'warning' : 'info'
+        );
+
+        return {
+          ...inc,
+          status: 'RESOLVED',
+          resolvedAt: resolvedDate.toISOString(),
+          timeToResolveMinutes: elapsedMinutes,
+          slaBreached: breached,
+        };
+      })
+    );
+  };
+
+  const handleInvestigateIncident = (id: string) => {
+    setIncidents((prev) =>
+      prev.map((inc) => {
+        if (inc.id !== id) return inc;
+        logAction('INCIDENT_TRIAGE', `Incidente ${inc.ticketNumber} puesto en estado de investigación activa.`);
+        return {
+          ...inc,
+          status: 'INVESTIGATING',
+          assignee: currentUserRole === 'SuperAdmin' ? 'Pedro Medina' : 'Operador en Turno',
+        };
+      })
+    );
+  };
+
+  // Search input handler with Sanitization
+  const handleSearchChange = (val: string) => {
+    const { sanitized, wasSanitized } = sanitizeInput(val, 50);
+    setSearchQuery(sanitized);
+
+    if (wasSanitized && val.includes('<')) {
+      setSanitizedSearchWarning(true);
+      logAction(
+        'SECURITY_XSS_SEARCH_FILTERED',
+        `Intento de inyección de script neutralizado en campo de búsqueda: "${val}".`,
+        'danger'
+      );
+      setTimeout(() => setSanitizedSearchWarning(false), 4000);
+    }
+  };
+
+  // ==============================================================================
+  // 5. ANALYTICAL METRICS DERIVATION
+  // ==============================================================================
+
+  const metrics = useMemo(() => calculateOperationalMetrics(incidents), [incidents]);
+  const timeSeriesData = useMemo(() => generateTimeSeriesFromIncidents(incidents), [incidents]);
+
+  // Filtered & Sorted Incidents List
+  const filteredIncidents = useMemo(() => {
+    return incidents
+      .filter((inc) => {
+        // Search
+        if (searchQuery.trim()) {
+          const q = searchQuery.toLowerCase();
+          const matchTitle = inc.title.toLowerCase().includes(q);
+          const matchNumber = inc.ticketNumber.toLowerCase().includes(q);
+          const matchAssignee = inc.assignee.toLowerCase().includes(q);
+          if (!matchTitle && !matchNumber && !matchAssignee) return false;
+        }
+
+        // Priority filter
+        if (selectedPriority !== 'ALL' && inc.priority !== selectedPriority) return false;
+
+        // Team filter
+        if (selectedTeam !== 'ALL' && inc.team !== selectedTeam) return false;
+
+        // Status filter
+        if (selectedStatus === 'ACTIVE') {
+          if (inc.status !== 'OPEN' && inc.status !== 'INVESTIGATING') return false;
+        } else if (selectedStatus === 'RESOLVED') {
+          if (inc.status !== 'RESOLVED' && inc.status !== 'CLOSED') return false;
+        }
+
+        return true;
+      })
+      .sort((a, b) => {
+        if (sortField === 'createdAt') {
+          return sortAsc
+            ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+            : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        }
+        if (sortField === 'priority') {
+          return sortAsc ? a.priority.localeCompare(b.priority) : b.priority.localeCompare(a.priority);
+        }
+        return sortAsc ? a.status.localeCompare(b.status) : b.status.localeCompare(a.status);
+      });
+  }, [incidents, searchQuery, selectedPriority, selectedTeam, selectedStatus, sortField, sortAsc]);
+
+  // ==============================================================================
+  // 6. RENDER
+  // ==============================================================================
 
   return (
     <div className="min-h-screen bg-[#09090b] text-zinc-100 selection:bg-emerald-500/20 selection:text-emerald-300 font-sans">
-      {/* 1. Header Bar (Linear / Vercel style) */}
-      <header className="sticky top-0 z-40 border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur-xl">
+      {/* Top Navbar with Role Switcher & Audit Trigger */}
+      <header className="sticky top-0 z-40 border-b border-zinc-800/80 bg-zinc-950/85 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           {/* Brand & Organization */}
           <div className="flex items-center gap-3">
@@ -174,146 +341,326 @@ export const PulseOpsDashboard: React.FC = () => {
                 P
               </div>
               <span className="font-semibold text-sm tracking-tight text-zinc-100">
-                PulseOps <span className="text-zinc-500 font-mono text-xs font-normal">/ B2B Intelligence</span>
+                PulseOps <span className="text-zinc-500 font-mono text-xs font-normal">/ SLA Intelligence</span>
               </span>
             </div>
 
-            <span className="text-zinc-700">|</span>
+            <span className="hidden sm:inline text-zinc-700">|</span>
 
-            {/* Live Telemetry WebSocket Status Badge */}
-            <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-[11px] font-mono text-zinc-300">
+            {/* Live Indicator */}
+            <div className="hidden sm:flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-zinc-900 border border-zinc-800 text-[11px] font-mono text-zinc-300">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
-              <span>WS Live Pulse</span>
-              <span className="text-zinc-600">•</span>
-              <span className="text-zinc-500 text-[10px]">{lastUpdated}</span>
+              <span>En Vivo ({incidents.length} tickets)</span>
             </div>
           </div>
 
-          {/* Right Action Icons */}
+          {/* RBAC Selector & Actions */}
           <div className="flex items-center gap-3">
-            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-zinc-800 bg-zinc-900/50 text-xs text-zinc-400">
-              <Search className="w-3.5 h-3.5 text-zinc-500" />
-              <span>⌘K Quick search</span>
+            {/* RBAC Simulator Dropdown */}
+            <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl border border-zinc-800 bg-zinc-900/80 text-xs">
+              <UserCheck className="w-3.5 h-3.5 text-zinc-400" />
+              <span className="text-zinc-400 hidden sm:inline">Rol RBAC:</span>
+              <select
+                value={currentUserRole}
+                onChange={(e) => handleRoleChange(e.target.value as UserRole)}
+                className="bg-transparent font-bold text-emerald-400 focus:outline-none cursor-pointer"
+              >
+                <option value="SuperAdmin" className="bg-zinc-950 text-white">SuperAdmin</option>
+                <option value="Operator" className="bg-zinc-950 text-white">Operator</option>
+                <option value="Auditor" className="bg-zinc-950 text-white">Auditor (Solo Lectura)</option>
+              </select>
             </div>
 
-            <button className="p-2 rounded-lg border border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 transition-colors">
-              <Bell className="w-4 h-4" />
+            {/* Audit Log Drawer Button */}
+            <button
+              onClick={() => setIsAuditDrawerOpen(true)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 text-xs font-medium text-zinc-300 transition-colors"
+              title="Ver Audit Log"
+            >
+              <History className="w-3.5 h-3.5 text-zinc-400" />
+              <span className="hidden sm:inline">Audit Log</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
             </button>
 
-            <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-zinc-700 to-zinc-500 border border-zinc-700 flex items-center justify-center text-[11px] font-bold text-white">
-              PM
-            </div>
+            {/* Create Incident Button */}
+            <button
+              disabled={currentUserRole === 'Auditor'}
+              onClick={() => setIsCreateModalOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500 text-zinc-950 font-bold text-xs hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-sm"
+              title={currentUserRole === 'Auditor' ? 'Acción restringida para el rol Auditor' : 'Crear incidente'}
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Nuevo Ticket</span>
+            </button>
           </div>
         </div>
       </header>
 
-      {/* 2. Main Content Area */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        {/* Page Title & View Filters */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
-              Live Operational Performance
-            </h1>
-            <p className="text-xs text-zinc-400 mt-1">
-              Monitoreo predictivo de SLAs en tiempo real, velocidad de resolución y carga de turnos operativos
-            </p>
-          </div>
+      {/* Main Container */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 space-y-6">
+        {/* Simulator Control Bar */}
+        <LiveSimulatorControl
+          isSimulating={isSimulating}
+          onToggleSimulation={() => {
+            setIsSimulating(!isSimulating);
+            logAction(
+              'SIMULATOR_STATE_TOGGLED',
+              `Simulador de tickets puesto en estado: ${!isSimulating ? 'ACTIVO' : 'PAUSADO'}.`
+            );
+          }}
+          intervalSpeed={simulatorSpeed}
+          onChangeSpeed={(ms) => setSimulatorSpeed(ms)}
+          generatedCount={generatedCount}
+          onTriggerManualEvent={injectNewIncident}
+        />
 
-          {/* Interactive Popover Filters */}
-          <InteractiveViewFilters
-            selectedTeam={selectedTeam}
-            onSelectTeam={setSelectedTeam}
-            selectedShift={selectedShift}
-            onSelectShift={setSelectedShift}
-            selectedRange={selectedRange}
-            onSelectRange={setSelectedRange}
+        {/* 4 KPI Metric Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <MetricKpiCard
+            metric={{
+              id: 'sla',
+              title: 'SLA Compliance Rate',
+              value: `${metrics.slaComplianceRate}%`,
+              rawValue: metrics.slaComplianceRate,
+              trend: metrics.slaTrend,
+              isPositive: metrics.slaComplianceRate >= 99.0,
+              comparisonText: 'Objetivo SLA: ≥99.0%',
+              status: metrics.slaComplianceRate >= 99.0 ? 'healthy' : 'critical',
+              sparkline: [97.8, 98.2, 98.9, 98.4, 99.1, 99.0, metrics.slaComplianceRate],
+            }}
+          />
+
+          <MetricKpiCard
+            metric={{
+              id: 'volume',
+              title: 'Active Incident Volume',
+              value: String(metrics.activeTickets),
+              rawValue: metrics.activeTickets,
+              trend: metrics.activeTrend,
+              isPositive: true,
+              comparisonText: 'Tickets en investigación',
+              status: metrics.activeTickets > 8 ? 'warning' : 'healthy',
+              sparkline: [12, 10, 8, 9, 7, 6, metrics.activeTickets],
+            }}
+          />
+
+          <MetricKpiCard
+            metric={{
+              id: 'mttr',
+              title: 'Mean Time to Resolve',
+              value: `${metrics.mttrMinutes}m`,
+              rawValue: metrics.mttrMinutes,
+              trend: metrics.mttrTrend,
+              isPositive: metrics.mttrMinutes <= 30,
+              comparisonText: 'Meta: <30 min promedio',
+              status: metrics.mttrMinutes <= 30 ? 'healthy' : 'warning',
+              sparkline: [32, 28, 25, 22, 20, 19, metrics.mttrMinutes],
+            }}
+          />
+
+          <MetricKpiCard
+            metric={{
+              id: 'critical',
+              title: 'Critical Alerts (P1 / P2)',
+              value: String(metrics.criticalAlerts),
+              rawValue: metrics.criticalAlerts,
+              trend: metrics.criticalTrend,
+              isPositive: metrics.criticalAlerts === 0,
+              comparisonText: 'Atención inmediata requerida',
+              status: metrics.criticalAlerts > 0 ? 'critical' : 'healthy',
+              sparkline: [4, 3, 2, 3, 2, 1, metrics.criticalAlerts],
+            }}
           />
         </div>
 
-        {/* 3. Top Row: 4 Metric KPI Cards with Sparklines */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {kpis.map((kpi) => (
-            <MetricKpiCard key={kpi.id} metric={kpi} />
-          ))}
-        </div>
-
-        {/* 4. Interactive Time-Series Telemetry Chart */}
+        {/* Dynamic Time-Series Telemetry Chart */}
         <PulseTimeSeriesChart data={timeSeriesData} />
 
-        {/* 5. Live Incidents & Shift Escalations Table */}
-        <div className="rounded-xl border border-zinc-800/80 bg-zinc-900/40 backdrop-blur-md overflow-hidden">
-          <div className="p-5 border-b border-zinc-800/80 flex items-center justify-between">
-            <div>
-              <h3 className="text-sm font-semibold text-zinc-200 tracking-tight flex items-center gap-2">
-                <Flame className="w-4 h-4 text-rose-400" />
-                Active Incident Triage & SLA Runway
-              </h3>
-              <p className="text-xs text-zinc-500 mt-0.5">
-                Cola priorizada según criticidad P1-P4 y margen de tolerancia SLA
-              </p>
+        {/* Incidents Table & Filter Bar */}
+        <div className="rounded-2xl border border-zinc-800/80 bg-zinc-900/40 backdrop-blur-md overflow-hidden">
+          {/* Filter Bar */}
+          <div className="p-4 border-b border-zinc-800/80 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+            {/* Search Input with Sanitization Feedback */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => handleSearchChange(e.target.value)}
+                placeholder="Buscar por ID, título o responsable..."
+                className="w-full pl-9 pr-3.5 py-2 rounded-xl border border-zinc-800 bg-zinc-950/80 text-xs text-zinc-100 placeholder-zinc-500 focus:border-emerald-500 focus:outline-none"
+              />
+              {sanitizedSearchWarning && (
+                <div className="absolute left-0 top-full mt-1.5 z-20 rounded-lg border border-rose-500/30 bg-rose-500/10 p-2 text-[10px] text-rose-300 flex items-center gap-1.5">
+                  <ShieldAlert className="w-3 h-3 text-rose-400" />
+                  <span>XSS neutralizado: se detectaron etiquetas no seguras en la búsqueda.</span>
+                </div>
+              )}
             </div>
-            <button className="text-xs text-zinc-400 hover:text-zinc-200 font-medium flex items-center gap-1">
-              <span>Ver todos</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+
+            {/* Quick Filter Selectors */}
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Priority Filter */}
+              <select
+                value={selectedPriority}
+                onChange={(e) => setSelectedPriority(e.target.value)}
+                className="rounded-xl border border-zinc-800 bg-zinc-950/90 px-3 py-2 text-xs text-zinc-300 focus:border-emerald-500 focus:outline-none"
+              >
+                <option value="ALL">Todas las Prioridades</option>
+                <option value="P1_CRITICAL">P1 - Crítico</option>
+                <option value="P2_HIGH">P2 - Alto</option>
+                <option value="P3_MEDIUM">P3 - Medio</option>
+                <option value="P4_LOW">P4 - Bajo</option>
+              </select>
+
+              {/* Team Filter */}
+              <select
+                value={selectedTeam}
+                onChange={(e) => setSelectedTeam(e.target.value)}
+                className="rounded-xl border border-zinc-800 bg-zinc-950/90 px-3 py-2 text-xs text-zinc-300 focus:border-emerald-500 focus:outline-none"
+              >
+                <option value="ALL">Todos los Equipos</option>
+                <option value="SRE Especialistas">SRE Especialistas</option>
+                <option value="N2 Support">N2 Support</option>
+                <option value="N1 Triage">N1 Triage</option>
+              </select>
+
+              {/* Status Filter */}
+              <select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="rounded-xl border border-zinc-800 bg-zinc-950/90 px-3 py-2 text-xs text-zinc-300 focus:border-emerald-500 focus:outline-none"
+              >
+                <option value="ALL">Todos los Estados</option>
+                <option value="ACTIVE">Solo Activos (Open/Investigating)</option>
+                <option value="RESOLVED">Solo Resueltos</option>
+              </select>
+            </div>
           </div>
 
+          {/* Table */}
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-zinc-950/60 text-zinc-500 font-mono uppercase text-[10px] tracking-wider border-b border-zinc-800/60">
+              <thead className="bg-zinc-950/80 text-zinc-500 font-mono uppercase text-[10px] tracking-wider border-b border-zinc-800/80">
                 <tr>
-                  <th className="px-5 py-3">Incident ID</th>
-                  <th className="px-5 py-3">Summary</th>
-                  <th className="px-5 py-3">Priority</th>
-                  <th className="px-5 py-3">Status</th>
-                  <th className="px-5 py-3">Squad</th>
-                  <th className="px-5 py-3">SLA Runway</th>
-                  <th className="px-5 py-3">Lead</th>
+                  <th className="px-5 py-3.5">Ticket ID</th>
+                  <th className="px-5 py-3.5">Título / Resumen</th>
+                  <th className="px-5 py-3.5">Severidad</th>
+                  <th className="px-5 py-3.5">Estado</th>
+                  <th className="px-5 py-3.5">Equipo</th>
+                  <th className="px-5 py-3.5">Tolerancia SLA</th>
+                  <th className="px-5 py-3.5">Responsable</th>
+                  <th className="px-5 py-3.5 text-right">Acción</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-800/60 font-sans">
-                {incidents.map((inc) => (
-                  <tr key={inc.id} className="hover:bg-zinc-800/30 transition-colors">
-                    <td className="px-5 py-3.5 font-mono text-zinc-300 font-semibold">{inc.id}</td>
-                    <td className="px-5 py-3.5 text-zinc-200 max-w-xs truncate font-medium">
-                      {inc.title}
+                {filteredIncidents.length === 0 ? (
+                  <tr>
+                    <td colSpan={8} className="text-center py-10 text-zinc-500">
+                      No se encontraron incidentes con los filtros seleccionados.
                     </td>
-                    <td className="px-5 py-3.5">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
-                          inc.priority === 'P1_CRITICAL'
-                            ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
-                            : inc.priority === 'P2_HIGH'
-                            ? 'bg-amber-500/15 text-amber-400 border border-amber-500/30'
-                            : 'bg-blue-500/15 text-blue-400 border border-blue-500/30'
-                        }`}
-                      >
-                        {inc.priority}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3.5">
-                      <span className="text-zinc-400 flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-zinc-400" />
-                        {inc.status}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3.5 text-zinc-400 font-mono">{inc.team}</td>
-                    <td className="px-5 py-3.5 font-mono font-bold text-zinc-200">
-                      {inc.slaRemaining}
-                    </td>
-                    <td className="px-5 py-3.5 text-zinc-400">{inc.assignee}</td>
                   </tr>
-                ))}
+                ) : (
+                  filteredIncidents.map((inc) => {
+                    const isResolved = inc.status === 'RESOLVED' || inc.status === 'CLOSED';
+                    return (
+                      <tr
+                        key={inc.id}
+                        className="hover:bg-zinc-800/30 transition-colors cursor-pointer"
+                        onClick={() => setSelectedIncidentForDetail(inc)}
+                      >
+                        <td className="px-5 py-3.5 font-mono text-zinc-300 font-semibold whitespace-nowrap">
+                          {inc.ticketNumber}
+                        </td>
+                        <td className="px-5 py-3.5 text-zinc-200 max-w-sm truncate font-medium">
+                          {inc.title}
+                        </td>
+                        <td className="px-5 py-3.5 whitespace-nowrap">
+                          <span
+                            className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${
+                              inc.priority === 'P1_CRITICAL'
+                                ? 'bg-rose-500/15 text-rose-400 border-rose-500/30'
+                                : inc.priority === 'P2_HIGH'
+                                ? 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+                                : 'bg-blue-500/15 text-blue-400 border-blue-500/30'
+                            }`}
+                          >
+                            {inc.priority}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3.5 whitespace-nowrap">
+                          <span className="text-zinc-400 flex items-center gap-1.5">
+                            <span
+                              className={`w-2 h-2 rounded-full ${
+                                isResolved
+                                  ? 'bg-emerald-400'
+                                  : inc.status === 'INVESTIGATING'
+                                  ? 'bg-amber-400'
+                                  : 'bg-rose-400'
+                              }`}
+                            />
+                            {inc.status}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3.5 text-zinc-400 font-mono whitespace-nowrap">{inc.team}</td>
+                        <td className="px-5 py-3.5 font-mono font-bold whitespace-nowrap">
+                          {inc.slaBreached ? (
+                            <span className="text-rose-400">Incumplido</span>
+                          ) : isResolved ? (
+                            <span className="text-emerald-400">{inc.timeToResolveMinutes || 25}m</span>
+                          ) : (
+                            <span className="text-zinc-300">{inc.slaTargetMinutes}m meta</span>
+                          )}
+                        </td>
+                        <td className="px-5 py-3.5 text-zinc-400 whitespace-nowrap">{inc.assignee}</td>
+                        <td className="px-5 py-3.5 text-right whitespace-nowrap">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedIncidentForDetail(inc);
+                            }}
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 hover:text-emerald-300"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>Ver</span>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
         </div>
       </main>
+
+      {/* Detail Modal */}
+      <IncidentDetailModal
+        incident={selectedIncidentForDetail}
+        onClose={() => setSelectedIncidentForDetail(null)}
+        currentUserRole={currentUserRole}
+        onResolve={handleResolveIncident}
+        onInvestigate={handleInvestigateIncident}
+      />
+
+      {/* Create Modal */}
+      <CreateIncidentModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        currentUserRole={currentUserRole}
+        onCreateIncident={handleCreateIncident}
+      />
+
+      {/* Audit Trail Drawer */}
+      <AuditLogDrawer
+        isOpen={isAuditDrawerOpen}
+        onClose={() => setIsAuditDrawerOpen(false)}
+        logs={auditLogs}
+      />
     </div>
   );
 };
-
