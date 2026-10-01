@@ -105,3 +105,4 @@ export const FinPulseHeader: React.FC<FinPulseHeaderProps> = ({
     </header>
   );
 };
+

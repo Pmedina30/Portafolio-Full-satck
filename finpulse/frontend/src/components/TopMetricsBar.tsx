@@ -102,3 +102,4 @@ export const TopMetricsBar: React.FC<TopMetricsBarProps> = ({ metrics, isMasked 
     </div>
   );
 };
+

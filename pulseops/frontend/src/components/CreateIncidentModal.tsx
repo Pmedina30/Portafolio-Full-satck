@@ -207,3 +207,4 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
     </div>
   );
 };
+

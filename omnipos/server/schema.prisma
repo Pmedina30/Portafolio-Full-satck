@@ -1,0 +1,261 @@
+// OmniPOS - Cloud Retail & Tech Inventory Command
+// Prisma ORM Schema for PostgreSQL Database Architecture
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// User Roles for Corporate RBAC
+enum Role {
+  CAJERO
+  SUPERVISOR
+  ADMIN
+}
+
+// Tech Product Conditions
+enum ItemCondition {
+  NUEVO
+  REACONDICIONADO_A
+  REACONDICIONADO_B
+  OPEN_BOX
+}
+
+// Serial Number Status
+enum SerialStatus {
+  EN_STOCK
+  VENDIDO
+  EN_GARANTIA
+  DEVUELTO
+  BAJA
+}
+
+// Payment Methods
+enum PaymentMethod {
+  EFECTIVO
+  TARJETA_CREDITO
+  TARJETA_DEBITO
+  TRANSFERENCIA
+  MIXTO
+}
+
+// Cash Transaction Types
+enum CashMovementType {
+  APERTURA_FONDO
+  VENTA_EFECTIVO
+  ENTRADA_AJUSTE
+  RETIRO_JUSTIFICADO
+  CIERRE_CORTE
+}
+
+// Invoice Fiscal Types
+enum InvoiceType {
+  TICKET_CONSUMIDOR_FINAL
+  CREDITO_FISCAL_B01
+  FACTURA_GUBERNAMENTAL
+  NOTA_CREDITO
+}
+
+model User {
+  id           String      @id @default(uuid())
+  email        String      @unique
+  name         String
+  pinHash      String      // Quick 4-digit POS PIN for iPadOS terminal access
+  role         Role        @default(CAJERO)
+  isActive     Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  invoices     Invoice[]
+  registers    CashRegister[]
+  auditLogs    AuditLog[]
+
+  @@index([role])
+  @@index([email])
+}
+
+model Customer {
+  id           String      @id @default(uuid())
+  taxId        String      @unique // RNC / RFC / CIF / DNI
+  name         String
+  email        String?
+  phone        String?
+  address      String?
+  isWholesale  Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  invoices     Invoice[]
+
+  @@index([taxId])
+  @@index([name])
+}
+
+model Product {
+  id           String      @id @default(uuid())
+  sku          String      @unique
+  name         String
+  brand        String      // Apple, Samsung, Sony, etc.
+  category     String      // Smartphones, Laptops, Wearables, etc.
+  description  String?
+  hasSerial    Boolean     @default(false) // Mandatory IMEI / Serial tracking
+  warrantyDays Int         @default(365)
+  basePrice    Decimal     @db.Decimal(10, 2)
+  avgCost      Decimal     @db.Decimal(10, 2) // Weighted Average Cost (CPP)
+  minStockAlert Int        @default(3)
+  imageUrl     String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  variants     Variant[]
+
+  @@index([category])
+  @@index([brand])
+  @@index([sku])
+}
+
+model Variant {
+  id           String        @id @default(uuid())
+  productId    String
+  skuVariant   String        @unique
+  name         String        // e.g. "Natural Titanium - 256GB"
+  color        String?
+  storage      String?
+  condition    ItemCondition @default(NUEVO)
+  price        Decimal       @db.Decimal(10, 2)
+  cost         Decimal       @db.Decimal(10, 2)
+  stock        Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  product      Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+  serials      SerialNumber[]
+  invoiceItems InvoiceItem[]
+
+  @@index([productId])
+  @@index([skuVariant])
+}
+
+model SerialNumber {
+  id           String       @id @default(uuid())
+  variantId    String
+  serialNumber String       @unique // IMEI 1, IMEI 2 or Hardware Serial
+  status       SerialStatus @default(EN_STOCK)
+  receivedAt   DateTime     @default(now())
+  soldAt       DateTime?
+  warrantyEnd  DateTime?
+
+  variant      Variant      @relation(fields: [variantId], references: [id])
+  invoiceItem  InvoiceItem? @relation(fields: [invoiceItemId], references: [id])
+  invoiceItemId String?
+
+  @@index([serialNumber])
+  @@index([status])
+}
+
+model Invoice {
+  id           String        @id @default(uuid())
+  invoiceNumber String       @unique // e.g. "B0200001082"
+  invoiceType  InvoiceType   @default(TICKET_CONSUMIDOR_FINAL)
+  userId       String        // Cashier who processed the sale
+  customerId   String?
+  cashRegisterId String
+
+  subtotal     Decimal       @db.Decimal(10, 2)
+  taxRate      Decimal       @default(0.18) @db.Decimal(4, 2) // 18% ITBIS / IVA / Sales Tax
+  taxAmount    Decimal       @db.Decimal(10, 2)
+  discountAmt  Decimal       @default(0.00) @db.Decimal(10, 2)
+  total        Decimal       @db.Decimal(10, 2)
+
+  paymentMethod PaymentMethod @default(EFECTIVO)
+  cashPaid     Decimal       @default(0.00) @db.Decimal(10, 2)
+  cardPaid     Decimal       @default(0.00) @db.Decimal(10, 2)
+  transferPaid Decimal       @default(0.00) @db.Decimal(10, 2)
+  changeGiven  Decimal       @default(0.00) @db.Decimal(10, 2)
+
+  isVoided     Boolean       @default(false)
+  voidReason   String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  user         User          @relation(fields: [userId], references: [id])
+  customer     Customer?     @relation(fields: [customerId], references: [id])
+  cashRegister CashRegister  @relation(fields: [cashRegisterId], references: [id])
+  items        InvoiceItem[]
+
+  @@index([invoiceNumber])
+  @@index([createdAt])
+  @@index([userId])
+}
+
+model InvoiceItem {
+  id           String       @id @default(uuid())
+  invoiceId    String
+  variantId    String
+  quantity     Int
+  unitPrice    Decimal      @db.Decimal(10, 2)
+  unitCost     Decimal      @db.Decimal(10, 2)
+  discountAmt  Decimal      @default(0.00) @db.Decimal(10, 2)
+  lineTotal    Decimal      @db.Decimal(10, 2)
+
+  invoice      Invoice      @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  variant      Variant      @relation(fields: [variantId], references: [id])
+  serials      SerialNumber[]
+
+  @@index([invoiceId])
+  @@index([variantId])
+}
+
+model CashRegister {
+  id             String            @id @default(uuid())
+  terminalName   String            // "iPad Terminal #1"
+  userId         String            // Active assigned cashier
+  openingFloat   Decimal           @db.Decimal(10, 2) // Fondo inicial
+  openedAt       DateTime          @default(now())
+  closedAt       DateTime?
+  expectedCash   Decimal?          @db.Decimal(10, 2)
+  actualCash     Decimal?          @db.Decimal(10, 2)
+  discrepancy    Decimal?          @db.Decimal(10, 2) // Sobrante (+) o Faltante (-)
+  isClosed       Boolean           @default(false)
+  closureNotes   String?
+
+  user           User              @relation(fields: [userId], references: [id])
+  invoices       Invoice[]
+  transactions   CashTransaction[]
+
+  @@index([isClosed])
+  @@index([openedAt])
+}
+
+model CashTransaction {
+  id             String           @id @default(uuid())
+  cashRegisterId String
+  type           CashMovementType
+  amount         Decimal          @db.Decimal(10, 2)
+  justification  String
+  createdAt      DateTime         @default(now())
+
+  cashRegister   CashRegister     @relation(fields: [cashRegisterId], references: [id], onDelete: Cascade)
+
+  @@index([cashRegisterId])
+  @@index([type])
+}
+
+model AuditLog {
+  id           String      @id @default(uuid())
+  userId       String
+  action       String      // e.g. "ANULACION_VENTA", "DESCUENTO_SUPERVISOR", "APERTURA_CAJON"
+  resource     String      // e.g. "Invoice #B0200001082"
+  details      String?
+  ipAddress    String?
+  createdAt    DateTime    @default(now())
+
+  user         User        @relation(fields: [userId], references: [id])
+
+  @@index([action])
+  @@index([createdAt])
+}

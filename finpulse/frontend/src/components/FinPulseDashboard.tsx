@@ -328,3 +328,4 @@ export const FinPulseDashboard: React.FC = () => {
     </div>
   );
 };
+

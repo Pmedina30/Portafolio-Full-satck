@@ -235,3 +235,4 @@ export const ReceivablesChart: React.FC = () => {
     </div>
   );
 };
+

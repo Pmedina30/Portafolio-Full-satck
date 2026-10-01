@@ -104,3 +104,4 @@ export const AppleHeader: React.FC<AppleHeaderProps> = ({
     </header>
   );
 };
+

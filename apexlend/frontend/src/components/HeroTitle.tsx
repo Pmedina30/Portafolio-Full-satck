@@ -25,3 +25,4 @@ export const HeroTitle: React.FC = () => {
     </section>
   );
 };
+

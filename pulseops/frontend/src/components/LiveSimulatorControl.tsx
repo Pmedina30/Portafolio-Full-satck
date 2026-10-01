@@ -88,3 +88,4 @@ export const LiveSimulatorControl: React.FC<LiveSimulatorControlProps> = ({
     </div>
   );
 };
+

@@ -93,3 +93,4 @@ export const PortfolioMetricsBar: React.FC<PortfolioMetricsBarProps> = ({ metric
     </div>
   );
 };
+

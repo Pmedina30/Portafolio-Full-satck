@@ -83,3 +83,4 @@ export interface PortfolioMetrics {
   collectedThisMonth: number;
   projectedThisMonth: number;
 }
+

@@ -243,3 +243,4 @@ export const PendingInstallmentsTable: React.FC<PendingInstallmentsTableProps> =
     </div>
   );
 };
+

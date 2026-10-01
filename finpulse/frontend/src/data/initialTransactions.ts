@@ -423,3 +423,4 @@ export const INITIAL_TRANSACTIONS: Transaction[] = [
     isOffHours: false,
   },
 ];
+

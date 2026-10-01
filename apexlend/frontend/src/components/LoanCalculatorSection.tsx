@@ -342,3 +342,4 @@ export const LoanCalculatorSection: React.FC<LoanCalculatorSectionProps> = ({
     </section>
   );
 };
+

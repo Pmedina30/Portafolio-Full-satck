@@ -138,3 +138,4 @@ export const TwoFactorAuthModal: React.FC<TwoFactorAuthModalProps> = ({
     </div>
   );
 };
+

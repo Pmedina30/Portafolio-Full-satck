@@ -627,3 +627,4 @@ export const INITIAL_INCIDENTS: Incident[] = [
     assignee: 'Laura Paez',
   },
 ];
+

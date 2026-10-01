@@ -137,3 +137,4 @@ export const SecurityPinModal: React.FC<SecurityPinModalProps> = ({ isOpen, onCl
     </div>
   );
 };
+

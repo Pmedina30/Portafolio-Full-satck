@@ -245,3 +245,4 @@ export const TransactionDetailDrawer: React.FC<TransactionDetailDrawerProps> = (
     </div>
   );
 };
+

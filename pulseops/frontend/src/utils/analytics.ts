@@ -62,3 +62,4 @@ export function generateTimeSeriesFromIncidents(incidents: Incident[]): TimeSeri
 
   return points;
 }
+

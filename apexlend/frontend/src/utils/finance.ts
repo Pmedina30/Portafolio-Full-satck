@@ -191,3 +191,4 @@ export async function generateSha256(text: string): Promise<string> {
   const hex = Math.abs(hash).toString(16).padStart(8, '0');
   return `0x${hex}ab94cf210e74f8819d45e${hex.slice(0, 4)}c9172844`;
 }
+

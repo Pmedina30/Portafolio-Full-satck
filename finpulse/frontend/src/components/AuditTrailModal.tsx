@@ -150,3 +150,4 @@ export const AuditTrailModal: React.FC<AuditTrailModalProps> = ({ isOpen, onClos
     </div>
   );
 };
+

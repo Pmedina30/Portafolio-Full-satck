@@ -165,3 +165,4 @@ export function calculateOperationalMetrics(analyzed: AnalyzedTransaction[]): Op
     avgCriticalZScore,
   };
 }
+

@@ -12,3 +12,4 @@ if not exist "node_modules" (
 )
 npm run dev -- --port 5180 --host
 pause
+
