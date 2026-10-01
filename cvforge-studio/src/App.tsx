@@ -39,6 +39,12 @@ export function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash === '#profile') {
+      setCurrentView('public_profile');
+    }
+  }, []);
+
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => {

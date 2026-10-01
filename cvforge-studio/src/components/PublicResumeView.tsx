@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ResumeData, TemplateType } from '../types';
 import { TemplateCupertino } from './TemplateCupertino';
+import { TemplateNordic } from './TemplateNordic';
+import { TemplateTerminal } from './TemplateTerminal';
 import { TemplateZurich } from './TemplateZurich';
 import { TemplateGeneva } from './TemplateGeneva';
 import {
@@ -12,7 +14,8 @@ import {
   Share2,
   ExternalLink,
   Eye,
-  ShieldCheck
+  ShieldCheck,
+  Lock
 } from 'lucide-react';
 
 interface PublicResumeViewProps {
@@ -37,12 +40,19 @@ export const PublicResumeView: React.FC<PublicResumeViewProps> = ({
   const usernameSlug = resumeData.personalDetails.fullName
     .toLowerCase()
     .replace(/\s+/g, '-')
-    .replace(/[^a-z0-9-]/g, '');
+    .replace(/[^a-z0-9-]/g, '') || 'perfil';
 
-  const publicUrl = `https://cvforge.app/u/${usernameSlug}`;
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5180';
+  const publicUrl = `${origin}/#profile`;
   const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(
     publicUrl
   )}`;
+
+  const isPrivacyActive = Boolean(
+    resumeData.privacySettings?.hide_phone ||
+    resumeData.privacySettings?.hide_email ||
+    resumeData.privacySettings?.hide_address
+  );
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(publicUrl);
@@ -74,38 +84,55 @@ export const PublicResumeView: React.FC<PublicResumeViewProps> = ({
           >
             ← Volver al Editor
           </button>
-          <div className="w-[1px] h-4 bg-[#d6d6d6]" />
-          <div className="flex items-center gap-1.5 text-[12px] text-[#86868b]">
-            <Eye className="w-3.5 h-3.5 text-[#1d1d1f]" />
-            <span className="font-mono text-[#1d1d1f] font-semibold">{viewsCount}</span> visitas registradas
+          <span className="text-[#d6d6d6]">•</span>
+          <div className="flex items-center gap-1.5 text-[12px] text-[#86868b] bg-white border border-[#d6d6d6] px-3 py-1 rounded-full">
+            <Eye className="w-3.5 h-3.5 text-[#0071e3]" />
+            <span>{viewsCount.toLocaleString()} visualizaciones</span>
           </div>
+
+          {isPrivacyActive && (
+            <div className="flex items-center gap-1 text-[11px] text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">
+              <Lock className="w-3 h-3 text-emerald-600" />
+              <span>PII Masking Activo</span>
+            </div>
+          )}
         </div>
 
-        {/* Acciones del Visitante */}
-        <div className="flex flex-wrap items-center gap-2">
-          {/* URL Pill */}
-          <div className="hidden sm:flex items-center gap-2 bg-white border border-[#d6d6d6] rounded-full px-3 py-1 text-[11.5px] text-[#86868b]">
-            <span className="font-mono text-[#1d1d1f]">{publicUrl.replace('https://', '')}</span>
-            <button onClick={handleCopyLink} className="hover:text-[#1d1d1f]" title="Copiar enlace">
-              {copied ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
-            </button>
-          </div>
-
-          {/* Ver QR Modal */}
+        <div className="flex items-center gap-2">
+          {/* Botón QR */}
           <button
             onClick={() => setShowQrModal(true)}
             className="h-8 px-3 rounded-full bg-white hover:bg-[#f5f5f7] border border-[#d6d6d6] text-[12px] font-medium text-[#1d1d1f] inline-flex items-center gap-1.5 transition-colors"
+            title="Generar Código QR del CV"
           >
-            <QrCode className="w-3.5 h-3.5" />
+            <QrCode className="w-3.5 h-3.5 text-[#86868b]" />
             <span>Código QR</span>
           </button>
 
-          {/* Contactar por Email */}
-          <a
-            href={`mailto:${resumeData.personalDetails.email}`}
+          {/* Botón Copiar URL */}
+          <button
+            onClick={handleCopyLink}
             className="h-8 px-3.5 rounded-full bg-white hover:bg-[#f5f5f7] border border-[#d6d6d6] text-[12px] font-medium text-[#1d1d1f] inline-flex items-center gap-1.5 transition-colors"
           >
-            <Mail className="w-3.5 h-3.5" />
+            {copied ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                <span className="text-emerald-700 font-semibold">¡Copiado!</span>
+              </>
+            ) : (
+              <>
+                <Share2 className="w-3.5 h-3.5 text-[#86868b]" />
+                <span>Compartir</span>
+              </>
+            )}
+          </button>
+
+          {/* Contactar vía Email */}
+          <a
+            href={`mailto:${resumeData.personalDetails.email}?subject=Contacto%20Profesional%20vía%20CVForge`}
+            className="h-8 px-3.5 rounded-full bg-white hover:bg-[#f5f5f7] border border-[#d6d6d6] text-[12px] font-medium text-[#1d1d1f] inline-flex items-center gap-1.5 transition-colors"
+          >
+            <Mail className="w-3.5 h-3.5 text-[#86868b]" />
             <span>Contactar</span>
           </a>
 
@@ -121,13 +148,15 @@ export const PublicResumeView: React.FC<PublicResumeViewProps> = ({
       </div>
 
       {/* Tarjeta Hoja de CV con Radio Estricto de 28px sin sombras */}
-      <div className="max-w-[820px] mx-auto bg-white border border-[#d6d6d6] rounded-[28px] p-8 sm:p-14 select-text">
+      <div className="max-w-[820px] mx-auto bg-white border border-[#d6d6d6] rounded-[28px] p-6 sm:p-12 select-text overflow-hidden">
         {template === 'cupertino_minimal' && <TemplateCupertino data={resumeData} />}
-        {template === 'zurich_executive' && <TemplateZurich data={resumeData} />}
+        {template === 'nordic_editorial' && <TemplateNordic data={resumeData} />}
+        {template === 'terminal_pro' && <TemplateTerminal data={resumeData} />}
+        {(template === 'zurich_grid' || template === 'zurich_executive') && <TemplateZurich data={resumeData} />}
         {template === 'geneva_classic' && <TemplateGeneva data={resumeData} />}
 
         {/* Footer del Perfil: Verificación Digital y QR */}
-        <div className="mt-12 pt-8 border-t border-[#d6d6d6] flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="mt-12 pt-8 border-t border-[#d6d6d6] flex flex-col sm:flex-row items-center justify-between gap-6 no-print">
           <div className="flex items-center gap-4">
             <img
               src={qrApiUrl}
@@ -140,21 +169,21 @@ export const PublicResumeView: React.FC<PublicResumeViewProps> = ({
                 <span>Perfil Digital Verificado</span>
               </div>
               <p className="text-[11px] text-[#86868b] leading-relaxed max-w-sm">
-                Escanea con la cámara de tu smartphone para acceder al currículum online interactivo y credenciales en tiempo real.
+                Escanea con la cámara de tu smartphone para acceder al currículum interactivo y credenciales en tiempo real.
               </p>
             </div>
           </div>
 
           <div className="text-right text-[11px] text-[#86868b]">
             <p>Alojado en <span className="font-semibold text-[#1d1d1f]">CVForge Studio</span></p>
-            <p className="text-[10px] font-mono mt-0.5">Hash SHA256 verificado</p>
+            <p className="text-[10px] font-mono mt-0.5">Hash SHA256 criptográficamente seguro</p>
           </div>
         </div>
 
         {/* Watermark si es Free */}
         {!isPro && (
           <div className="mt-6 pt-4 border-t border-[#d6d6d6]/40 text-center text-[11px] text-[#86868b] no-print">
-            ¿Deseas tu propio currículum con diseño Apple White Gallery?{' '}
+            ¿Deseas tu propio currículum profesional con diseño Gallery?{' '}
             <button onClick={onOpenCheckout} className="text-[#0071e3] font-medium hover:underline">
               Crea tu perfil gratis en CVForge →
             </button>

@@ -6,6 +6,13 @@ export default defineConfig({
   server: {
     port: 5180,
     open: false,
-    host: true
-  }
+    host: true,
+    headers: {
+      'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
+      'X-Content-Type-Options': 'nosniff',
+      'X-Frame-Options': 'DENY',
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
+      'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
+    },
+  },
 });
