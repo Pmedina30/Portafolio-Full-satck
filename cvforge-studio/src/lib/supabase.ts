@@ -29,8 +29,43 @@ class SupabaseAuthClient {
   private listeners: Array<(session: SupabaseSession | null) => void> = [];
 
   constructor() {
-    // Escuchar cambios de storage entre pestañas
+    // Capturar sesión tras redirección OAuth (#access_token=...&expires_in=...)
     if (typeof window !== 'undefined') {
+      if (window.location.hash) {
+        try {
+          const hashParams = new URLSearchParams(window.location.hash.substring(1));
+          const accessToken = hashParams.get('access_token');
+          const expiresIn = Number(hashParams.get('expires_in')) || 3600;
+          const errorDesc = hashParams.get('error_description');
+
+          if (accessToken) {
+            const payloadBase64 = accessToken.split('.')[1];
+            const payload = JSON.parse(atob(payloadBase64));
+            const user: SupabaseUser = {
+              id: payload.sub,
+              email: payload.email || '',
+              user_metadata: payload.user_metadata || {},
+              created_at: new Date().toISOString(),
+            };
+            const session: SupabaseSession = {
+              access_token: accessToken,
+              user,
+              expires_at: Date.now() + expiresIn * 1000,
+            };
+            localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+            this.notify(session);
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+          } else if (errorDesc) {
+            console.warn('Supabase Auth Redirect Error:', errorDesc);
+            sessionStorage.setItem('cvforge_auth_error', decodeURIComponent(errorDesc.replace(/\+/g, ' ')));
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+          }
+        } catch (e) {
+          console.error('Error parseando parámetros de autenticación:', e);
+        }
+      }
+
+      // Escuchar cambios de storage entre pestañas
       window.addEventListener('storage', (e) => {
         if (e.key === SESSION_STORAGE_KEY) {
           const session = this.getSessionSync();
@@ -91,7 +126,8 @@ class SupabaseAuthClient {
     // Si hay credenciales reales de Supabase configuradas, conectamos directamente con Supabase REST API
     if (SUPABASE_URL && SUPABASE_ANON_KEY) {
       try {
-        const res = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+        const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5180';
+        const res = await fetch(`${SUPABASE_URL}/auth/v1/signup?redirect_to=${encodeURIComponent(origin)}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -109,15 +145,20 @@ class SupabaseAuthClient {
           throw new Error(json.error_description || json.msg || json.message || 'Error en registro');
         }
 
-        const session: SupabaseSession = {
-          access_token: json.access_token || `tok_${Date.now()}`,
-          user: json.user,
-          expires_at: Date.now() + 3600 * 1000 * 24 * 7,
-        };
-
-        localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
-        this.notify(session);
-        return { data: { user: json.user, session }, error: null };
+        const accessToken = json.access_token || json.session?.access_token;
+        if (accessToken) {
+          const session: SupabaseSession = {
+            access_token: accessToken,
+            user: json.user,
+            expires_at: Date.now() + 3600 * 1000 * 24 * 7,
+          };
+          localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+          this.notify(session);
+          return { data: { user: json.user, session }, error: null };
+        } else {
+          // Usuario registrado pero requiere confirmación de correo
+          return { data: { user: json.user, session: null }, error: null };
+        }
       } catch (err: any) {
         return { data: { user: null, session: null }, error: err };
       }
@@ -167,7 +208,14 @@ class SupabaseAuthClient {
 
         const json = await res.json();
         if (!res.ok) {
-          throw new Error(json.error_description || json.msg || json.message || 'Credenciales inválidas');
+          const rawErr = json.error_description || json.msg || json.message || '';
+          if (rawErr.toLowerCase().includes('email not confirmed')) {
+            throw new Error('Tu correo electrónico aún no ha sido confirmado. Por favor revisa tu bandeja de entrada o haz clic en el enlace de verificación recibido.');
+          }
+          if (rawErr.toLowerCase().includes('invalid login credentials')) {
+            throw new Error('Credenciales inválidas. Verifica tu correo o contraseña.');
+          }
+          throw new Error(rawErr || 'Error al iniciar sesión.');
         }
 
         const session: SupabaseSession = {
@@ -214,10 +262,36 @@ class SupabaseAuthClient {
     provider: 'github' | 'google';
   }): Promise<{ data: { provider: string; url: string | null }; error: Error | null }> {
     if (SUPABASE_URL && SUPABASE_ANON_KEY) {
-      window.location.href = `${SUPABASE_URL}/auth/v1/authorize?provider=${provider}&redirect_to=${encodeURIComponent(
+      const targetUrl = `${SUPABASE_URL}/auth/v1/authorize?provider=${provider}&redirect_to=${encodeURIComponent(
         window.location.origin
       )}`;
-      return { data: { provider, url: null }, error: null };
+
+      try {
+        const check = await fetch(targetUrl, {
+          method: 'GET',
+          headers: { apikey: SUPABASE_ANON_KEY },
+        });
+
+        if (!check.ok) {
+          const body = await check.json().catch(() => null);
+          if (body?.msg?.includes('not enabled') || check.status === 400) {
+            return {
+              data: { provider, url: null },
+              error: new Error(
+                `El inicio con ${provider === 'google' ? 'Google' : 'GitHub'} aún no está habilitado en tu panel de Supabase. Puedes ingresar con Email y Contraseña o habilitar el proveedor en Supabase Auth.`
+              ),
+            };
+          }
+        }
+      } catch (err: any) {
+        // En caso de bloqueo CORS o preflight en cliente, si no es fatal permitimos la navegación
+        if (err.message && err.message.includes('habilitado')) {
+          return { data: { provider, url: null }, error: err };
+        }
+      }
+
+      window.location.href = targetUrl;
+      return { data: { provider, url: targetUrl }, error: null };
     }
 
     // Simulación instantánea para desarrollo

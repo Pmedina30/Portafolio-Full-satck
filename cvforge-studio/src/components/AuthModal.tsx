@@ -21,6 +21,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [emailConfirmationSent, setEmailConfirmationSent] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (isOpen && typeof window !== 'undefined') {
+      const storedErr = sessionStorage.getItem('cvforge_auth_error');
+      if (storedErr) {
+        setErrorMsg(storedErr);
+        sessionStorage.removeItem('cvforge_auth_error');
+      }
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -63,12 +74,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         });
 
         if (error) throw error;
-        if (data.user) {
+        if (data.session && data.user) {
           setSuccessMsg('¡Cuenta creada con éxito! Sesión iniciada.');
           setTimeout(() => {
             onAuthSuccess(data.user!);
             onClose();
           }, 800);
+        } else if (data.user) {
+          setEmailConfirmationSent(cleanEmail);
         }
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -133,8 +146,52 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           <X className="w-4 h-4" />
         </button>
 
-        {/* Encabezado */}
-        <div className="text-center space-y-2 mb-6">
+        {/* Contenido Condicional: Confirmación de Correo o Formulario */}
+        {emailConfirmationSent ? (
+          <div className="text-center py-6 space-y-5 animate-in fade-in zoom-in-95 duration-200">
+            <div className="w-16 h-16 mx-auto rounded-full bg-[#0071e3]/10 border border-[#0071e3]/30 flex items-center justify-center text-[#0071e3]">
+              <Mail className="w-8 h-8 animate-pulse" />
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-xl font-semibold tracking-tight text-white">
+                ¡Revisa tu correo electrónico!
+              </h3>
+              <p className="text-[13px] text-zinc-300 leading-relaxed">
+                Hemos enviado un enlace de confirmación a:
+              </p>
+              <div className="inline-block px-3.5 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white font-mono text-xs">
+                {emailConfirmationSent}
+              </div>
+              <p className="text-[12px] text-zinc-400 mt-2 max-w-xs mx-auto">
+                Abre el correo y haz clic en el enlace para verificar tu cuenta y entrarás automáticamente a tu estudio de CVs.
+              </p>
+            </div>
+
+            <div className="pt-3 space-y-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setEmailConfirmationSent(null);
+                  setMode('signin');
+                }}
+                className="w-full h-11 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white text-[13px] font-medium transition-all"
+              >
+                Volver a Iniciar Sesión
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full py-2 text-zinc-400 hover:text-white text-xs transition-colors"
+              >
+                Cerrar ventana
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Encabezado */}
+            <div className="text-center space-y-2 mb-6">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] font-mono text-zinc-300">
             <Sparkles className="w-3 h-3 text-[#0071e3]" />
             CVFORGE STUDIO ID
@@ -335,6 +392,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           <span className="text-zinc-400 hover:underline cursor-pointer">Términos de Servicio</span> y{' '}
           <span className="text-zinc-400 hover:underline cursor-pointer">Política de Privacidad</span>.
         </p>
+          </>
+        )}
       </div>
     </div>
   );
