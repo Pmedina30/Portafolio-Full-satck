@@ -65,7 +65,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#1d1d1f] font-sans selection:bg-[#1d1d1f] selection:text-white flex flex-col justify-between">
+    <div className="min-h-screen bg-[#fafafa] text-[#1d1d1f] font-sans selection:bg-[#1d1d1f] selection:text-white flex flex-col justify-between relative">
       {/* Toast Notification Flotante */}
       {toastMessage && (
         <div className="fixed top-24 left-1/2 transform -translate-x-1/2 z-50 bg-[#1d1d1f] text-white px-5 py-2.5 rounded-full text-[12.5px] font-medium flex items-center gap-2 border border-white/20 animate-bounce">

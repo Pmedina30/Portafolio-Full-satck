@@ -5,6 +5,7 @@ import { TemplateNordic } from './TemplateNordic';
 import { TemplateTerminal } from './TemplateTerminal';
 import { TemplateZurich } from './TemplateZurich';
 import { TemplateGeneva } from './TemplateGeneva';
+import { InteractiveIdBadge } from './3d/InteractiveIdBadge';
 import {
   FileDown,
   Mail,
@@ -15,7 +16,8 @@ import {
   ExternalLink,
   Eye,
   ShieldCheck,
-  Lock
+  Lock,
+  Sparkles
 } from 'lucide-react';
 
 interface PublicResumeViewProps {
@@ -35,6 +37,7 @@ export const PublicResumeView: React.FC<PublicResumeViewProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const [showQrModal, setShowQrModal] = useState(false);
+  const [showBadgeModal, setShowBadgeModal] = useState(false);
   const [viewsCount] = useState(1483);
 
   const usernameSlug = resumeData.personalDetails.fullName
@@ -99,6 +102,16 @@ export const PublicResumeView: React.FC<PublicResumeViewProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Botón Credencial 3D */}
+          <button
+            onClick={() => setShowBadgeModal(true)}
+            className="h-8 px-3 rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white text-[12px] font-semibold inline-flex items-center gap-1.5 shadow-sm shadow-blue-500/25 transition-all"
+            title="Ver Credencial 3D Holográfica"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-white" />
+            <span>Credencial 3D</span>
+          </button>
+
           {/* Botón QR */}
           <button
             onClick={() => setShowQrModal(true)}
@@ -220,6 +233,30 @@ export const PublicResumeView: React.FC<PublicResumeViewProps> = ({
                 Cerrar
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Credencial 3D Holográfica Interactiva */}
+      {showBadgeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md no-print">
+          <div className="relative flex flex-col items-center max-w-md w-full animate-in fade-in zoom-in-95 duration-200">
+            {/* Botón flotante para cerrar */}
+            <div className="w-full flex justify-end mb-2">
+              <button
+                onClick={() => setShowBadgeModal(false)}
+                className="px-3 py-1 rounded-full bg-white/20 hover:bg-white/30 text-white text-[12px] font-medium backdrop-blur-lg border border-white/20 transition-colors"
+              >
+                ✕ Cerrar Credencial
+              </button>
+            </div>
+
+            {/* Componente 3D Holographic ID Badge */}
+            <InteractiveIdBadge
+              personalDetails={resumeData.personalDetails}
+              username={usernameSlug}
+              onViewProfile={() => setShowBadgeModal(false)}
+            />
           </div>
         </div>
       )}
