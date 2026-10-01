@@ -266,3 +266,19 @@ export const INDUSTRY_PRESETS: Record<IndustryType, Partial<ResumeData>> = {
     ],
   },
 };
+
+export const MOCK_ANALYTICS = {
+  totalViews: 1483,
+  uniqueVisitors: 942,
+  qrScans: 312,
+  pdfDownloads: 189,
+  conversionRate: '12.7%',
+  recentVisitors: [
+    { company: 'Apple Inc. (Cupertino HQ)', location: 'California, US', device: 'macOS / Safari', time: 'Hace 12 min' },
+    { company: 'Spotify AB', location: 'Estocolmo, SE', device: 'macOS / Chrome', time: 'Hace 45 min' },
+    { company: 'Stripe Payments UK', location: 'Londres, UK', device: 'iOS / Safari', time: 'Hace 2 horas' },
+    { company: 'Google LLC (Mountain View)', location: 'California, US', device: 'Linux / Chrome', time: 'Hace 5 horas' },
+    { company: 'Revolut Ltd', location: 'Madrid, ES', device: 'Windows / Edge', time: 'Hace 1 día' },
+  ],
+};
+
