@@ -42,7 +42,7 @@ export const INITIAL_RESUME_DATA: ResumeData = {
         'Conceptualicé y desplegué aplicaciones web críticas para clientes Fortune 500, coordinando equipos multidisciplinares de ingeniería frontend y producto.',
       metrics: 'Procesamiento de $12M+ ARR con 99.99% de uptime contable',
       highlights: [
-        'Arquitectura de suscripciones Lemon Squeezy y webhooks idempotentes con verificación criptográfica HMAC-SHA256.',
+        'Arquitectura de suscripciones PayPal y webhooks idempotentes con verificación criptográfica oficial.',
         'Optimización de First Contentful Paint a 0.4s en redes móviles 4G.',
       ],
     },
@@ -94,7 +94,7 @@ export const INITIAL_RESUME_DATA: ResumeData = {
     'Next.js 15 App Router',
     'React 19',
     'Supabase & PostgreSQL',
-    'Lemon Squeezy API',
+    'PayPal REST API & SDK',
     'Tailwind CSS',
     'Arquitectura Limpia & DDD',
     'Seguridad OWASP',
@@ -276,7 +276,7 @@ export const MOCK_ANALYTICS = {
   recentVisitors: [
     { company: 'Apple Inc. (Cupertino HQ)', location: 'California, US', device: 'macOS / Safari', time: 'Hace 12 min' },
     { company: 'Spotify AB', location: 'Estocolmo, SE', device: 'macOS / Chrome', time: 'Hace 45 min' },
-    { company: 'Stripe Payments UK', location: 'Londres, UK', device: 'iOS / Safari', time: 'Hace 2 horas' },
+    { company: 'PayPal EMEA HQ', location: 'Dublín, Irlanda', device: 'iOS / Safari', time: 'Hace 2 horas' },
     { company: 'Google LLC (Mountain View)', location: 'California, US', device: 'Linux / Chrome', time: 'Hace 5 horas' },
     { company: 'Revolut Ltd', location: 'Madrid, ES', device: 'Windows / Edge', time: 'Hace 1 día' },
   ],

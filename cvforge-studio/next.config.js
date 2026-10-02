@@ -25,18 +25,18 @@ const nextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=(), payment=(self "https://*.lemonsqueezy.com")',
+            value: 'camera=(), microphone=(), geolocation=(), payment=(self "https://*.paypal.com" "https://*.paypalobjects.com")',
           },
           {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.supabase.co https://*.lemonsqueezy.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.supabase.co https://*.paypal.com https://*.paypalobjects.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
-              "img-src 'self' data: https: blob:",
-              "connect-src 'self' https://*.supabase.co https://*.lemonsqueezy.com https://api.qrserver.com",
-              "frame-src 'self' https://*.lemonsqueezy.com",
+              "img-src 'self' data: https: blob: https://*.paypal.com https://*.paypalobjects.com",
+              "connect-src 'self' https://*.supabase.co https://*.paypal.com https://api.qrserver.com",
+              "frame-src 'self' https://*.paypal.com https://*.paypalobjects.com",
             ].join('; '),
           },
         ],

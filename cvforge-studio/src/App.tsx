@@ -150,11 +150,12 @@ export function App() {
         }}
       />
 
-      {/* Modal de Checkout Pro Simulado de Stripe */}
+      {/* Modal de Checkout Oficial con PayPal (Subscriptions & Orders) */}
       <ProCheckoutModal
         isOpen={isCheckoutOpen}
         onClose={() => setIsCheckoutOpen(false)}
         onSuccess={handleCheckoutSuccess}
+        user={user}
       />
 
       {/* Footer Minimalista White Gallery */}

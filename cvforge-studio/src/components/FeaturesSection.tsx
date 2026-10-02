@@ -68,12 +68,12 @@ export const FeaturesSection: React.FC<FeaturesSectionProps> = ({ onNavigate }) 
           {/* Tarjeta 3 */}
           <div className="bg-white border border-[#d6d6d6] rounded-[28px] p-8 flex flex-col justify-between h-[380px] hover:border-[#1d1d1f] transition-colors">
             <div>
-              <span className="text-[11px] font-mono text-[#86868b]">03 / MONETIZACIÓN STRIPE</span>
+              <span className="text-[11px] font-mono text-[#86868b]">03 / MONETIZACIÓN PAYPAL</span>
               <h3 className="text-[22px] font-semibold text-[#1d1d1f] mt-3 tracking-tight">
                 Pase Pro & Analíticas
               </h3>
               <p className="text-[14px] text-[#86868b] mt-3 leading-relaxed tracking-[-0.2px]">
-                Plan gratuito con marca de agua discreta. Desbloqueo mediante Stripe de descarga en PDF vectorial a 300 DPI y métricas de visitantes de empresas Fortune 500.
+                Plan gratuito con marca de agua discreta. Desbloqueo mediante PayPal de descarga en PDF vectorial a 300 DPI y métricas de visitantes de empresas Fortune 500.
               </p>
             </div>
             <button

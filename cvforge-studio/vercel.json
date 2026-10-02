@@ -5,8 +5,8 @@
   "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/api/lemon/webhook",
-      "destination": "/api/webhooks/lemonsqueezy"
+      "source": "/api/paypal/webhook",
+      "destination": "/api/webhooks/paypal"
     },
     {
       "source": "/(.*)",
