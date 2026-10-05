@@ -47,6 +47,13 @@ export async function POST(req: NextRequest) {
     // Desbloquear exportación Pro sin marca de agua
     await supabaseAdmin.from('resumes').update({ has_watermark: false }).eq('user_id', userId);
 
+    // Sincronizar estado is_pro en public.profiles
+    await supabaseAdmin.from('profiles').upsert({
+      id: userId,
+      is_pro: true,
+      updated_at: new Date().toISOString(),
+    });
+
     console.info(`[PAYPAL_SUB_ACTIVATED]: Suscripción Pro activa para usuario ${userId} (ID: ${subscriptionId})`);
 
     return NextResponse.json(

@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           error: 'Validación de esquema fallida',
-          issues: validation.error?.issues.map((i) => i.message),
+          issues: validation.error?.issues.map((i: any) => i.message),
         },
         { status: 400 }
       );

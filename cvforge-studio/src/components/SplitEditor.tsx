@@ -7,6 +7,8 @@ import { TemplateZurich } from './TemplateZurich';
 import { TemplateGeneva } from './TemplateGeneva';
 import { INDUSTRY_PRESETS } from '../data/mockData';
 import { saveResumeSecurely } from '../lib/resumeService';
+import { AIAssistantDrawer } from './editor/AIAssistantDrawer';
+import { AssistantMode } from '../app/api/ai/assistant/route';
 import {
   FileDown,
   ExternalLink,
@@ -25,7 +27,8 @@ import {
   Award,
   Lock,
   Eye,
-  EyeOff
+  EyeOff,
+  Zap,
 } from 'lucide-react';
 
 interface SplitEditorProps {
@@ -52,6 +55,43 @@ export const SplitEditor: React.FC<SplitEditorProps> = ({
   const [copiedLink, setCopiedLink] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // Estados para el Copilot de IA Exclusivo Pro
+  const [isAIDrawerOpen, setIsAIDrawerOpen] = useState(false);
+  const [drawerInitialContent, setDrawerInitialContent] = useState('');
+  const [drawerInitialMode, setDrawerInitialMode] = useState<AssistantMode>('bullet_improve');
+
+  const handleApplyAIChange = (
+    target: 'summary' | 'experience_highlight' | 'full_text',
+    newContent: string,
+    expId?: string,
+    highlightIndex?: number
+  ) => {
+    if (target === 'summary') {
+      setResumeData((prev) => ({
+        ...prev,
+        personalDetails: { ...prev.personalDetails, summary: newContent },
+      }));
+    } else if (target === 'experience_highlight' && expId) {
+      setResumeData((prev) => ({
+        ...prev,
+        experience: prev.experience.map((exp) => {
+          if (exp.id !== expId) return exp;
+          const newHighlights = [...(exp.highlights || [])];
+          if (typeof highlightIndex === 'number' && highlightIndex >= 0 && highlightIndex < newHighlights.length) {
+            newHighlights[highlightIndex] = newContent;
+          } else {
+            newHighlights.push(newContent);
+          }
+          return {
+            ...exp,
+            highlights: newHighlights,
+            metrics: exp.metrics || newContent,
+          };
+        }),
+      }));
+    }
+  };
 
   const currentIndustry = resumeData.industry || 'tech_software';
 
@@ -234,6 +274,18 @@ export const SplitEditor: React.FC<SplitEditorProps> = ({
               Zurich Grid
             </button>
           </div>
+
+          {/* Botón Copilot de IA Exclusivo Pro */}
+          <button
+            onClick={() => {
+              setDrawerInitialMode('bullet_improve');
+              setIsAIDrawerOpen(true);
+            }}
+            className="inline-flex items-center gap-1.5 h-9 px-4 rounded-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:opacity-95 text-white text-[12px] font-medium shadow-md shadow-indigo-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-cyan-200 animate-pulse" />
+            <span>AI Copilot Pro</span>
+          </button>
 
           {/* Guardar Seguro */}
           <button
@@ -459,9 +511,23 @@ export const SplitEditor: React.FC<SplitEditorProps> = ({
                 )}
 
                 <div>
-                  <label className="block text-[11px] uppercase tracking-[0.5px] font-semibold text-[#86868b] mb-1">
-                    Resumen Ejecutivo (Perfil Profesional)
-                  </label>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="block text-[11px] uppercase tracking-[0.5px] font-semibold text-[#86868b]">
+                      Resumen Ejecutivo (Perfil Profesional)
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDrawerInitialMode('bullet_improve');
+                        setDrawerInitialContent(resumeData.personalDetails.summary);
+                        setIsAIDrawerOpen(true);
+                      }}
+                      className="inline-flex items-center gap-1 text-[11px] text-[#0071e3] hover:underline font-medium"
+                    >
+                      <Sparkles className="w-3 h-3 text-[#0071e3]" />
+                      <span>Optimizar con IA</span>
+                    </button>
+                  </div>
                   <textarea
                     rows={4}
                     value={resumeData.personalDetails.summary}
@@ -530,9 +596,23 @@ export const SplitEditor: React.FC<SplitEditorProps> = ({
 
                     {/* Métrica de Alto Impacto (Fórmula XYZ) */}
                     <div>
-                      <label className="block text-[10.5px] uppercase tracking-[0.5px] font-bold text-[#0071e3] mb-1">
-                        KPI / Métrica de Alto Impacto (Fórmula XYZ)
-                      </label>
+                      <div className="flex justify-between items-center mb-1">
+                        <label className="block text-[10.5px] uppercase tracking-[0.5px] font-bold text-[#0071e3]">
+                          KPI / Métrica de Alto Impacto (Fórmula XYZ)
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setDrawerInitialMode('bullet_improve');
+                            setDrawerInitialContent(exp.metrics || exp.description);
+                            setIsAIDrawerOpen(true);
+                          }}
+                          className="inline-flex items-center gap-1 text-[10.5px] text-[#0071e3] hover:underline font-semibold"
+                        >
+                          <Sparkles className="w-3 h-3 text-[#0071e3]" />
+                          <span>Pulir con IA</span>
+                        </button>
+                      </div>
                       <input
                         placeholder={
                           currentIndustry === 'tech_software'
@@ -892,6 +972,18 @@ export const SplitEditor: React.FC<SplitEditorProps> = ({
           </div>
         </section>
       </div>
+
+      {/* Drawer del Copilot de IA Exclusivo Pro */}
+      <AIAssistantDrawer
+        isOpen={isAIDrawerOpen}
+        onClose={() => setIsAIDrawerOpen(false)}
+        isPro={isPro}
+        onOpenProModal={onOpenCheckout}
+        resumeData={resumeData}
+        onApplyChange={handleApplyAIChange}
+        initialMode={drawerInitialMode}
+        initialContent={drawerInitialContent}
+      />
     </div>
   );
 };

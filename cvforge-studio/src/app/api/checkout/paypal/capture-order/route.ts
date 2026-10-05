@@ -40,6 +40,13 @@ export async function POST(req: NextRequest) {
     // Desbloquear exportación sin marca de agua para el usuario
     await supabaseAdmin.from('resumes').update({ has_watermark: false }).eq('user_id', userId);
 
+    // Sincronizar estado Pro en perfil
+    await supabaseAdmin.from('profiles').upsert({
+      id: userId,
+      is_pro: true,
+      updated_at: new Date().toISOString(),
+    });
+
     console.info(`[PAYPAL_ORDER_CAPTURED]: Usuario ${userId} activó Pase Individual con orden ${orderId}`);
 
     return NextResponse.json(

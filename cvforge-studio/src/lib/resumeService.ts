@@ -64,7 +64,7 @@ export async function saveResumeSecurely(
         headers: {
           'Content-Type': 'application/json',
           apikey: supabaseKey,
-          Authorization: `Bearer ${sessionData.session.access_token}`,
+          Authorization: `Bearer ${sessionData.session?.access_token || ''}`,
           Prefer: 'resolution=merge-duplicates,return=representation',
         },
         body: JSON.stringify({

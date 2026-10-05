@@ -61,6 +61,13 @@ export async function POST(req: NextRequest) {
             updated_at: new Date().toISOString(),
           });
 
+          // Actualizar estado Pro en perfil
+          await supabaseAdmin.from('profiles').upsert({
+            id: customId,
+            is_pro: true,
+            updated_at: new Date().toISOString(),
+          });
+
           await supabaseAdmin.from('resumes').update({ has_watermark: false }).eq('user_id', customId);
           console.info(`[PAYPAL_WEBHOOK_CAPTURE_SUCCESS]: Usuario ${customId} activó pase individual.`);
         }
@@ -86,6 +93,13 @@ export async function POST(req: NextRequest) {
             status: 'active',
             current_period_end: nextBilling,
             cancel_at_period_end: false,
+            updated_at: new Date().toISOString(),
+          });
+
+          // Actualizar estado Pro en perfil
+          await supabaseAdmin.from('profiles').upsert({
+            id: customId,
+            is_pro: true,
             updated_at: new Date().toISOString(),
           });
 
@@ -117,6 +131,11 @@ export async function POST(req: NextRequest) {
               })
               .eq('paypal_subscription_id', subscriptionId);
 
+            await supabaseAdmin.from('profiles').update({
+              is_pro: true,
+              updated_at: new Date().toISOString(),
+            }).eq('id', subRecord.user_id);
+
             await supabaseAdmin.from('resumes').update({ has_watermark: false }).eq('user_id', subRecord.user_id);
             console.info(`[PAYPAL_WEBHOOK_RENEWAL]: Suscripción ${subscriptionId} renovada.`);
           }
@@ -144,7 +163,16 @@ export async function POST(req: NextRequest) {
             })
             .eq('paypal_subscription_id', subscriptionId);
 
-          console.info(`[PAYPAL_WEBHOOK_SUB_CANCELLED]: Suscripción ${subscriptionId} cancelada/suspendida.`);
+          // Revocar is_pro en perfiles
+          await supabaseAdmin
+            .from('profiles')
+            .update({
+              is_pro: false,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', subRecord.user_id);
+
+          console.info(`[PAYPAL_WEBHOOK_SUB_CANCELLED]: Suscripción ${subscriptionId} cancelada/suspendida para ${subRecord.user_id}.`);
         }
         break;
       }
@@ -167,6 +195,15 @@ export async function POST(req: NextRequest) {
               updated_at: new Date().toISOString(),
             })
             .eq('paypal_subscription_id', subscriptionId);
+
+          // Revocar is_pro en perfiles
+          await supabaseAdmin
+            .from('profiles')
+            .update({
+              is_pro: false,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', subRecord.user_id);
 
           // Reactivar marca de agua al terminar plan
           await supabaseAdmin.from('resumes').update({ has_watermark: true }).eq('user_id', subRecord.user_id);

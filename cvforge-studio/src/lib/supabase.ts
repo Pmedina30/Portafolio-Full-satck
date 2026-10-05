@@ -26,7 +26,7 @@ const SUPABASE_ANON_KEY = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || (i
 const SESSION_STORAGE_KEY = 'cvforge_supabase_session';
 
 class SupabaseAuthClient {
-  private listeners: Array<(session: SupabaseSession | null) => void> = [];
+  private listeners: Array<(event: string, session: SupabaseSession | null) => void> = [];
 
   constructor() {
     // Capturar sesión tras redirección OAuth (#access_token=...&expires_in=...)
@@ -76,7 +76,7 @@ class SupabaseAuthClient {
   }
 
   private notify(session: SupabaseSession | null) {
-    this.listeners.forEach((callback) => callback(session));
+    this.listeners.forEach((callback) => callback(session ? 'SIGNED_IN' : 'SIGNED_OUT', session));
   }
 
   public getSessionSync(): SupabaseSession | null {
