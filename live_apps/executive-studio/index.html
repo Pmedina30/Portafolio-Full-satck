@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ExecutiveBI — Analytics That Drive Executive Decisions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --ink: #0f172a;
+      --ink-muted: #475569;
+      --ink-subtle: #94a3b8;
+      --border: #e2e8f0;
+      --border-soft: #f1f5f9;
+      --coral: #fb7185;
+      --indigo: #4f46e5;
+      --amber: #f59e0b;
+      --emerald: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-variant-numeric: tabular-nums;
+      background: var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: #ffffff;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* Pure #FFFFFF Top Header (Exact Mixpanel Model) */
+    .header-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(226, 232, 240, 0.75);
+    }
+
+    .navbar {
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 19px;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #4f46e5 0%, #fb7185 100%);
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.25);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #334155;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.16s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--indigo);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-login {
+      background: none;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      padding: 8px 10px;
+    }
+
+    .btn-login:hover {
+      color: var(--ink);
+    }
+
+    .btn-black-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #0f172a;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      font-size: 13.5px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    .btn-black-pill:hover {
+      background: #1e293b;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.18);
+    }
+
+    /* Centered Mixpanel Hero */
+    .hero {
+      padding: 68px 0 36px;
+      text-align: center;
+    }
+
+    .eyebrow-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #4f46e5;
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(38px, 4.6vw, 54px);
+      font-weight: 800;
+      letter-spacing: -0.036em;
+      line-height: 1.08;
+      color: #0f172a;
+      max-width: 780px;
+      margin: 0 auto 20px;
+    }
+
+    .hero h1 span.serif-accent {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-style: italic;
+      color: #4f46e5;
+      padding-right: 4px;
+    }
+
+    .hero p.subtitle {
+      font-size: 17.5px;
+      line-height: 1.6;
+      color: var(--ink-muted);
+      max-width: 630px;
+      margin: 0 auto 30px;
+    }
+
+    .hero-cta-row {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 42px;
+    }
+
+    .btn-hero-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0f172a;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.16);
+      transition: all 0.18s ease;
+    }
+
+    .btn-hero-main:hover {
+      background: #1e293b;
+      transform: translateY(-1px);
+    }
+
+    .link-explore {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #0f172a;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    .link-explore:hover {
+      color: var(--indigo);
+    }
+
+    .client-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      color: #94a3b8;
+      margin-bottom: 12px;
+    }
+
+    /* Luminous Peach, Rose & Electric-Violet Aura Stage */
+    .aura-stage {
+      position: relative;
+      padding: 46px 0 92px;
+    }
+
+    .aura-backdrop {
+      position: absolute;
+      inset: 6px 2% 28px 2%;
+      border-radius: 36px;
+      background:
+        radial-gradient(circle at 12% 24%, rgba(251, 146, 60, 0.42) 0%, rgba(251, 113, 133, 0.34) 28%, transparent 62%),
+        radial-gradient(circle at 88% 22%, rgba(124, 58, 237, 0.40) 0%, rgba(79, 70, 229, 0.28) 34%, transparent 65%),
+        radial-gradient(circle at 50% 85%, rgba(244, 114, 182, 0.30) 0%, rgba(253, 186, 116, 0.22) 44%, transparent 72%),
+        linear-gradient(135deg, #fff1f2 0%, #f5f3ff 50%, #fff7ed 100%);
+      filter: blur(2px);
+      z-index: 0;
+    }
+
+    .aura-bloom-left,
+    .aura-bloom-right {
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      filter: blur(68px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .aura-bloom-left {
+      top: 10px;
+      left: -40px;
+      background: rgba(251, 113, 133, 0.42);
+    }
+
+    .aura-bloom-right {
+      top: 20px;
+      right: -40px;
+      background: rgba(124, 58, 237, 0.38);
+    }
+
+    /* Elevated White SaaS Analytics Application Window */
+    .app-window-wrap {
+      position: relative;
+      z-index: 2;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .app-window {
+      background: #ffffff;
+      border-radius: 20px;
+      border: 1px solid rgba(226, 232, 240, 0.95);
+      box-shadow:
+        0 32px 80px rgba(15, 23, 42, 0.14),
+        0 6px 20px rgba(79, 70, 229, 0.08);
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      min-height: 620px;
+      overflow: hidden;
+    }
+
+    /* Floating Glass "Share Executive Board" Popover Card */
+    .share-popover {
+      position: absolute;
+      top: -22px;
+      right: -14px;
+      width: 288px;
+      background: rgba(255, 255, 255, 0.84);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 15px 16px;
+      box-shadow: 0 20px 48px rgba(15, 23, 42, 0.16), 0 0 0 1px rgba(15, 23, 42, 0.05);
+      z-index: 15;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .share-popover.minimized {
+      transform: translateY(-6px) scale(0.97);
+    }
+
+    .share-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .share-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .live-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+    }
+
+    .avatar-stack {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .avatars {
+      display: flex;
+    }
+
+    .avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      margin-right: -7px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #ffffff;
+      display: grid;
+      place-items: center;
+    }
+
+    .share-copy-btn {
+      width: 100%;
+      padding: 7px 10px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: #334155;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s ease;
+    }
+
+    .share-copy-btn:hover {
+      border-color: var(--indigo);
+      color: var(--indigo);
+    }
+
+    /* Left Sidebar */
+    .app-sidebar {
+      background: #f8fafc;
+      border-right: 1px solid var(--border);
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .workspace-switcher {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .ws-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: #0f172a;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+    }
+
+    .ws-meta {
+      text-align: left;
+    }
+
+    .ws-meta strong {
+      display: block;
+      font-size: 12.5px;
+      color: #0f172a;
+    }
+
+    .ws-meta span {
+      font-size: 10.5px;
+      color: var(--ink-subtle);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .side-nav-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--ink-subtle);
+      padding: 0 10px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .side-tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .side-tab {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 11px;
+      border-radius: 9px;
+      border: none;
+      background: transparent;
+      color: #475569;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+    }
+
+    .side-tab:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .side-tab.active {
+      background: #eef2ff;
+      color: var(--indigo);
+    }
+
+    .engine-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 12px;
+      font-size: 11.5px;
+    }
+
+    .engine-card strong {
+      display: block;
+      color: #0f172a;
+      margin-bottom: 3px;
+    }
+
+    .engine-card span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: #10b981;
+    }
+
+    /* Main Workspace Canvas */
+    .app-main {
+      padding: 24px 28px;
+      background: #ffffff;
+    }
+
+    .board-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border-soft);
+      margin-bottom: 20px;
+      padding-right: 250px;
+    }
+
+    .board-heading h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .board-heading p {
+      font-size: 12.5px;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    .segmented-group {
+      display: inline-flex;
+      background: #f1f5f9;
+      padding: 3px;
+      border-radius: 10px;
+      gap: 2px;
+    }
+
+    .seg-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .seg-btn.active {
+      background: #ffffff;
+      color: #0f172a;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+    }
+
+    /* Metric Summary Cards */
+    .metric-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .metric-box {
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 15px 18px;
+      background: #ffffff;
+    }
+
+    .metric-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-muted);
+      margin-bottom: 6px;
+    }
+
+    .series-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .metric-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+    }
+
+    .metric-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #059669;
+      margin-top: 4px;
+    }
+
+    /* Two Rich Multi-Series SVG Charts */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .chart-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 18px;
+      background: #ffffff;
+    }
+
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .chart-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .legend-inline {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11px;
+      color: var(--ink-muted);
+      font-weight: 500;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Live DAX Measure Bar */
+    .dax-bar {
+      background: #0f172a;
+      color: #f8fafc;
+      border-radius: 12px;
+      padding: 13px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+    }
+
+    .dax-code {
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .kw { color: #fb7185; font-weight: 600; }
+    .fn { color: #818cf8; }
+    .col { color: #fcd34d; }
+
+    .dax-exec-btn {
+      background: #4f46e5;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 7px 13px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .dax-exec-btn:hover {
+      background: #4338ca;
+    }
+
+    @media (max-width: 1060px) {
+      .app-window { grid-template-columns: 1fr; }
+      .app-sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+      .side-tabs { flex-direction: row; flex-wrap: wrap; }
+      .share-popover { position: static; width: 100%; margin-bottom: 16px; }
+      .board-toolbar { padding-right: 0; }
+      .charts-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .metric-strip { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Pure White Header -->
+  <header class="header-wrap">
+    <div class="container navbar">
+      <a href="#" class="brand">
+        <span class="brand-icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 20V10"></path>
+            <path d="M12 20V4"></path>
+            <path d="M6 20v-6"></path>
+          </svg>
+        </span>
+        <span>ExecutiveBI</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#studio">Platform</a></li>
+        <li><a href="#studio">Solutions</a></li>
+        <li><a href="#dax-box">DAX Engine</a></li>
+        <li><a href="#studio">Benchmarks</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="btn-login" onclick="copyBoardLink('Executive SSO Authenticated')">Log in</button>
+        <a href="#studio" class="btn-black-pill">Launch Studio &gt;</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Centered Mixpanel Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="eyebrow-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <span>SEMANTIC BI &amp; VERTIPAQ DAX STUDIO 2026</span>
+      </div>
+
+      <h1>
+        Analytics that drive <span class="serif-accent">executive</span> decisions
+      </h1>
+
+      <p class="subtitle">
+        Unify multi-million-row operational KPIs, Power BI semantic DAX measures, cohort retention funnels, and board-ready forecasting in one interactive studio.
+      </p>
+
+      <div class="hero-cta-row">
+        <a href="#studio" class="btn-hero-main" onclick="cycleRange('90D')">Run Live Model &gt;</a>
+        <button class="link-explore" onclick="selectBoard('aviation')">Explore Datasets &gt;</button>
+      </div>
+
+      <div class="client-strip">
+        <span>CENTERWELL</span>
+        <span>&middot;</span>
+        <span>IOCC AVIATION</span>
+        <span>&middot;</span>
+        <span>TRUESHORE</span>
+        <span>&middot;</span>
+        <span>AERODOM</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Luminous Aura + Elevated SaaS Application Frame -->
+  <section id="studio" class="aura-stage">
+    <div class="aura-backdrop"></div>
+    <div class="aura-bloom-left"></div>
+    <div class="aura-bloom-right"></div>
+
+    <div class="container">
+      <div class="app-window-wrap">
+        <!-- Floating Glass Share Executive Board Popover -->
+        <div class="share-popover" id="share-popover">
+          <div class="share-head">
+            <div class="share-title">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2.3"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              <span>Share Executive Board</span>
+            </div>
+            <span class="live-pill">LIVE SYNC</span>
+          </div>
+          <div class="avatar-stack">
+            <div class="avatars">
+              <div class="avatar" style="background:#4f46e5;">PM</div>
+              <div class="avatar" style="background:#fb7185;">VP</div>
+              <div class="avatar" style="background:#f59e0b;">CF</div>
+              <div class="avatar" style="background:#0f172a;">+6</div>
+            </div>
+            <span style="font-size:11px;color:#64748b;font-weight:500;">C-Suite Viewers</span>
+          </div>
+          <button class="share-copy-btn" id="copy-share-btn" onclick="copyBoardLink()">
+            <span>exec.bi/q4-board-deck</span>
+            <span style="color:#4f46e5;">Copy</span>
+          </button>
+        </div>
+
+        <div class="app-window">
+          <!-- Left Sidebar -->
+          <aside class="app-sidebar">
+            <div>
+              <div class="workspace-switcher">
+                <div class="ws-dot">EB</div>
+                <div class="ws-meta">
+                  <strong>Enterprise Star Schema</strong>
+                  <span>14.8M rows &middot; DirectLake</span>
+                </div>
+              </div>
+
+              <div class="side-nav-label">Executive Views</div>
+              <div class="side-tabs">
+                <button class="side-tab active" data-tab="board" onclick="selectBoard('board')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                  <span>Board</span>
+                </button>
+                <button class="side-tab" data-tab="aviation" onclick="selectBoard('aviation')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+                  <span>Aviation OTP</span>
+                </button>
+                <button class="side-tab" data-tab="healthcare" onclick="selectBoard('healthcare')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                  <span>Healthcare QA</span>
+                </button>
+                <button class="side-tab" data-tab="cohort" onclick="selectBoard('cohort')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                  <span>Cohort Funnel</span>
+                </button>
+                <button class="side-tab" data-tab="dax" onclick="selectBoard('dax')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                  <span>DAX Editor</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="engine-card">
+              <strong>VertiPaq In-Memory</strong>
+              <span>Query cache: 11.4 ms FE/SE</span>
+            </div>
+          </aside>
+
+          <!-- Main Analytics Surface -->
+          <main class="app-main">
+            <div class="board-toolbar">
+              <div class="board-heading">
+                <h2 id="board-title">Executive Revenue &amp; SLA Attainment</h2>
+                <p id="board-sub">Consolidated Star Schema &middot; Net Margin, Cohort Expansion &amp; Forecast</p>
+              </div>
+
+              <div class="segmented-group" role="tablist" aria-label="Time window">
+                <button class="seg-btn" data-range="30D" onclick="cycleRange('30D')">30D</button>
+                <button class="seg-btn active" data-range="90D" onclick="cycleRange('90D')">90D</button>
+                <button class="seg-btn" data-range="12M" onclick="cycleRange('12M')">12M</button>
+              </div>
+            </div>
+
+            <!-- 3 KPI Cards -->
+            <div class="metric-strip">
+              <div class="metric-box">
+                <div class="metric-top">
+                  <span id="m1-label">Net Operating Revenue</span>
+                  <span class="series-dot" style="background:#4f46e5;"></span>
+                </div>
+                <div class="metric-val" id="m1-val">$4.82M</div>
+                <div class="metric-sub" id="m1-sub">+18.4% YoY DAX Time-Intel</div>
+              </div>
+
+              <div class="metric-box">
+                <div class="metric-top">
+                  <span id="m2-label">On-Time SLA / QA Index</span>
+                  <span class="series-dot" style="background:#fb7185;"></span>
+                </div>
+                <div class="metric-val" id="m2-val">96.4%</div>
+                <div class="metric-sub" id="m2-sub">+240 bps vs Target Benchmark</div>
+              </div>
+
+              <div class="metric-box">
+                <div class="metric-top">
+                  <span id="m3-label">Net Dollar Retention</span>
+                  <span class="series-dot" style="background:#f59e0b;"></span>
+                </div>
+                <div class="metric-val" id="m3-val">124.8%</div>
+                <div class="metric-sub" id="m3-sub">Top-decile enterprise cohort</div>
+              </div>
+            </div>
+
+            <!-- 2 Multi-Series Smooth SVG Area & Line Charts -->
+            <div class="charts-grid">
+              <!-- Chart 1: Multi-Series Smooth Area Chart -->
+              <div class="chart-card">
+                <div class="chart-header">
+                  <span class="chart-title" id="chart1-title">Multi-Stream Performance Trajectory</span>
+                  <div class="legend-inline">
+                    <span class="legend-item"><span class="series-dot" style="background:#4f46e5;"></span>Indigo Core</span>
+                    <span class="legend-item"><span class="series-dot" style="background:#fb7185;"></span>Coral SLA</span>
+                    <span class="legend-item"><span class="series-dot" style="background:#f59e0b;"></span>Amber Plan</span>
+                  </div>
+                </div>
+
+                <svg id="area-chart-svg" width="100%" height="220" viewBox="0 0 520 220" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="indigoArea" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.28" />
+                      <stop offset="100%" stop-color="#4f46e5" stop-opacity="0.0" />
+                    </linearGradient>
+                    <linearGradient id="coralArea" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#fb7185" stop-opacity="0.25" />
+                      <stop offset="100%" stop-color="#fb7185" stop-opacity="0.0" />
+                    </linearGradient>
+                  </defs>
+                  <line x1="0" y1="44" x2="520" y2="44" stroke="#f1f5f9" stroke-width="1" />
+                  <line x1="0" y1="98" x2="520" y2="98" stroke="#f1f5f9" stroke-width="1" />
+                  <line x1="0" y1="152" x2="520" y2="152" stroke="#f1f5f9" stroke-width="1" />
+                  <line x1="0" y1="200" x2="520" y2="200" stroke="#e2e8f0" stroke-width="1" />
+
+                  <path id="svg-indigo-area" d="" fill="url(#indigoArea)" />
+                  <path id="svg-coral-area" d="" fill="url(#coralArea)" />
+                  <path id="svg-indigo-line" d="" fill="none" stroke="#4f46e5" stroke-width="2.8" stroke-linecap="round" />
+                  <path id="svg-coral-line" d="" fill="none" stroke="#fb7185" stroke-width="2.6" stroke-linecap="round" />
+                  <path id="svg-amber-line" d="" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-dasharray="5 4" stroke-linecap="round" />
+                </svg>
+              </div>
+
+              <!-- Chart 2: Cohort Variance & Conversion Line/Bar Hybrid -->
+              <div class="chart-card">
+                <div class="chart-header">
+                  <span class="chart-title" id="chart2-title">Segment Attribution &amp; Variance</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#64748b;" id="chart2-badge">Q4 COHORT</span>
+                </div>
+
+                <svg id="secondary-chart-svg" width="100%" height="220" viewBox="0 0 380 220" preserveAspectRatio="none">
+                  <line x1="0" y1="44" x2="380" y2="44" stroke="#f1f5f9" />
+                  <line x1="0" y1="98" x2="380" y2="98" stroke="#f1f5f9" />
+                  <line x1="0" y1="152" x2="380" y2="152" stroke="#f1f5f9" />
+                  <line x1="0" y1="200" x2="380" y2="200" stroke="#e2e8f0" />
+                  <g id="bars-group"></g>
+                  <path id="sec-trend-line" d="" fill="none" stroke="#fb7185" stroke-width="2.6" stroke-linecap="round" />
+                  <g id="sec-dots-group"></g>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Interactive DAX Measure Bar -->
+            <div class="dax-bar" id="dax-box">
+              <div class="dax-code" id="dax-formula">
+                <span class="kw">EVALUATE</span> <span class="fn">SUMMARIZECOLUMNS</span>(<span class="col">'DimDate'[Quarter]</span>, <span class="kw">"ExecMargin"</span>, <span class="fn">CALCULATE</span>([NetRevenue], <span class="col">'FactOps'[SLA_Met]</span> = <span class="kw">TRUE</span>()))
+              </div>
+              <button class="dax-exec-btn" id="run-dax-btn" onclick="executeDAX()">Evaluate DAX (11ms)</button>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    let currentBoard = 'board';
+    let currentRange = '90D';
+
+    const datasets = {
+      board: {
+        title: 'Executive Revenue & SLA Attainment',
+        sub: 'Consolidated Star Schema · Net Margin, Cohort Expansion & Forecast',
+        kpis: [
+          { label: 'Net Operating Revenue', val: '$4.82M', sub: '+18.4% YoY DAX Time-Intel' },
+          { label: 'On-Time SLA / QA Index', val: '96.4%', sub: '+240 bps vs Target Benchmark' },
+          { label: 'Net Dollar Retention', val: '124.8%', sub: 'Top-decile enterprise cohort' }
+        ],
+        dax: `<span class="kw">EVALUATE</span> <span class="fn">SUMMARIZECOLUMNS</span>(<span class="col">'DimDate'[FiscalPeriod]</span>, <span class="kw">"ExecMargin"</span>, <span class="fn">CALCULATE</span>([NetRevenue], <span class="col">'FactOps'[SLA_Met]</span> = <span class="kw">TRUE</span>()))`,
+        indigo: [148, 136, 129, 114, 102, 88, 72, 56],
+        coral:  [164, 152, 140, 134, 118, 106, 94, 78],
+        amber:  [158, 149, 142, 130, 121, 112, 99, 90],
+        bars:   [92, 118, 108, 136, 148, 162],
+        secLine:[142, 126, 130, 102, 88, 68]
+      },
+      aviation: {
+        title: 'IOCC Aviation OTP & Turnaround Control',
+        sub: 'AERODOM / IOCC Hub Telemetry · D0 Departure Punctuality & Gate Utilization',
+        kpis: [
+          { label: 'D15 On-Time Performance', val: '94.2%', sub: '+4.1% vs IATA Regional Avg' },
+          { label: 'Mean Gate Turnaround', val: '38.5 min', sub: '-6.2 min Ground Ops Optimization' },
+          { label: 'Fleet Dispatch Reliability', val: '99.1%', sub: '1,420 Scheduled Rotations' }
+        ],
+        dax: `<span class="kw">DEFINE MEASURE</span> <span class="col">'FactFlights'[OTP_D15]</span> = <span class="fn">DIVIDE</span>(<span class="fn">COUNTROWS</span>(<span class="fn">FILTER</span>('FactFlights', [DelayMin] &lt;= 15)), <span class="fn">COUNTROWS</span>('FactFlights'))`,
+        indigo: [152, 140, 118, 112, 96, 82, 68, 52],
+        coral:  [170, 155, 148, 125, 116, 98, 86, 74],
+        amber:  [145, 138, 132, 124, 118, 108, 98, 88],
+        bars:   [110, 124, 138, 129, 154, 168],
+        secLine:[134, 118, 104, 110, 82, 64]
+      },
+      healthcare: {
+        title: 'CenterWell Clinical QA & Patient Outcomes',
+        sub: 'Healthcare Contact Center & Clinical Documentation Audit Star Schema',
+        kpis: [
+          { label: 'Clinical QA Compliance', val: '98.1%', sub: '+310 bps HEDIS Star Rating Lift' },
+          { label: 'First-Call Resolution', val: '89.7%', sub: 'Trueshore BPO Bilingual Pod' },
+          { label: 'Avg Speed of Answer', val: '19.4 sec', sub: 'Within CMS 30s Regulatory SLA' }
+        ],
+        dax: `<span class="kw">EVALUATE</span> <span class="fn">TOPN</span>(10, <span class="fn">SUMMARIZE</span>(<span class="col">'DimClinic'</span>, [ClinicName], <span class="kw">"QAScore"</span>, <span class="fn">AVERAGE</span>('FactAudits'[RubricScore])))`,
+        indigo: [140, 132, 122, 108, 94, 84, 64, 48],
+        coral:  [158, 144, 138, 120, 104, 92, 80, 66],
+        amber:  [150, 144, 136, 126, 116, 106, 94, 84],
+        bars:   [104, 128, 134, 146, 152, 170],
+        secLine:[130, 116, 108, 94, 78, 58]
+      },
+      cohort: {
+        title: 'Enterprise Logo Cohort & Funnel Velocity',
+        sub: 'Multi-Touch Conversion Funnel · SQL -> Pilot -> Annual Contract Expansion',
+        kpis: [
+          { label: 'Pilot-to-Paid Conversion', val: '68.4%', sub: '+9.2% Product-Led Enterprise Motion' },
+          { label: 'LTV : CAC Ratio', val: '6.4x', sub: 'Payback period 7.2 months' },
+          { label: 'Month-12 Seat Expansion', val: '+41.0%', sub: 'Zero gross churn in >$100k tier' }
+        ],
+        dax: `<span class="kw">VAR</span> CohortStart = <span class="fn">MIN</span>(<span class="col">'DimCustomer'[CohortMonth]</span>) <span class="kw">RETURN</span> <span class="fn">CALCULATE</span>([ActiveARR], <span class="fn">DATESINPERIOD</span>('DimDate'[Date], CohortStart, 12, MONTH))`,
+        indigo: [162, 148, 130, 116, 98, 78, 62, 46],
+        coral:  [174, 160, 144, 128, 112, 96, 82, 70],
+        amber:  [166, 152, 140, 128, 115, 102, 92, 82],
+        bars:   [168, 146, 132, 118, 106, 98],
+        secLine:[64, 82, 96, 112, 124, 134]
+      },
+      dax: {
+        title: 'DAX Semantic Query Plan & Storage Engine',
+        sub: 'Live Formula Engine (FE) vs VertiPaq Storage Engine (SE) Benchmark',
+        kpis: [
+          { label: 'Median DAX Latency', val: '11.4 ms', sub: '94.2% Storage Engine Pushdown' },
+          { label: 'Dictionary Compression', val: '14.2 : 1', sub: '1.12 GB RAM Footprint' },
+          { label: 'Concurrent Exec Queries', val: '320 / min', sub: 'Zero row-context materialization' }
+        ],
+        dax: `<span class="kw">DEFINE MEASURE</span> <span class="col">'Metrics'[YoY_Growth]</span> = <span class="fn">VAR</span> Prior = <span class="fn">CALCULATE</span>([TotalKPI], <span class="fn">SAMEPERIODLASTYEAR</span>('DimDate'[Date])) <span class="kw">RETURN</span> <span class="fn">DIVIDE</span>([TotalKPI] - Prior, Prior)`,
+        indigo: [154, 138, 124, 104, 92, 76, 60, 44],
+        coral:  [168, 156, 142, 126, 114, 98, 84, 72],
+        amber:  [160, 150, 138, 128, 114, 100, 88, 78],
+        bars:   [88, 112, 126, 140, 156, 172],
+        secLine:[148, 128, 114, 96, 80, 62]
+      }
+    };
+
+    function smoothCatmullRom(points) {
+      if (points.length < 2) return '';
+      let d = `M ${points[0][0].toFixed(1)} ${points[0][1].toFixed(1)}`;
+      for (let i = 0; i < points.length - 1; i++) {
+        const p0 = points[i === 0 ? i : i - 1];
+        const p1 = points[i];
+        const p2 = points[i + 1];
+        const p3 = points[i + 2 < points.length ? i + 2 : i + 1];
+
+        const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+        const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+        const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+        const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+
+        d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+      }
+      return d;
+    }
+
+    function renderStudio() {
+      const data = datasets[currentBoard];
+      const rangeOffset = currentRange === '30D' ? 8 : (currentRange === '12M' ? -10 : 0);
+
+      document.getElementById('board-title').textContent = data.title;
+      document.getElementById('board-sub').textContent = data.sub;
+      document.getElementById('m1-label').textContent = data.kpis[0].label;
+      document.getElementById('m1-val').textContent = data.kpis[0].val;
+      document.getElementById('m1-sub').textContent = data.kpis[0].sub;
+
+      document.getElementById('m2-label').textContent = data.kpis[1].label;
+      document.getElementById('m2-val').textContent = data.kpis[1].val;
+      document.getElementById('m2-sub').textContent = data.kpis[1].sub;
+
+      document.getElementById('m3-label').textContent = data.kpis[2].label;
+      document.getElementById('m3-val').textContent = data.kpis[2].val;
+      document.getElementById('m3-sub').textContent = data.kpis[2].sub;
+
+      document.getElementById('dax-formula').innerHTML = data.dax;
+      document.getElementById('chart2-badge').textContent = currentRange + ' WINDOW';
+
+      const w = 520;
+      const mapSeries = (arr) => arr.map((y, idx) => [
+        18 + (idx / (arr.length - 1)) * (w - 36),
+        Math.max(24, Math.min(192, y + rangeOffset))
+      ]);
+
+      const ptsIndigo = mapSeries(data.indigo);
+      const ptsCoral  = mapSeries(data.coral);
+      const ptsAmber  = mapSeries(data.amber);
+
+      const lineIndigo = smoothCatmullRom(ptsIndigo);
+      const lineCoral  = smoothCatmullRom(ptsCoral);
+      const lineAmber  = smoothCatmullRom(ptsAmber);
+
+      document.getElementById('svg-indigo-line').setAttribute('d', lineIndigo);
+      document.getElementById('svg-indigo-area').setAttribute('d', `${lineIndigo} L ${ptsIndigo[ptsIndigo.length - 1][0]} 200 L ${ptsIndigo[0][0]} 200 Z`);
+
+      document.getElementById('svg-coral-line').setAttribute('d', lineCoral);
+      document.getElementById('svg-coral-area').setAttribute('d', `${lineCoral} L ${ptsCoral[ptsCoral.length - 1][0]} 200 L ${ptsCoral[0][0]} 200 Z`);
+
+      document.getElementById('svg-amber-line').setAttribute('d', lineAmber);
+
+      // Secondary Chart Bars + Coral Overlay Line
+      const barsGroup = document.getElementById('bars-group');
+      const dotsGroup = document.getElementById('sec-dots-group');
+      const secPts = [];
+      const labels = ['P1', 'P2', 'P3', 'P4', 'P5', 'P6'];
+
+      barsGroup.innerHTML = data.bars.map((bh, i) => {
+        const adjH = Math.max(30, Math.min(168, bh - rangeOffset));
+        const x = 24 + i * 58;
+        const y = 200 - adjH;
+        const sy = Math.max(28, Math.min(180, data.secLine[i] + rangeOffset));
+        secPts.push([x + 15, sy]);
+        const fill = i === data.bars.length - 1 ? '#4f46e5' : '#e0e7ff';
+        return `
+          <rect x="${x}" y="${y}" width="30" height="${adjH}" rx="6" fill="${fill}" />
+          <text x="${x + 15}" y="215" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="JetBrains Mono">${labels[i]}</text>
+        `;
+      }).join('');
+
+      document.getElementById('sec-trend-line').setAttribute('d', smoothCatmullRom(secPts));
+      dotsGroup.innerHTML = secPts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="#ffffff" stroke="#fb7185" stroke-width="2.4" />`).join('');
+    }
+
+    function selectBoard(tabKey) {
+      currentBoard = tabKey;
+      document.querySelectorAll('.side-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabKey);
+      });
+      renderStudio();
+    }
+
+    function cycleRange(range) {
+      currentRange = range;
+      document.querySelectorAll('.seg-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.range === range);
+      });
+      renderStudio();
+    }
+
+    function executeDAX() {
+      const btn = document.getElementById('run-dax-btn');
+      const ms = (8.4 + Math.random() * 4.5).toFixed(1);
+      btn.textContent = `Executed · ${ms}ms`;
+      btn.style.background = '#10b981';
+      setTimeout(() => {
+        btn.textContent = `Evaluate DAX (${ms}ms)`;
+        btn.style.background = '#4f46e5';
+      }, 1500);
+      renderStudio();
+    }
+
+    function copyBoardLink(customMsg) {
+      const btn = document.getElementById('copy-share-btn');
+      const prev = btn.innerHTML;
+      btn.innerHTML = `<span style="color:#059669;">${customMsg || 'Copied snapshot URL!'}</span><span>OK</span>`;
+      setTimeout(() => { btn.innerHTML = prev; }, 1800);
+    }
+
+    renderStudio();
+  </script>
+</body>
+</html>

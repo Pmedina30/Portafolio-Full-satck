@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pedro Medina — Software Engineering Monograph</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-paper: #f5f3ee;
+      --bg-surface: #ffffff;
+      --bg-obsidian: #0f1014;
+      --bg-obsidian-soft: #171920;
+      --ink-primary: #111216;
+      --ink-secondary: #4b505c;
+      --ink-muted: #767c89;
+      --accent-bronze: #b47b38;
+      --accent-vermilion: #d9462f;
+      --border-rule: rgba(17, 18, 22, 0.11);
+      --border-strong: rgba(17, 18, 22, 0.24);
+      --font-serif: 'Instrument Serif', serif;
+      --font-display: 'Plus Jakarta Sans', sans-serif;
+      --font-sans: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg-paper);
+      color: var(--ink-primary);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--bg-paper);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Museum Monograph Top Index Strip */
+    .monograph-strip {
+      border-bottom: 1px solid var(--border-rule);
+      padding: 0.5rem 2rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--ink-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(245, 243, 238, 0.95);
+    }
+
+    /* Sticky Editorial Header */
+    header.vessa-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(245, 243, 238, 0.86);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border-rule);
+    }
+
+    .header-inner {
+      max-width: 1420px;
+      margin: 0 auto;
+      padding: 0.95rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .monograph-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--ink-primary);
+    }
+
+    .monograph-sigil {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--bg-obsidian);
+      color: #f5f3ee;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.2rem;
+      display: grid;
+      place-items: center;
+    }
+
+    .brand-meta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 0.94rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-loc {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--ink-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.8rem;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink-secondary);
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: color 0.18s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink-primary);
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .cmdk-trigger {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-rule);
+      border-radius: 999px;
+      padding: 0.46rem 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      color: var(--ink-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .cmdk-trigger:hover {
+      border-color: var(--border-strong);
+      color: var(--ink-primary);
+    }
+
+    .kbd-pill {
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      background: var(--bg-paper);
+      border: 1px solid var(--border-rule);
+      font-size: 0.66rem;
+      color: var(--ink-primary);
+    }
+
+    .lang-switch {
+      display: inline-flex;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-rule);
+      border-radius: 999px;
+      padding: 0.18rem;
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      padding: 0.3rem 0.62rem;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .lang-btn.active {
+      background: var(--bg-obsidian);
+      color: #ffffff;
+    }
+
+    /* Hero + 3D Kinetic Sculpture Stage */
+    .hero-monograph {
+      max-width: 1420px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 3.5rem;
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      gap: 2.25rem;
+      align-items: stretch;
+      border-bottom: 1px solid var(--border-rule);
+    }
+
+    .hero-copy-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.75rem;
+    }
+
+    .catalog-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent-bronze);
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-size: clamp(3rem, 5.2vw, 4.95rem);
+      line-height: 0.96;
+      letter-spacing: -0.025em;
+      margin-top: 0.8rem;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--accent-bronze);
+    }
+
+    .hero-bio {
+      margin-top: 1.2rem;
+      font-size: 1rem;
+      line-height: 1.68;
+      color: var(--ink-secondary);
+      max-width: 590px;
+    }
+
+    .hero-cta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn-copy-email {
+      background: var(--bg-obsidian);
+      color: #ffffff;
+      border: none;
+      padding: 0.78rem 1.35rem;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .btn-copy-email:hover {
+      transform: translateY(-1px);
+      background: #232630;
+    }
+
+    .btn-secondary-pill {
+      background: var(--bg-surface);
+      color: var(--ink-primary);
+      border: 1px solid var(--border-rule);
+      padding: 0.76rem 1.25rem;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.84rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .vitals-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      padding-top: 1.4rem;
+      border-top: 1px solid var(--border-rule);
+    }
+
+    .vital-val {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.45rem;
+      letter-spacing: -0.03em;
+    }
+
+    .vital-lbl {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      margin-top: 0.2rem;
+    }
+
+    /* Right 3D Kinetic Sculpture Frame */
+    .sculpture-stage {
+      position: relative;
+      min-height: 490px;
+      border-radius: 24px;
+      background: radial-gradient(circle at 50% 42%, #232530 0%, #0f1014 74%);
+      border: 1px solid rgba(17, 18, 22, 0.18);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 28px 65px rgba(15, 16, 20, 0.16);
+    }
+
+    #sculpture-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+      z-index: 2;
+    }
+
+    #sculpture-canvas:active {
+      cursor: grabbing;
+    }
+
+    .sculpture-caption {
+      position: relative;
+      z-index: 4;
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: rgba(245, 243, 238, 0.72);
+      pointer-events: none;
+    }
+
+    /* Bento Showcase of All Live Local Ports */
+    .monograph-section {
+      max-width: 1420px;
+      margin: 0 auto;
+      padding: 3.5rem 2rem;
+      border-bottom: 1px solid var(--border-rule);
+    }
+
+    .sec-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .sec-title {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-size: clamp(2.2rem, 3.4vw, 3.1rem);
+      line-height: 1.04;
+      margin-top: 0.4rem;
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 0.42rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-rule);
+      background: var(--bg-surface);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--ink-secondary);
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .filter-btn.active {
+      background: var(--bg-obsidian);
+      border-color: var(--bg-obsidian);
+      color: #ffffff;
+    }
+
+    .ports-bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1rem;
+    }
+
+    .port-card {
+      grid-column: span 4;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-rule);
+      border-radius: 18px;
+      padding: 1.35rem;
+      text-decoration: none;
+      color: var(--ink-primary);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .port-card.featured {
+      grid-column: span 6;
+      background: var(--bg-obsidian);
+      color: #f5f3ee;
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .port-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-bronze);
+      box-shadow: 0 18px 38px rgba(17, 18, 22, 0.08);
+    }
+
+    .port-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .port-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.24rem 0.58rem;
+      border-radius: 6px;
+      background: rgba(180, 123, 56, 0.14);
+      color: var(--accent-bronze);
+      border: 1px solid rgba(180, 123, 56, 0.3);
+    }
+
+    .port-card.featured .port-badge {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fcd34d;
+      border-color: rgba(252, 211, 77, 0.3);
+    }
+
+    .port-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.06rem;
+      margin-top: 0.55rem;
+    }
+
+    .port-desc {
+      font-size: 0.83rem;
+      line-height: 1.55;
+      color: var(--ink-secondary);
+      margin-top: 0.3rem;
+    }
+
+    .port-card.featured .port-desc {
+      color: #9ca3af;
+    }
+
+    .port-stack {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--ink-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 0.7rem;
+      border-top: 1px solid var(--border-rule);
+    }
+
+    .port-card.featured .port-stack {
+      border-top-color: rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+    }
+
+    /* Interactive Career & Academic Timeline */
+    .timeline-layout {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .timeline-tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .tl-tab {
+      text-align: left;
+      padding: 1rem 1.15rem;
+      border-radius: 14px;
+      border: 1px solid var(--border-rule);
+      background: var(--bg-surface);
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .tl-tab.active {
+      background: var(--bg-obsidian);
+      color: #ffffff;
+      border-color: var(--bg-obsidian);
+    }
+
+    .tl-year {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--accent-bronze);
+      display: block;
+    }
+
+    .tl-tab.active .tl-year {
+      color: #fcd34d;
+    }
+
+    .tl-org {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-top: 0.2rem;
+      display: block;
+    }
+
+    .tl-detail-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-rule);
+      border-radius: 22px;
+      padding: 2rem;
+    }
+
+    .tl-detail-role {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      line-height: 1.1;
+    }
+
+    .tl-detail-loc {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--ink-muted);
+      margin-top: 0.35rem;
+    }
+
+    .tl-bullets {
+      margin-top: 1.25rem;
+      padding-left: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: var(--ink-secondary);
+    }
+
+    /* Cmd+K / Ctrl+K Command Palette Modal */
+    .cmdk-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(15, 16, 20, 0.58);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 10vh 1rem 2rem;
+    }
+
+    .cmdk-backdrop.open {
+      display: flex;
+    }
+
+    .cmdk-modal {
+      width: 100%;
+      max-width: 620px;
+      background: #13151b;
+      color: #f8fafc;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+    }
+
+    .cmdk-search-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cmdk-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .cmdk-results {
+      max-height: 360px;
+      overflow-y: auto;
+      padding: 0.5rem;
+    }
+
+    .cmdk-item {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #e2e8f0;
+      padding: 0.7rem 0.85rem;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+    }
+
+    .cmdk-item:hover,
+    .cmdk-item.focused {
+      background: rgba(255, 255, 255, 0.09);
+      color: #ffffff;
+    }
+
+    .cmdk-port-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: #fcd34d;
+    }
+
+    footer.monograph-footer {
+      max-width: 1420px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--ink-muted);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    @media (max-width: 1080px) {
+      .hero-monograph,
+      .timeline-layout {
+        grid-template-columns: 1fr;
+      }
+      .port-card,
+      .port-card.featured {
+        grid-column: span 6;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav-links,
+      .monograph-strip {
+        display: none;
+      }
+      .port-card,
+      .port-card.featured {
+        grid-column: span 12;
+      }
+      .vitals-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="monograph-strip tabular">
+    <span id="stripEdition">MONOGRAPH EDITION NO. 05 · PEDRO MEDINA</span>
+    <span>SANTO DOMINGO, DO · 18.4861° N, 69.9312° W</span>
+  </div>
+
+  <header class="vessa-header">
+    <div class="header-inner">
+      <a href="#" class="monograph-brand">
+        <div class="monograph-sigil">P</div>
+        <div class="brand-meta">
+          <span class="brand-name">Pedro Medina</span>
+          <span class="brand-loc">SANTO DOMINGO · TRUESHORE / CENTERWELL</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#ecosystem" data-i18n="navWork">Live Ecosystem</a>
+        <a href="#timeline" data-i18n="navCareer">Career &amp; ITLA</a>
+        <a href="#contact-footer" data-i18n="navContact">Contact</a>
+      </nav>
+
+      <div class="header-controls">
+        <button type="button" class="cmdk-trigger" id="openCmdkBtn">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <span data-i18n="cmdBtn">Command</span>
+          <span class="kbd-pill">Ctrl+K</span>
+        </button>
+
+        <div class="lang-switch" role="group" aria-label="Language Switcher">
+          <button type="button" class="lang-btn active" data-lang="en">EN</button>
+          <button type="button" class="lang-btn" data-lang="es">ES</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero + Interactive Three.js 3D Kinetic Sculpture -->
+    <section class="hero-monograph">
+      <div class="hero-copy-col">
+        <div>
+          <span class="catalog-tag" data-i18n="heroKicker">
+            CATALOG 001 · FULL-STACK &amp; HEALTHCARE DATA ENGINEERING
+          </span>
+          <h1 class="hero-title" id="heroHeadline">
+            Engineering reliable software with <em>editorial</em> rigor.
+          </h1>
+          <p class="hero-bio" data-i18n="heroBio">
+            Software Engineer based in Santo Domingo, Dominican Republic. Advancing mission-critical healthcare QA &amp; data reliability at Trueshore / CenterWell while architecting full-stack web applications, interactive 3D WebGL systems, and deterministic APIs.
+          </p>
+        </div>
+
+        <div class="hero-cta-bar">
+          <button type="button" class="btn-copy-email" id="copyEmailBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            <span id="copyEmailLabel">pedromedina1508@icloud.com</span>
+          </button>
+          <a href="#ecosystem" class="btn-secondary-pill">
+            <span data-i18n="explorePorts">Explore 15 Live Ports</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M7 17L17 7M7 7h10v10" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="vitals-strip tabular">
+          <div>
+            <div class="vital-val">3.6 / 4.0</div>
+            <div class="vital-lbl" data-i18n="vitalGpa">ITLA Software Eng. GPA</div>
+          </div>
+          <div>
+            <div class="vital-val">15 Ports</div>
+            <div class="vital-lbl" data-i18n="vitalApps">Live Local Deployments</div>
+          </div>
+          <div>
+            <div class="vital-val">EN / ES</div>
+            <div class="vital-lbl" data-i18n="vitalLang">Bilingual US &amp; LATAM Ops</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sculpture-stage">
+        <div class="sculpture-caption tabular">
+          <span>KINETIC GYROSCOPE NO. 04 · THREE.JS WEBGL</span>
+          <span>DRAG 360°</span>
+        </div>
+        <canvas id="sculpture-canvas"></canvas>
+        <div class="sculpture-caption tabular">
+          <span id="sculptureCoords">TORUS HARMONIC · 60 FPS</span>
+          <span>SANTO DOMINGO STUDIO</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento Showcase Linking All Live Local Ports -->
+    <section class="monograph-section" id="ecosystem">
+      <div class="sec-top">
+        <div>
+          <span class="catalog-tag" data-i18n="bentoKicker">CATALOG 002 · LIVE LOCALHOST INFRASTRUCTURE</span>
+          <h2 class="sec-title" data-i18n="bentoTitle">Active Port Directory &amp; Bento Matrix</h2>
+        </div>
+
+        <div class="filter-pills">
+          <button type="button" class="filter-btn active" data-filter="all" data-i18n="fAll">All 15 Ports</button>
+          <button type="button" class="filter-btn" data-filter="core">Core (:3000–:5000)</button>
+          <button type="button" class="filter-btn" data-filter="webgl">3D &amp; Studio (:5173–:5184)</button>
+        </div>
+      </div>
+
+      <div class="ports-bento tabular" id="portsGrid"></div>
+    </section>
+
+    <!-- Interactive Career & Academic Timeline -->
+    <section class="monograph-section" id="timeline">
+      <div class="sec-top">
+        <div>
+          <span class="catalog-tag" data-i18n="tlKicker">CATALOG 003 · PROVENANCE &amp; TRAJECTORY</span>
+          <h2 class="sec-title" data-i18n="tlTitle">Career &amp; Academic Monograph</h2>
+        </div>
+      </div>
+
+      <div class="timeline-layout">
+        <div class="timeline-tabs" id="timelineTabs">
+          <button type="button" class="tl-tab active" data-idx="0">
+            <span class="tl-year tabular">2024 — PRESENT</span>
+            <span class="tl-org">Trueshore / CenterWell</span>
+          </button>
+          <button type="button" class="tl-tab" data-idx="1">
+            <span class="tl-year tabular">2023 — PRESENT</span>
+            <span class="tl-org">Full-Stack Systems &amp; WebGL Lab</span>
+          </button>
+          <button type="button" class="tl-tab" data-idx="2">
+            <span class="tl-year tabular">ACADEMIC HONORS · GPA 3.6 / 4.0</span>
+            <span class="tl-org">ITLA — Software Engineering</span>
+          </button>
+        </div>
+
+        <article class="tl-detail-card" id="timelineDetail">
+          <h3 class="tl-detail-role" id="tlRole"></h3>
+          <div class="tl-detail-loc tabular" id="tlMeta"></div>
+          <ul class="tl-bullets" id="tlList"></ul>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Cmd+K / Ctrl+K Command Palette Modal -->
+  <div class="cmdk-backdrop" id="cmdkBackdrop" role="dialog" aria-modal="true" aria-label="Command Palette">
+    <div class="cmdk-modal">
+      <div class="cmdk-search-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" class="cmdk-input" id="cmdkInput" placeholder="Jump to localhost port (3000, 5000, 5173..5184) or run action..." />
+        <span class="kbd-pill" style="background:#1e293b; color:#cbd5e1; border-color:#334155;">ESC</span>
+      </div>
+      <div class="cmdk-results tabular" id="cmdkResults"></div>
+    </div>
+  </div>
+
+  <footer class="monograph-footer tabular" id="contact-footer">
+    <div>PEDRO MEDINA · SOFTWARE ENGINEER · SANTO DOMINGO, DO</div>
+    <div>DIRECT MAIL: PEDROMEDINA1508@ICLOUD.COM · PRESS CTRL+K ANYTIME</div>
+  </footer>
+
+  <script type="module">
+    import * as THREE from '/vendor/three.module.min.js';
+
+    // All 15 Live Local Ports Showcase Data (3000, 3001, 5000, 5173..5184)
+    const LIVE_PORTS = [
+      { port: 3000, group: 'core', featured: true, name: 'Primary Portfolio Hub', stack: 'Next.js · TypeScript · Hub', en: 'Central executive launchpad orchestrating full-stack services and architecture case studies.', es: 'Centro ejecutivo principal que orquesta servicios full-stack y casos de arquitectura.' },
+      { port: 3001, group: 'core', featured: true, name: 'Enterprise API & Auth Gateway', stack: 'Node.js · REST · Telemetry', en: 'Real-time backend gateway handling health checks, JWT sessions, and service telemetry.', es: 'Gateway backend en tiempo real para sesiones seguras, métricas y salud de servicios.' },
+      { port: 5000, group: 'core', featured: false, name: 'Python Data & QA Engine', stack: 'FastAPI · Python · SQL', en: 'Automated data validation, healthcare schema checks, and analytics microservice.', es: 'Motor Python de validación automatizada de datos y esquemas clínicos.' },
+      { port: 5173, group: 'webgl', featured: false, name: 'NEXUS-01 Cybernetic Audio', stack: 'Three.js · PBR · Web Audio', en: 'Exploded-view 3D acoustic hardware studio with real-time PBR swatches and harmonic synth.', es: 'Estudio 3D de hardware acústico con vista explotada, materiales PBR y audio.' },
+      { port: 5174, group: 'webgl', featured: false, name: 'CosmosLens Observatory', stack: 'Three.js · Shaders · HUD', en: 'Arrakis-inspired deep-space exoplanet observatory with 3 inclined orbital rings.', es: 'Observatorio espacial de exoplanetas con anillos orbitales y telemetría espectral.' },
+      { port: 5175, group: 'webgl', featured: false, name: 'CVForge Executive Studio', stack: 'A4 Builder · ATS · Print PDF', en: 'Live split-screen Swiss A4 resume builder with instant ATS scoring and vector PDF print.', es: 'Constructor editorial de CV en formato A4 con puntaje ATS en vivo y exportación PDF.' },
+      { port: 5176, group: 'webgl', featured: false, name: 'SmileCraft Dental Concierge', stack: 'Healthcare UX · Estimator', en: 'Calm luxury dental sanctuary featuring transparent PPO fee calculator and Digital Patient Pass.', es: 'Plataforma dental de lujo con estimador transparente de inversión y pase digital.' },
+      { port: 5177, group: 'webgl', featured: false, name: 'FinPulse Quantitative Terminal', stack: 'Streaming Ledger · Charts', en: 'Low-latency multi-asset orderbook, risk matrix, and institutional portfolio analytics.', es: 'Terminal cuantitativa de activos en vivo, matriz de riesgo y analítica financiera.' },
+      { port: 5178, group: 'webgl', featured: false, name: 'MedVault Clinical QA Suite', stack: 'HL7 / FHIR · Data Integrity', en: 'Healthcare interoperability inspector inspired by enterprise clinical QA pipelines.', es: 'Suite de aseguramiento de calidad clínica e validación de registros de salud.' },
+      { port: 5179, group: 'webgl', featured: false, name: 'VeloCloud Ops Control Plane', stack: 'Kubernetes · Observability', en: 'Distributed cluster topology visualizer, SLO burn-rate alerts, and deployment rollback.', es: 'Plano de control de infraestructura distribuida y monitoreo de alertas SLO.' },
+      { port: 5180, group: 'webgl', featured: false, name: 'LexisAI Contract Intelligence', stack: 'LLM Clauses · Diff Engine', en: 'Semantic legal clause risk analyzer with side-by-side redline comparison.', es: 'Analizador semántico de contratos con detección de riesgos y comparación.' },
+      { port: 5181, group: 'webgl', featured: false, name: 'AuraCommerce Luxury Storefront', stack: 'Headless Cart · Motion', en: 'Editorial spatial e-commerce flagship with instant drawer checkout and inventory sync.', es: 'Tienda insignia de comercio electrónico editorial con carrito instantáneo.' },
+      { port: 5182, group: 'webgl', featured: false, name: 'PulseFlow Agile Linear Board', stack: 'Kanban · Keyboard UX', en: 'Keyboard-first issue tracker with sprint velocity telemetry and cycle-time charts.', es: 'Tablero ágil controlado por teclado con métricas de velocidad de sprint.' },
+      { port: 5183, group: 'webgl', featured: false, name: 'SynthWave Spatial DAW Lab', stack: 'Web Audio · Step Sequencer', en: 'Browser-native polyphonic synthesizer and polyrhythmic step matrix.', es: 'Sintetizador polifónico nativo en navegador y secuenciador rítmico.' },
+      { port: 5184, group: 'webgl', featured: false, name: 'Pedro Medina Monograph', stack: 'Bilingual EN/ES · 3D · Cmd+K', en: 'This museum-grade personal engineering monograph uniting all local deployments.', es: 'Esta monografía personal bilingüe de ingeniería con escultura cinética 3D.' }
+    ];
+
+    const I18N = {
+      en: {
+        navWork: 'Live Ecosystem',
+        navCareer: 'Career & ITLA',
+        navContact: 'Contact',
+        cmdBtn: 'Command',
+        heroKicker: 'CATALOG 001 · FULL-STACK & HEALTHCARE DATA ENGINEERING',
+        heroHeadline: 'Engineering reliable software with <em>editorial</em> rigor.',
+        heroBio: 'Software Engineer based in Santo Domingo, Dominican Republic. Advancing mission-critical healthcare QA & data reliability at Trueshore / CenterWell while architecting full-stack web applications, interactive 3D WebGL systems, and deterministic APIs.',
+        explorePorts: 'Explore 15 Live Ports',
+        vitalGpa: 'ITLA Software Eng. GPA',
+        vitalApps: 'Live Local Deployments',
+        vitalLang: 'Bilingual US & LATAM Ops',
+        bentoKicker: 'CATALOG 002 · LIVE LOCALHOST INFRASTRUCTURE',
+        bentoTitle: 'Active Port Directory & Bento Matrix',
+        fAll: 'All 15 Ports',
+        tlKicker: 'CATALOG 003 · PROVENANCE & TRAJECTORY',
+        tlTitle: 'Career & Academic Monograph',
+        cmdPlaceholder: 'Jump to localhost port (3000, 5000, 5173..5184) or run action...',
+        copied: 'Copied pedromedina1508@icloud.com!',
+        timeline: [
+          {
+            role: 'QA & Data Operations Specialist · Trueshore / CenterWell',
+            meta: 'SANTO DOMINGO, DO (US HEALTHCARE ENTERPRISE) · 2024 — PRESENT',
+            bullets: [
+              'Ensure end-to-end data quality, HIPAA-aligned integrity, and regression reliability across high-volume CenterWell healthcare workflows.',
+              'Design structured SQL validation queries and automated edge-case test suites that cut manual verification cycles while safeguarding production releases.',
+              'Partner seamlessly in English and Spanish with distributed US engineering, product, and clinical data stakeholders.'
+            ]
+          },
+          {
+            role: 'Principal Full-Stack & Interactive 3D Systems Creator',
+            meta: '15-PORT PRODUCTION ECOSYSTEM · REACT, TYPESCRIPT, PYTHON, THREE.JS',
+            bullets: [
+              'Architected a unified local cloud of 15 standalone & full-stack web applications spanning ports :3000, :3001, :5000, and :5173–:5184.',
+              'Engineered real-time Three.js WebGL hardware configurators, orbital telemetry observatories, A4 vector resume engines, and healthcare concierge platforms.',
+              'Enforced strict Lighthouse accessibility, tabular numeric typography, zero-dependency resilience, and responsive mobile ergonomics.'
+            ]
+          },
+          {
+            role: 'Software Engineering Degree · ITLA',
+            meta: 'INSTITUTO TECNOLOGICO DE LAS AMERICAS · GPA 3.6 / 4.0 · SANTO DOMINGO',
+            bullets: [
+              'Maintained a 3.6 / 4.0 GPA across Algorithms & Data Structures, Relational Database Architecture, Software Quality Assurance, and Distributed Web Engineering.',
+              'Led capstone full-stack teams delivering clean RESTful architectures, automated testing pipelines, and modern frontend design systems.'
+            ]
+          }
+        ]
+      },
+      es: {
+        navWork: 'Ecosistema en Vivo',
+        navCareer: 'Trayectoria e ITLA',
+        navContact: 'Contacto',
+        cmdBtn: 'Comandos',
+        heroKicker: 'CATÁLOGO 001 · INGENIERÍA FULL-STACK Y DATOS DE SALUD',
+        heroHeadline: 'Ingeniería de software confiable con rigor <em>editorial</em>.',
+        heroBio: 'Ingeniero de Software en Santo Domingo, República Dominicana. Impulsando la calidad de software (QA) e integridad de datos clínicos en Trueshore / CenterWell, mientras diseño aplicaciones full-stack, experiencias 3D WebGL e infraestructuras API.',
+        explorePorts: 'Explorar 15 Puertos Activos',
+        vitalGpa: 'Índice Académico ITLA',
+        vitalApps: 'Despliegues Locales Activos',
+        vitalLang: 'Operación Bilingüe EN / ES',
+        bentoKicker: 'CATÁLOGO 002 · INFRAESTRUCTURA LOCALHOST EN VIVO',
+        bentoTitle: 'Directorio de Puertos y Matriz Bento',
+        fAll: 'Los 15 Puertos',
+        tlKicker: 'CATÁLOGO 003 · TRAYECTORIA Y FORMACIÓN',
+        tlTitle: 'Monografía Profesional y Académica',
+        cmdPlaceholder: 'Saltar a puerto localhost (3000, 5000, 5173..5184) o ejecutar acción...',
+        copied: '¡Correo copiado al portapapeles!',
+        timeline: [
+          {
+            role: 'Especialista en QA y Operaciones de Datos · Trueshore / CenterWell',
+            meta: 'SANTO DOMINGO, DO (SALUD ENTERPRISE EE. UU.) · 2024 — PRESENTE',
+            bullets: [
+              'Garantizo la integridad de datos de extremo a extremo y aseguramiento de calidad en flujos clínicos críticos para CenterWell.',
+              'Desarrollo validaciones estructuradas en SQL y matrices de pruebas de regresión que aceleran la verificación de lanzamientos.',
+              'Colaboración bilingüe continua (EN/ES) con escuadrones de ingeniería, producto y datos en Estados Unidos y LATAM.'
+            ]
+          },
+          {
+            role: 'Arquitecto de Sistemas Full-Stack y WebGL Interactivo',
+            meta: 'ECOSISTEMA DE 15 PUERTOS · REACT, TYPESCRIPT, PYTHON, THREE.JS',
+            bullets: [
+              'Construí un ecosistema unificado de 15 aplicaciones desplegadas en los puertos :3000, :3001, :5000 y :5173 hasta :5184.',
+              'Implementé estudios 3D WebGL en tiempo real, observatorios orbitales, editores vectoriales A4 y plataformas médicas.',
+              'Tipografía numérica tabular, diseño responsivo móvil y rendimiento de 60 FPS en cada aplicación.'
+            ]
+          },
+          {
+            role: 'Ingeniería en Desarrollo de Software · ITLA',
+            meta: 'INSTITUTO TECNOLÓGICO DE LAS AMÉRICAS · GPA 3.6 / 4.0 · SANTO DOMINGO',
+            bullets: [
+              'Índice académico sobresaliente de 3.6 / 4.0 en Estructuras de Datos, Bases de Datos Relacionales, Aseguramiento de Calidad y Arquitectura Web.',
+              'Liderazgo técnico en proyectos integradores con APIs limpias, pruebas automatizadas y sistemas de diseño modernos.'
+            ]
+          }
+        ]
+      }
+    };
+
+    let currentLang = 'en';
+    let currentFilter = 'all';
+    let activeTimelineIdx = 0;
+
+    const portsGrid = document.getElementById('portsGrid');
+    function renderPorts() {
+      portsGrid.innerHTML = '';
+      const filtered = LIVE_PORTS.filter(p => currentFilter === 'all' || p.group === currentFilter);
+      filtered.forEach(p => {
+        const a = document.createElement('a');
+        a.href = `http://localhost:${p.port}`;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.className = `port-card${p.featured && currentFilter === 'all' ? ' featured' : ''}`;
+        a.innerHTML = `
+          <div>
+            <div class="port-top">
+              <span class="port-badge">localhost:${p.port}</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 17L17 7M7 7h10v10" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="port-name">${p.name}</h3>
+            <p class="port-desc">${p[currentLang]}</p>
+          </div>
+          <div class="port-stack">
+            <span>${p.stack}</span>
+            <span>OPEN PORT :${p.port}</span>
+          </div>
+        `;
+        portsGrid.appendChild(a);
+      });
+    }
+
+    function renderTimeline() {
+      const item = I18N[currentLang].timeline[activeTimelineIdx];
+      document.getElementById('tlRole').textContent = item.role;
+      document.getElementById('tlMeta').textContent = item.meta;
+      const ul = document.getElementById('tlList');
+      ul.innerHTML = item.bullets.map(b => `<li>${b}</li>`).join('');
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+
+      const dict = I18N[lang];
+      document.getElementById('heroHeadline').innerHTML = dict.heroHeadline;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (dict[key]) el.textContent = dict[key];
+      });
+      document.getElementById('cmdkInput').placeholder = dict.cmdPlaceholder;
+
+      renderPorts();
+      renderTimeline();
+      renderCmdkList(document.getElementById('cmdkInput').value);
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderPorts();
+      });
+    });
+
+    document.querySelectorAll('.tl-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tl-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        activeTimelineIdx = Number(tab.dataset.idx);
+        renderTimeline();
+      });
+    });
+
+    // 1-Click Email Copy
+    const copyEmailBtn = document.getElementById('copyEmailBtn');
+    const copyEmailLabel = document.getElementById('copyEmailLabel');
+    function copyPedroEmail() {
+      const email = 'pedromedina1508@icloud.com';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email).catch(() => {});
+      }
+      copyEmailLabel.textContent = I18N[currentLang].copied;
+      setTimeout(() => {
+        copyEmailLabel.textContent = email;
+      }, 2400);
+    }
+    copyEmailBtn.addEventListener('click', copyPedroEmail);
+
+    // Cmd+K / Ctrl+K Command Palette
+    const cmdkBackdrop = document.getElementById('cmdkBackdrop');
+    const cmdkInput = document.getElementById('cmdkInput');
+    const cmdkResults = document.getElementById('cmdkResults');
+    let cmdItems = [];
+    let focusedIdx = 0;
+
+    function openCmdk() {
+      cmdkBackdrop.classList.add('open');
+      cmdkInput.value = '';
+      renderCmdkList('');
+      setTimeout(() => cmdkInput.focus(), 20);
+    }
+
+    function closeCmdk() {
+      cmdkBackdrop.classList.remove('open');
+    }
+
+    function renderCmdkList(query) {
+      const q = query.trim().toLowerCase();
+      const actions = [
+        {
+          label: currentLang === 'en' ? 'Switch Language (EN / ES)' : 'Cambiar Idioma (EN / ES)',
+          tag: 'ACTION',
+          run: () => { setLanguage(currentLang === 'en' ? 'es' : 'en'); closeCmdk(); }
+        },
+        {
+          label: currentLang === 'en' ? 'Copy Email (pedromedina1508@icloud.com)' : 'Copiar Correo (pedromedina1508@icloud.com)',
+          tag: 'CLIPBOARD',
+          run: () => { copyPedroEmail(); closeCmdk(); }
+        },
+        ...LIVE_PORTS.map(p => ({
+          label: `${p.name} — ${p.stack}`,
+          tag: `:${p.port}`,
+          run: () => { window.open(`http://localhost:${p.port}`, '_blank', 'noopener'); closeCmdk(); }
+        }))
+      ];
+
+      cmdItems = actions.filter(a => !q || a.label.toLowerCase().includes(q) || a.tag.toLowerCase().includes(q));
+      focusedIdx = 0;
+      cmdkResults.innerHTML = '';
+
+      cmdItems.forEach((item, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `cmdk-item${idx === 0 ? ' focused' : ''}`;
+        btn.innerHTML = `<span>${item.label}</span><span class="cmdk-port-tag">${item.tag}</span>`;
+        btn.addEventListener('click', item.run);
+        cmdkResults.appendChild(btn);
+      });
+    }
+
+    document.getElementById('openCmdkBtn').addEventListener('click', openCmdk);
+    cmdkBackdrop.addEventListener('click', (e) => {
+      if (e.target === cmdkBackdrop) closeCmdk();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        cmdkBackdrop.classList.contains('open') ? closeCmdk() : openCmdk();
+      } else if (e.key === 'Escape' && cmdkBackdrop.classList.contains('open')) {
+        closeCmdk();
+      } else if (cmdkBackdrop.classList.contains('open') && cmdItems.length > 0) {
+        const nodes = cmdkResults.querySelectorAll('.cmdk-item');
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          focusedIdx = (focusedIdx + 1) % cmdItems.length;
+          nodes.forEach((n, i) => n.classList.toggle('focused', i === focusedIdx));
+          nodes[focusedIdx].scrollIntoView({ block: 'nearest' });
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          focusedIdx = (focusedIdx - 1 + cmdItems.length) % cmdItems.length;
+          nodes.forEach((n, i) => n.classList.toggle('focused', i === focusedIdx));
+          nodes[focusedIdx].scrollIntoView({ block: 'nearest' });
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          cmdItems[focusedIdx].run();
+        }
+      }
+    });
+
+    cmdkInput.addEventListener('input', (e) => renderCmdkList(e.target.value));
+
+    // Three.js Interactive 3D Kinetic Sculpture in Hero
+    const canvas = document.getElementById('sculpture-canvas');
+    const stage = canvas.parentElement;
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+    camera.position.set(0, 0, 7.5);
+
+    scene.add(new THREE.AmbientLight(0xf5f3ee, 0.65));
+    const warmKey = new THREE.DirectionalLight(0xfff7ed, 2.8);
+    warmKey.position.set(5, 6, 5);
+    scene.add(warmKey);
+
+    const bronzeRim = new THREE.PointLight(0xd97706, 3.6, 18);
+    bronzeRim.position.set(-5, -3, 3);
+    scene.add(bronzeRim);
+
+    const coolBack = new THREE.PointLight(0x93c5fd, 2.2, 16);
+    coolBack.position.set(3, -4, -4);
+    scene.add(coolBack);
+
+    const sculptureGroup = new THREE.Group();
+    scene.add(sculptureGroup);
+
+    const bronzeMat = new THREE.MeshStandardMaterial({
+      color: 0xc89248,
+      metalness: 0.92,
+      roughness: 0.18
+    });
+
+    const obsidianMat = new THREE.MeshStandardMaterial({
+      color: 0x1c1f28,
+      metalness: 0.85,
+      roughness: 0.24
+    });
+
+    // Center Brushed Bronze TorusKnot
+    const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(1.02, 0.24, 180, 32, 2, 3), bronzeMat);
+    sculptureGroup.add(knot);
+
+    // 3 Nested Precision Gimbal Rings
+    const gimbal1 = new THREE.Mesh(new THREE.TorusGeometry(1.88, 0.032, 24, 120), obsidianMat);
+    const gimbal2 = new THREE.Mesh(new THREE.TorusGeometry(2.18, 0.025, 24, 120), bronzeMat);
+    const gimbal3 = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(2.48, 1),
+      new THREE.MeshBasicMaterial({ color: 0xd4a359, wireframe: true, transparent: true, opacity: 0.16 })
+    );
+    sculptureGroup.add(gimbal1, gimbal2, gimbal3);
+
+    function resizeSculpture() {
+      const w = stage.clientWidth;
+      const h = stage.clientHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize', resizeSculpture);
+    resizeSculpture();
+
+    let isDragging = false;
+    let prev = { x: 0, y: 0 };
+    let vel = { x: 0, y: 0 };
+
+    canvas.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      prev = { x: e.clientX, y: e.clientY };
+      canvas.setPointerCapture(e.pointerId);
+    });
+    canvas.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - prev.x;
+      const dy = e.clientY - prev.y;
+      prev = { x: e.clientX, y: e.clientY };
+      vel.y = dx * 0.007;
+      vel.x = dy * 0.007;
+      sculptureGroup.rotation.y += vel.y;
+      sculptureGroup.rotation.x += vel.x;
+    });
+    const endPointer = () => { isDragging = false; };
+    canvas.addEventListener('pointerup', endPointer);
+    canvas.addEventListener('pointercancel', endPointer);
+
+    const coordsEl = document.getElementById('sculptureCoords');
+    const clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+
+      knot.rotation.x = t * 0.32;
+      knot.rotation.y = t * 0.48;
+      gimbal1.rotation.x = Math.sin(t * 0.6) * 0.9;
+      gimbal1.rotation.y = t * 0.35;
+      gimbal2.rotation.y = Math.cos(t * 0.5) * 0.9;
+      gimbal2.rotation.z = -t * 0.28;
+      gimbal3.rotation.y = -t * 0.12;
+
+      if (!isDragging) {
+        vel.x *= 0.93;
+        vel.y *= 0.93;
+        sculptureGroup.rotation.x += vel.x;
+        sculptureGroup.rotation.y += vel.y + 0.0025;
+      }
+
+      const deg = Math.round(((sculptureGroup.rotation.y * 180) / Math.PI) % 360);
+      coordsEl.textContent = `TORUS HARMONIC · ${deg}° · 60 FPS`;
+      renderer.render(scene, camera);
+    }
+
+    setLanguage('en');
+    animate();
+  </script>
+</body>
+</html>

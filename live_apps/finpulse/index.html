@@ -1,0 +1,2061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FinPulse — Corporate Treasury &amp; Expense OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-page: #F8FAFC;
+      --surface: #FFFFFF;
+      --surface-muted: #F1F5F9;
+      --ink: #0B1120;
+      --ink-secondary: #475569;
+      --ink-muted: #64748B;
+      --border: #E2E8F0;
+      --blue-deep: #1D4ED8;
+      --blue-mid: #3B82F6;
+      --blue-sky: #93C5FD;
+      --indigo: #6366F1;
+      --emerald: #10B981;
+      --emerald-bg: #ECFDF5;
+      --amber: #F59E0B;
+      --amber-bg: #FFFBEB;
+      --rose: #EF4444;
+      --rose-bg: #FEF2F2;
+      --radius-hero: 28px;
+      --radius-card: 20px;
+      --shadow-soft: 0 12px 32px -8px rgba(15, 23, 42, 0.07), 0 2px 6px rgba(15, 23, 42, 0.03);
+      --shadow-float: 0 24px 60px -12px rgba(15, 23, 42, 0.22), 0 6px 16px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      font-variant-numeric: tabular-nums;
+      overflow-x: hidden;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .serif-accent {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    /* Outer Hero Wrapper */
+    .hero-shell {
+      padding: 16px 16px 0;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .hero-container {
+      position: relative;
+      border-radius: var(--radius-hero);
+      background: linear-gradient(165deg, #1D4ED8 0%, #3B82F6 48%, #93C5FD 100%);
+      color: #FFFFFF;
+      overflow: hidden;
+      min-height: 700px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 28px 64px -18px rgba(29, 78, 216, 0.35);
+    }
+
+    /* Atmospheric Cloud Light Blooms */
+    .hero-container::before {
+      content: '';
+      position: absolute;
+      width: 820px;
+      height: 520px;
+      right: -120px;
+      bottom: -140px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.48) 0%, rgba(186, 230, 253, 0.22) 42%, transparent 72%);
+      filter: blur(28px);
+      pointer-events: none;
+    }
+
+    .hero-container::after {
+      content: '';
+      position: absolute;
+      width: 640px;
+      height: 420px;
+      left: 18%;
+      top: 12%;
+      background: radial-gradient(circle, rgba(147, 197, 253, 0.32) 0%, transparent 70%);
+      filter: blur(36px);
+      pointer-events: none;
+    }
+
+    .cloud-horizon {
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 180px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.16) 100%);
+      pointer-events: none;
+    }
+
+    /* Top Transparent Navbar */
+    .navbar {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 44px;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(10px);
+      display: grid;
+      place-items: center;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 500;
+      padding: 8px 15px;
+      border-radius: 999px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: rgba(255, 255, 255, 0.16);
+      color: #FFFFFF;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-ghost-white {
+      background: transparent;
+      border: none;
+      color: #FFFFFF;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-ghost-white:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-black-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      background: #090D16;
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 11px 22px;
+      border-radius: 999px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      box-shadow: 0 10px 24px -6px rgba(9, 13, 22, 0.45);
+    }
+
+    .btn-black-pill:hover {
+      transform: translateY(-1px);
+      background: #131B2E;
+      box-shadow: 0 16px 32px -6px rgba(9, 13, 22, 0.55);
+    }
+
+    .btn-black-pill.lg {
+      font-size: 1rem;
+      padding: 15px 30px;
+    }
+
+    /* Hero Split Grid */
+    .hero-grid {
+      position: relative;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      align-items: center;
+      gap: 48px;
+      padding: 28px 56px 64px;
+      max-width: 1320px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      backdrop-filter: blur(12px);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin-bottom: 22px;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4ADE80;
+      box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.28);
+    }
+
+    .hero-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.8rem, 5vw, 4.4rem);
+      line-height: 1.03;
+      letter-spacing: -0.035em;
+      color: #FFFFFF;
+      margin-bottom: 22px;
+      max-width: 13.5ch;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1.02rem, 1.35vw, 1.18rem);
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 50ch;
+      margin-bottom: 32px;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .btn-glass-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 15px 24px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      color: #FFFFFF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.96rem;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-glass-pill:hover {
+      background: rgba(255, 255, 255, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.24);
+      max-width: 520px;
+    }
+
+    .hero-metric-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-metric-lbl {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 2px;
+    }
+
+    /* Signature Revolut Translucent White iPhone Mockup */
+    .phone-stage {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 0 26px;
+    }
+
+    .iphone-frame {
+      position: relative;
+      width: 348px;
+      min-height: 510px;
+      border-radius: 36px;
+      border: 2px solid rgba(255, 255, 255, 0.78);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.10) 100%);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      box-shadow:
+        0 32px 72px -16px rgba(15, 23, 42, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.75),
+        inset 0 0 28px rgba(255, 255, 255, 0.14);
+      padding: 18px 20px 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .iphone-notch-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.92);
+      margin-bottom: 22px;
+      padding: 0 6px;
+    }
+
+    .dynamic-island {
+      width: 84px;
+      height: 22px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+    }
+
+    .status-icons {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Currency Switcher inside Phone */
+    .phone-center {
+      text-align: center;
+      margin: 6px 0 18px;
+    }
+
+    .currency-pills {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      margin-bottom: 18px;
+    }
+
+    .curr-pill {
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.82);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.76rem;
+      padding: 5px 13px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .curr-pill.active {
+      background: #FFFFFF;
+      color: #1D4ED8;
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.14);
+    }
+
+    .phone-acct-label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.88);
+      margin-bottom: 6px;
+    }
+
+    .phone-balance {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 2.65rem;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      color: #FFFFFF;
+      margin-bottom: 16px;
+      text-shadow: 0 4px 18px rgba(29, 78, 216, 0.25);
+    }
+
+    .phone-accounts-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FFFFFF;
+      color: #0F172A;
+      border: none;
+      border-radius: 999px;
+      padding: 9px 22px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.14);
+      transition: transform 0.16s ease;
+    }
+
+    .phone-accounts-btn:hover {
+      transform: scale(1.03);
+    }
+
+    .phone-quick-actions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 22px 0 18px;
+    }
+
+    .qa-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      color: #FFFFFF;
+      cursor: pointer;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    .qa-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      display: grid;
+      place-items: center;
+      transition: background 0.18s ease, transform 0.18s ease;
+    }
+
+    .qa-item:hover .qa-circle {
+      background: rgba(255, 255, 255, 0.36);
+      transform: translateY(-2px);
+    }
+
+    /* Floating Crisp White Transaction Card at Bottom */
+    .floating-tx-card {
+      position: relative;
+      background: #FFFFFF;
+      color: var(--ink);
+      border-radius: 22px;
+      padding: 15px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: var(--shadow-float);
+      margin: 0 -18px -6px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      transition: transform 0.22s ease;
+    }
+
+    .floating-tx-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .tx-card-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .tx-indigo-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #6366F1;
+      color: #FFFFFF;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      box-shadow: 0 8px 18px rgba(99, 102, 241, 0.35);
+    }
+
+    .tx-card-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      color: #0F172A;
+      white-space: nowrap;
+    }
+
+    .tx-card-meta {
+      font-size: 0.76rem;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    .tx-card-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .tx-card-amount {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 0.98rem;
+      color: #059669;
+    }
+
+    .tx-card-badge {
+      display: inline-block;
+      margin-top: 3px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #ECFDF5;
+      color: #047857;
+    }
+
+    /* Floating Secondary Pill Badge on Stage */
+    .stage-pill-float {
+      position: absolute;
+      top: 32px;
+      right: -10px;
+      background: rgba(255, 255, 255, 0.94);
+      color: #0F172A;
+      padding: 10px 14px;
+      border-radius: 16px;
+      box-shadow: 0 18px 38px rgba(15, 23, 42, 0.18);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    /* Main Below-the-Fold Workspace */
+    .workspace {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 56px 24px 96px;
+    }
+
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .section-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--blue-deep);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.85rem, 3vw, 2.5rem);
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+
+    .section-desc {
+      color: var(--ink-secondary);
+      font-size: 0.98rem;
+      max-width: 58ch;
+      margin-top: 6px;
+    }
+
+    /* KPI Bento Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 22px 24px;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: #CBD5E1;
+    }
+
+    .kpi-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .kpi-label {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--ink-secondary);
+    }
+
+    .kpi-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+    }
+
+    .kpi-value {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.85rem;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .kpi-sub {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-delta {
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-size: 0.73rem;
+    }
+
+    .badge-delta.up {
+      background: var(--emerald-bg);
+      color: #047857;
+    }
+
+    .badge-delta.warn {
+      background: var(--rose-bg);
+      color: #B91C1C;
+    }
+
+    /* Analytics + Policy Split */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: 1.55fr 0.85fr;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 26px 28px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .panel-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .panel-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1.12rem;
+      letter-spacing: -0.02em;
+    }
+
+    .panel-subtitle {
+      font-size: 0.83rem;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    .segmented {
+      display: inline-flex;
+      background: var(--surface-muted);
+      padding: 4px;
+      border-radius: 999px;
+      gap: 4px;
+    }
+
+    .seg-btn {
+      border: none;
+      background: transparent;
+      color: var(--ink-secondary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .seg-btn.active {
+      background: var(--surface);
+      color: var(--ink);
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+    }
+
+    /* SVG Spend Chart */
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+      height: 270px;
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .chart-legend {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-top: 14px;
+      font-size: 0.8rem;
+      color: var(--ink-secondary);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+
+    .chart-tooltip {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #0F172A;
+      color: #FFFFFF;
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.16s ease, transform 0.16s ease;
+      box-shadow: 0 12px 24px rgba(15, 23, 42, 0.25);
+    }
+
+    .chart-tooltip.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Live Policy Feed Panel */
+    .feed-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 290px;
+      overflow-y: auto;
+    }
+
+    .feed-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      font-size: 0.83rem;
+    }
+
+    .feed-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .feed-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      margin-top: 3px;
+    }
+
+    /* Transaction Console Controls */
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-pill {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--ink-secondary);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 8px 15px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-pill:hover {
+      border-color: #94A3B8;
+      color: var(--ink);
+    }
+
+    .filter-pill.active {
+      background: #0F172A;
+      border-color: #0F172A;
+      color: #FFFFFF;
+    }
+
+    .search-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-box svg {
+      position: absolute;
+      left: 13px;
+      color: var(--ink-muted);
+      pointer-events: none;
+    }
+
+    .search-input {
+      border: 1px solid var(--border);
+      background: var(--bg-page);
+      border-radius: 999px;
+      padding: 9px 16px 9px 36px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      color: var(--ink);
+      width: 240px;
+      outline: none;
+      transition: border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--blue-mid);
+      background: #FFFFFF;
+    }
+
+    .btn-sim-swipe {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #EFF6FF;
+      color: var(--blue-deep);
+      border: 1px solid #BFDBFE;
+      font-weight: 600;
+      font-size: 0.82rem;
+      padding: 9px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.18s ease;
+    }
+
+    .btn-sim-swipe:hover {
+      background: #DBEAFE;
+    }
+
+    /* Transaction Table */
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 16px;
+      border-bottom: 1px solid #F1F5F9;
+      font-size: 0.88rem;
+      vertical-align: middle;
+    }
+
+    tbody tr {
+      transition: background 0.15s ease;
+    }
+
+    tbody tr:hover {
+      background: #F8FAFC;
+    }
+
+    tbody tr.flagged-row {
+      background: rgba(254, 242, 242, 0.55);
+    }
+
+    tbody tr.flagged-row:hover {
+      background: rgba(254, 242, 242, 0.9);
+    }
+
+    .merchant-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .merchant-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+
+    .merchant-name {
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .merchant-sub {
+      font-size: 0.76rem;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .status-pill.settled,
+    .status-pill.approved {
+      background: var(--emerald-bg);
+      color: #047857;
+    }
+
+    .status-pill.flagged {
+      background: var(--rose-bg);
+      color: #B91C1C;
+      border: 1px solid #FECACA;
+    }
+
+    .status-pill.frozen {
+      background: #EEF2FF;
+      color: #3730A3;
+      border: 1px solid #C7D2FE;
+    }
+
+    .risk-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .risk-track {
+      width: 58px;
+      height: 6px;
+      border-radius: 999px;
+      background: #E2E8F0;
+      overflow: hidden;
+    }
+
+    .risk-fill {
+      height: 100%;
+      border-radius: 999px;
+    }
+
+    .action-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-approve {
+      background: #10B981;
+      color: #FFFFFF;
+      border: none;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 7px 13px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.16s ease, transform 0.16s ease;
+    }
+
+    .btn-approve:hover {
+      background: #059669;
+      transform: translateY(-1px);
+    }
+
+    .btn-freeze {
+      background: #FFFFFF;
+      color: #DC2626;
+      border: 1px solid #FCA5A5;
+      font-size: 0.76rem;
+      font-weight: 700;
+      padding: 6px 13px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .btn-freeze:hover {
+      background: #FEF2F2;
+      border-color: #EF4444;
+    }
+
+    .resolved-label {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0F172A;
+      color: #FFFFFF;
+      padding: 14px 20px;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.28);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      z-index: 100;
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    footer {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 28px 24px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+    }
+
+    @media (max-width: 1080px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        padding: 24px 28px 52px;
+        text-align: center;
+      }
+      .hero-title,
+      .hero-subtitle {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .hero-cta-row {
+        justify-content: center;
+      }
+      .hero-metrics {
+        margin: 0 auto;
+      }
+      .stage-pill-float {
+        display: none;
+      }
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .navbar {
+        padding: 18px 20px;
+      }
+      .iphone-frame {
+        width: 100%;
+        max-width: 330px;
+      }
+      .floating-tx-card {
+        margin: 0 -6px -4px;
+      }
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-metrics {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .search-input {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Full-Bleed Inset Sky-Blue Revolut-Model Hero -->
+  <div class="hero-shell">
+    <header class="hero-container">
+      <div class="cloud-horizon"></div>
+
+      <!-- Top Transparent Navbar -->
+      <nav class="navbar" aria-label="Primary Navigation">
+        <a href="#" class="brand">
+          <span class="brand-mark">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 18L9 11L13 15L20 6" />
+              <path d="M15 6H20V11" />
+            </svg>
+          </span>
+          <span>FinPulse</span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="#audit-console">Personal</a></li>
+          <li><a href="#audit-console" class="active">Business</a></li>
+          <li><a href="#audit-console">Corporate Audit</a></li>
+          <li><a href="#spend-analytics">Treasury</a></li>
+        </ul>
+
+        <div class="nav-actions">
+          <button type="button" class="btn-ghost-white" id="loginBtn">Log in</button>
+          <a href="#audit-console" class="btn-black-pill">Sign up</a>
+        </div>
+      </nav>
+
+      <!-- Hero Split Content -->
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="hero-eyebrow">
+            <span class="pulse-dot"></span>
+            <span>Real-Time Multi-Currency Treasury &amp; AI Spend Guard</span>
+          </div>
+
+          <h1 class="hero-title">Change the way you control treasury</h1>
+
+          <p class="hero-subtitle">
+            Unify global operating accounts, corporate virtual cards, and automated duplicate-invoice anomaly detection in one deterministic command center.
+          </p>
+
+          <div class="hero-cta-row">
+            <a href="#audit-console" class="btn-black-pill lg">
+              <span>Open Audit Console</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </a>
+            <button type="button" class="btn-glass-pill" id="triggerAnomalyDemoBtn">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              <span>Simulate Card Anomaly</span>
+            </button>
+          </div>
+
+          <div class="hero-metrics">
+            <div>
+              <div class="hero-metric-val tabular">$4.82M</div>
+              <div class="hero-metric-lbl">Treasury Sweep Liquidity</div>
+            </div>
+            <div>
+              <div class="hero-metric-val tabular">18ms</div>
+              <div class="hero-metric-lbl">Duplicate Auth Detection</div>
+            </div>
+            <div>
+              <div class="hero-metric-val tabular">4.92%</div>
+              <div class="hero-metric-lbl">T-Bill Overnight Yield</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Signature Revolut Translucent White iPhone Mockup -->
+        <div class="phone-stage">
+          <div class="stage-pill-float">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+            <span>SOC2 Automated Sweep Active</span>
+          </div>
+
+          <div class="iphone-frame" aria-label="FinPulse Treasury Mobile Interface">
+            <div>
+              <div class="iphone-notch-bar">
+                <span class="tabular">11:28</span>
+                <div class="dynamic-island"></div>
+                <span class="status-icons">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <rect x="2" y="14" width="3" height="6" rx="1" />
+                    <rect x="7" y="11" width="3" height="9" rx="1" />
+                    <rect x="12" y="7" width="3" height="13" rx="1" />
+                    <rect x="17" y="4" width="3" height="16" rx="1" />
+                  </svg>
+                  <svg width="16" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <rect x="2" y="7" width="18" height="10" rx="2.5" />
+                    <path d="M22 10v4" stroke-linecap="round" />
+                  </svg>
+                </span>
+              </div>
+
+              <div class="phone-center">
+                <div class="currency-pills" role="tablist" aria-label="Currency Switcher">
+                  <button type="button" class="curr-pill active" data-curr="USD">USD</button>
+                  <button type="button" class="curr-pill" data-curr="DOP">DOP</button>
+                  <button type="button" class="curr-pill" data-curr="EUR">EUR</button>
+                </div>
+
+                <div class="phone-acct-label" id="phoneAcctLabel">Main Treasury · USD Operating</div>
+                <div class="phone-balance tabular" id="phoneBalance">$48,920.00</div>
+
+                <button type="button" class="phone-accounts-btn" id="accountsBtn">
+                  <span>Accounts</span>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </button>
+              </div>
+
+              <div class="phone-quick-actions">
+                <button type="button" class="qa-item" data-qa="Wire Transfer initiated">
+                  <span class="qa-circle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 5v14M5 12h14" />
+                    </svg>
+                  </span>
+                  <span>Top up</span>
+                </button>
+                <button type="button" class="qa-item" data-qa="FX Spot desk ready (0.04% spread)">
+                  <span class="qa-circle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m17 2 4 4-4 4" />
+                      <path d="M3 11v-1a4 4 0 0 1 4-4h14" />
+                      <path d="m7 22-4-4 4-4" />
+                      <path d="M21 13v1a4 4 0 0 1-4 4H3" />
+                    </svg>
+                  </span>
+                  <span>Exchange</span>
+                </button>
+                <button type="button" class="qa-item" data-qa="Scrolled to Audit Console">
+                  <span class="qa-circle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="5" width="20" height="14" rx="2" />
+                      <path d="M2 10h20" />
+                    </svg>
+                  </span>
+                  <span>Cards</span>
+                </button>
+                <button type="button" class="qa-item" data-qa="Treasury sweep yield: 4.92% APY">
+                  <span class="qa-circle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M3 3v18h18" />
+                      <path d="m19 9-5 5-4-4-3 3" />
+                    </svg>
+                  </span>
+                  <span>Yield</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Floating Crisp White Transaction Card -->
+            <div class="floating-tx-card">
+              <div class="tx-card-left">
+                <div class="tx-indigo-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="6" width="20" height="12" rx="2" />
+                    <circle cx="12" cy="12" r="2" />
+                    <path d="M6 12h.01M18 12h.01" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="tx-card-title">Corporate Payroll</div>
+                  <div class="tx-card-meta">Today, 11:28 · Batch #409</div>
+                </div>
+              </div>
+              <div class="tx-card-right">
+                <div class="tx-card-amount tabular" id="phoneTxAmount">+$12,400.00</div>
+                <span class="tx-card-badge">Cleared</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <!-- Below the Fold: Corporate Expense & Anomaly Detection Console -->
+  <main class="workspace" id="audit-console">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow">Corporate Expense &amp; Anomaly Detection</div>
+        <h2 class="section-title">Autonomous <span class="serif-accent">Treasury</span> Audit Console</h2>
+        <p class="section-desc">
+          Inspect live card authorizations, resolve duplicate merchant billing anomalies in one click, and track multi-month liquidity velocity.
+        </p>
+      </div>
+      <div class="mono" style="font-size:0.8rem;color:var(--ink-muted);background:#FFFFFF;padding:10px 16px;border-radius:999px;border:1px solid var(--border);">
+        LEDGER SYNC: LIVE · <span id="syncClock">11:28:04 UTC</span>
+      </div>
+    </div>
+
+    <!-- Live KPI Cards -->
+    <section class="kpi-grid" aria-label="Treasury Key Performance Indicators">
+      <article class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Cleared Operating Balance</span>
+          <span class="kpi-icon" style="background:#EFF6FF;color:#1D4ED8;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </span>
+        </div>
+        <div class="kpi-value tabular" id="kpiLiquid">$48,920.00</div>
+        <div class="kpi-sub">
+          <span class="badge-delta up">+14.2%</span>
+          <span>Net after Stripe settlement</span>
+        </div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Approved Monthly Spend</span>
+          <span class="kpi-icon" style="background:#EEF2FF;color:#4F46E5;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          </span>
+        </div>
+        <div class="kpi-value tabular" id="kpiSpend">$21,840.00</div>
+        <div class="kpi-sub">
+          <span class="badge-delta up">Under cap</span>
+          <span>72.8% of $30k budget</span>
+        </div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Flagged Exposure at Risk</span>
+          <span class="kpi-icon" style="background:#FEF2F2;color:#DC2626;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+          </span>
+        </div>
+        <div class="kpi-value tabular" id="kpiFlagged">$4,190.00</div>
+        <div class="kpi-sub">
+          <span class="badge-delta warn" id="kpiFlaggedCount">2 anomalies</span>
+          <span>Awaiting controller action</span>
+        </div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Prevented Leakage Saved</span>
+          <span class="kpi-icon" style="background:#ECFDF5;color:#059669;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          </span>
+        </div>
+        <div class="kpi-value tabular" id="kpiSaved">$6,420.00</div>
+        <div class="kpi-sub">
+          <span class="badge-delta up" id="kpiFrozenCards">1 card frozen</span>
+          <span>Auto-blocked duplicate auths</span>
+        </div>
+      </article>
+    </section>
+
+    <!-- Multi-Month Interactive SVG Spend Chart + Audit Feed -->
+    <section class="analytics-grid" id="spend-analytics">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h3 class="panel-title">Multi-Month Treasury Spend &amp; Anomaly Interception</h3>
+            <p class="panel-subtitle">Hover any month column to inspect departmental burn vs. blocked duplicate charges</p>
+          </div>
+          <div class="segmented" role="tablist" aria-label="Chart Horizon">
+            <button type="button" class="seg-btn active" data-horizon="6m">6 Months</button>
+            <button type="button" class="seg-btn" data-horizon="12m">12 Months</button>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <div class="chart-tooltip tabular" id="chartTooltip"></div>
+          <svg class="chart-svg" id="spendChartSvg" viewBox="0 0 720 250" aria-label="Monthly Corporate Spend SVG Chart"></svg>
+        </div>
+
+        <div class="chart-legend">
+          <span class="legend-item">
+            <span class="legend-swatch" style="background:#2563EB;"></span>
+            <span>Cleared Operating Spend</span>
+          </span>
+          <span class="legend-item">
+            <span class="legend-swatch" style="background:#93C5FD;"></span>
+            <span>Forecasted Budget Runway</span>
+          </span>
+          <span class="legend-item">
+            <span class="legend-swatch" style="background:#EF4444;"></span>
+            <span>Blocked Duplicate / Anomaly</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <h3 class="panel-title">Controller Audit Log</h3>
+            <p class="panel-subtitle">Immutable event stream</p>
+          </div>
+          <span class="status-pill settled">AI Guard Active</span>
+        </div>
+        <div class="feed-list" id="auditFeed">
+          <div class="feed-item">
+            <span class="feed-dot" style="background:#EF4444;"></span>
+            <div>
+              <div><strong>Duplicate Travel Auth Held</strong> — Delta Air Lines ($2,840.00) matched invoice #DL-8821 within 4 minutes.</div>
+              <div class="feed-time">11:24:19 UTC · Card •••• 4910</div>
+            </div>
+          </div>
+          <div class="feed-item">
+            <span class="feed-dot" style="background:#10B981;"></span>
+            <div>
+              <div><strong>Stripe Payout Settled</strong> — +$38,450.00 swept into Main USD Operating Treasury.</div>
+              <div class="feed-time">10:55:02 UTC · ACH Instant</div>
+            </div>
+          </div>
+          <div class="feed-item">
+            <span class="feed-dot" style="background:#F59E0B;"></span>
+            <div>
+              <div><strong>Out-of-Policy Spend Flagged</strong> — Grand Hyatt Offsite ($1,350.00) exceeded weekend meal cap.</div>
+              <div class="feed-time">09:41:11 UTC · Card •••• 7732</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Real-Time Filterable Transaction Table -->
+    <section class="panel" aria-label="Real-Time Corporate Transactions">
+      <div class="toolbar">
+        <div class="filter-pills" id="txFilterPills">
+          <button type="button" class="filter-pill active" data-filter="all">All Activity</button>
+          <button type="button" class="filter-pill" data-filter="flagged">Flagged Anomalies</button>
+          <button type="button" class="filter-pill" data-filter="cloud">Cloud &amp; SaaS</button>
+          <button type="button" class="filter-pill" data-filter="payout">Treasury Inflows</button>
+          <button type="button" class="filter-pill" data-filter="frozen">Frozen Cards</button>
+        </div>
+
+        <div class="search-group">
+          <div class="search-box">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="search" id="txSearch" class="search-input" placeholder="Search merchant, card, tag..." />
+          </div>
+          <button type="button" class="btn-sim-swipe" id="addAnomalyBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>
+            <span>Test Live Swipe</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Merchant &amp; Counterparty</th>
+              <th>Department / Card</th>
+              <th>Category</th>
+              <th>AI Risk Telemetry</th>
+              <th>Status</th>
+              <th style="text-align:right;">Amount (USD)</th>
+              <th style="text-align:right;">Audit Action</th>
+            </tr>
+          </thead>
+          <tbody id="txTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>FinPulse Treasury OS · Built on deterministic multi-currency ledger architecture</div>
+    <div class="mono">ISO 20022 · PCI-DSS LEVEL 1 · REAL-TIME RECONCILIATION</div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+    <span id="toastMsg">Action completed</span>
+  </div>
+
+  <script>
+    (function () {
+      // Currency Switcher inside Revolut Phone Mockup
+      const rates = {
+        USD: { sym: '$', rate: 1, label: 'Main Treasury · USD Operating', payroll: '+$12,400.00' },
+        DOP: { sym: 'RD$', rate: 59.2, label: 'Santo Domingo · DOP Operating', payroll: '+RD$734,080.00' },
+        EUR: { sym: '€', rate: 0.92, label: 'Frankfurt SEPA · EUR Treasury', payroll: '+€11,408.00' }
+      };
+      let activeCurr = 'USD';
+      let baseLiquidUSD = 48920.00;
+      let approvedSpendUSD = 21840.00;
+      let preventedSavedUSD = 6420.00;
+      let frozenCardsCount = 1;
+
+      const transactions = [
+        {
+          id: 'tx-1',
+          merchant: 'Delta Air Lines — Duplicate Auth #2',
+          sub: 'Today, 11:24 · Identical ticket ref #DL-8821 within 4m',
+          card: 'Travel Virtual •••• 4910',
+          category: 'Travel Anomaly',
+          filterGroup: 'flagged',
+          risk: 96,
+          status: 'flagged',
+          amount: -2840.00,
+          avatarBg: '#FEF2F2',
+          avatarColor: '#DC2626',
+          code: 'DL'
+        },
+        {
+          id: 'tx-2',
+          merchant: 'AWS Cloud Infrastructure',
+          sub: 'Today, 11:02 · us-east-1 Production Cluster Invoice',
+          card: 'Infra Auto-Pay •••• 1004',
+          category: 'Cloud & SaaS',
+          filterGroup: 'cloud',
+          risk: 4,
+          status: 'settled',
+          amount: -14280.00,
+          avatarBg: '#EFF6FF',
+          avatarColor: '#1D4ED8',
+          code: 'AW'
+        },
+        {
+          id: 'tx-3',
+          merchant: 'Stripe Merchant Payout',
+          sub: 'Today, 10:55 · Instant Treasury Sweep Batch #891',
+          card: 'Operating ACH •••• 8841',
+          category: 'Treasury Inflow',
+          filterGroup: 'payout',
+          risk: 1,
+          status: 'settled',
+          amount: 38450.00,
+          avatarBg: '#EEF2FF',
+          avatarColor: '#4F46E5',
+          code: 'ST'
+        },
+        {
+          id: 'tx-4',
+          merchant: 'Grand Hyatt Executive T&E',
+          sub: 'Today, 09:41 · Exceeded weekend per-diem policy ($500)',
+          card: 'Exec Physical •••• 7732',
+          category: 'Travel Anomaly',
+          filterGroup: 'flagged',
+          risk: 82,
+          status: 'flagged',
+          amount: -1350.00,
+          avatarBg: '#FFFBEB',
+          avatarColor: '#D97706',
+          code: 'GH'
+        },
+        {
+          id: 'tx-5',
+          merchant: 'Corporate Payroll Batch #409',
+          sub: 'Today, 11:28 · Treasury Reimbursement Credit',
+          card: 'Treasury Sweep •••• 8841',
+          category: 'Treasury Inflow',
+          filterGroup: 'payout',
+          risk: 2,
+          status: 'settled',
+          amount: 12400.00,
+          avatarBg: '#ECFDF5',
+          avatarColor: '#059669',
+          code: 'CP'
+        },
+        {
+          id: 'tx-6',
+          merchant: 'Datadog Observability Pro',
+          sub: 'Yesterday, 18:15 · Verified Annual Seat Commit',
+          card: 'DevOps Card •••• 3190',
+          category: 'Cloud & SaaS',
+          filterGroup: 'cloud',
+          risk: 8,
+          status: 'approved',
+          amount: -4620.00,
+          avatarBg: '#F3E8FF',
+          avatarColor: '#7C3AED',
+          code: 'DD'
+        },
+        {
+          id: 'tx-7',
+          merchant: 'Unknown SaaS Vendor LUX*99',
+          sub: 'Yesterday, 03:12 · Unrecognized MCC · Auto-Frozen',
+          card: 'Marketing •••• 6019',
+          category: 'Security Hold',
+          filterGroup: 'frozen',
+          risk: 99,
+          status: 'frozen',
+          amount: -1890.00,
+          avatarBg: '#EEF2FF',
+          avatarColor: '#3730A3',
+          code: 'LX'
+        }
+      ];
+
+      let currentFilter = 'all';
+      let searchQuery = '';
+
+      function fmtUSD(val, showPlus) {
+        const abs = Math.abs(val).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        if (val < 0) return '-$' + abs;
+        return (showPlus ? '+$' : '$') + abs;
+      }
+
+      function showToast(msg) {
+        const toast = document.getElementById('toast');
+        document.getElementById('toastMsg').textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(window.__toastTimer);
+        window.__toastTimer = setTimeout(() => toast.classList.remove('show'), 3200);
+      }
+
+      function updatePhoneDisplay() {
+        const cfg = rates[activeCurr];
+        const converted = baseLiquidUSD * cfg.rate;
+        document.getElementById('phoneBalance').textContent =
+          cfg.sym + converted.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        document.getElementById('phoneAcctLabel').textContent = cfg.label;
+        document.getElementById('phoneTxAmount').textContent = cfg.payroll;
+      }
+
+      document.querySelectorAll('.curr-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.curr-pill').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeCurr = btn.dataset.curr;
+          updatePhoneDisplay();
+        });
+      });
+
+      document.getElementById('accountsBtn').addEventListener('click', () => {
+        const order = ['USD', 'DOP', 'EUR'];
+        activeCurr = order[(order.indexOf(activeCurr) + 1) % order.length];
+        document.querySelectorAll('.curr-pill').forEach(b => {
+          b.classList.toggle('active', b.dataset.curr === activeCurr);
+        });
+        updatePhoneDisplay();
+        showToast('Switched active treasury view to ' + activeCurr);
+      });
+
+      document.querySelectorAll('.qa-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (btn.dataset.qa.includes('Audit')) {
+            document.getElementById('audit-console').scrollIntoView({ behavior: 'smooth' });
+          }
+          showToast(btn.dataset.qa);
+        });
+      });
+
+      document.getElementById('loginBtn').addEventListener('click', () => {
+        showToast('SSO Session Active · Controller: P. Medina');
+      });
+
+      function updateKPIs() {
+        const flaggedItems = transactions.filter(t => t.status === 'flagged');
+        const flaggedSum = flaggedItems.reduce((acc, t) => acc + Math.abs(t.amount), 0);
+
+        document.getElementById('kpiLiquid').textContent = fmtUSD(baseLiquidUSD, false);
+        document.getElementById('kpiSpend').textContent = fmtUSD(approvedSpendUSD, false);
+        document.getElementById('kpiFlagged').textContent = fmtUSD(flaggedSum, false);
+        document.getElementById('kpiFlaggedCount').textContent =
+          flaggedItems.length + (flaggedItems.length === 1 ? ' anomaly' : ' anomalies');
+        document.getElementById('kpiSaved').textContent = fmtUSD(preventedSavedUSD, false);
+        document.getElementById('kpiFrozenCards').textContent =
+          frozenCardsCount + (frozenCardsCount === 1 ? ' card frozen' : ' cards frozen');
+        updatePhoneDisplay();
+      }
+
+      function prependAuditLog(color, title, detail, cardInfo) {
+        const feed = document.getElementById('auditFeed');
+        const now = new Date().toISOString().slice(11, 19) + ' UTC';
+        const div = document.createElement('div');
+        div.className = 'feed-item';
+        div.innerHTML =
+          '<span class="feed-dot" style="background:' + color + ';"></span>' +
+          '<div><div><strong>' + title + '</strong> — ' + detail + '</div>' +
+          '<div class="feed-time">' + now + ' · ' + cardInfo + '</div></div>';
+        feed.prepend(div);
+      }
+
+      function renderTable() {
+        const tbody = document.getElementById('txTableBody');
+        const rows = transactions.filter(tx => {
+          const matchesFilter =
+            currentFilter === 'all' ||
+            (currentFilter === 'flagged' && tx.status === 'flagged') ||
+            (currentFilter === 'frozen' && tx.status === 'frozen') ||
+            tx.filterGroup === currentFilter;
+          const q = searchQuery.trim().toLowerCase();
+          const matchesSearch =
+            !q ||
+            tx.merchant.toLowerCase().includes(q) ||
+            tx.card.toLowerCase().includes(q) ||
+            tx.category.toLowerCase().includes(q);
+          return matchesFilter && matchesSearch;
+        });
+
+        tbody.innerHTML = rows.map(tx => {
+          const riskColor = tx.risk >= 75 ? '#EF4444' : tx.risk >= 35 ? '#F59E0B' : '#10B981';
+          const statusLabel =
+            tx.status === 'flagged' ? 'Flagged Anomaly' :
+            tx.status === 'frozen' ? 'Card Frozen' :
+            tx.status === 'approved' ? 'Approved' : 'Settled';
+          const amtColor = tx.amount > 0 ? '#059669' : '#0F172A';
+
+          let actionsHtml = '';
+          if (tx.status === 'flagged') {
+            actionsHtml =
+              '<div class="action-group">' +
+                '<button type="button" class="btn-approve" data-action="approve" data-id="' + tx.id + '">Approve</button>' +
+                '<button type="button" class="btn-freeze" data-action="freeze" data-id="' + tx.id + '">Freeze Card</button>' +
+              '</div>';
+          } else if (tx.status === 'frozen') {
+            actionsHtml = '<span class="resolved-label">Blocked &amp; Reversed</span>';
+          } else {
+            actionsHtml = '<span class="resolved-label">Reconciled</span>';
+          }
+
+          return (
+            '<tr class="' + (tx.status === 'flagged' ? 'flagged-row' : '') + '">' +
+              '<td>' +
+                '<div class="merchant-cell">' +
+                  '<div class="merchant-avatar" style="background:' + tx.avatarBg + ';color:' + tx.avatarColor + ';">' + tx.code + '</div>' +
+                  '<div>' +
+                    '<div class="merchant-name">' + tx.merchant + '</div>' +
+                    '<div class="merchant-sub">' + tx.sub + '</div>' +
+                  '</div>' +
+                '</div>' +
+              '</td>' +
+              '<td class="mono" style="font-size:0.8rem;">' + tx.card + '</td>' +
+              '<td>' + tx.category + '</td>' +
+              '<td>' +
+                '<div class="risk-bar-wrap">' +
+                  '<div class="risk-track"><div class="risk-fill" style="width:' + tx.risk + '%;background:' + riskColor + ';"></div></div>' +
+                  '<span class="mono" style="font-size:0.77rem;color:' + riskColor + ';font-weight:600;">' + tx.risk + '/100</span>' +
+                '</div>' +
+              '</td>' +
+              '<td><span class="status-pill ' + tx.status + '">' + statusLabel + '</span></td>' +
+              '<td class="tabular" style="text-align:right;font-weight:700;color:' + amtColor + ';">' + fmtUSD(tx.amount, tx.amount > 0) + '</td>' +
+              '<td style="text-align:right;">' + actionsHtml + '</td>' +
+            '</tr>'
+          );
+        }).join('');
+      }
+
+      document.getElementById('txTableBody').addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const tx = transactions.find(t => t.id === btn.dataset.id);
+        if (!tx || tx.status !== 'flagged') return;
+
+        const absAmt = Math.abs(tx.amount);
+        if (btn.dataset.action === 'approve') {
+          tx.status = 'approved';
+          tx.filterGroup = 'cloud';
+          tx.risk = 12;
+          approvedSpendUSD += absAmt;
+          baseLiquidUSD -= absAmt;
+          prependAuditLog('#10B981', 'Controller Approved Charge', tx.merchant + ' (' + fmtUSD(absAmt) + ') posted to ledger.', tx.card);
+          showToast('Approved ' + fmtUSD(absAmt) + ' · Ledger & liquidity updated');
+        } else if (btn.dataset.action === 'freeze') {
+          tx.status = 'frozen';
+          tx.filterGroup = 'frozen';
+          preventedSavedUSD += absAmt;
+          frozenCardsCount += 1;
+          prependAuditLog('#6366F1', 'Virtual Card Frozen', 'Blocked ' + tx.merchant + ' and saved ' + fmtUSD(absAmt) + '.', tx.card);
+          showToast('Card frozen · ' + fmtUSD(absAmt) + ' duplicate exposure blocked');
+        }
+        updateKPIs();
+        renderTable();
+      });
+
+      document.getElementById('txFilterPills').addEventListener('click', (e) => {
+        const pill = e.target.closest('.filter-pill');
+        if (!pill) return;
+        document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentFilter = pill.dataset.filter;
+        renderTable();
+      });
+
+      document.getElementById('txSearch').addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        renderTable();
+      });
+
+      function simulateAnomalySwipe() {
+        const samples = [
+          { merchant: 'United Airlines — Duplicate T&E #9', amt: -1940.00, card: 'Exec Travel •••• 5512', code: 'UA' },
+          { merchant: 'Cloudflare Enterprise — Double Invoice', amt: -3200.00, card: 'Infra Auto •••• 1004', code: 'CF' },
+          { merchant: 'Sheraton Santo Domingo — Weekend Hold', amt: -980.00, card: 'Regional Ops •••• 8120', code: 'SH' }
+        ];
+        const pick = samples[Math.floor(Math.random() * samples.length)];
+        transactions.unshift({
+          id: 'tx-' + Date.now(),
+          merchant: pick.merchant,
+          sub: 'Just now · Real-time AI velocity hold triggered',
+          card: pick.card,
+          category: 'Travel Anomaly',
+          filterGroup: 'flagged',
+          risk: 94,
+          status: 'flagged',
+          amount: pick.amt,
+          avatarBg: '#FEF2F2',
+          avatarColor: '#DC2626',
+          code: pick.code
+        });
+        prependAuditLog('#EF4444', 'Live Anomaly Intercepted', pick.merchant + ' (' + fmtUSD(Math.abs(pick.amt)) + ') held for review.', pick.card);
+        updateKPIs();
+        renderTable();
+        document.getElementById('audit-console').scrollIntoView({ behavior: 'smooth' });
+        showToast('New flagged transaction intercepted · Review in table');
+      }
+
+      document.getElementById('addAnomalyBtn').addEventListener('click', simulateAnomalySwipe);
+      document.getElementById('triggerAnomalyDemoBtn').addEventListener('click', simulateAnomalySwipe);
+
+      // Multi-Month Interactive SVG Spend Chart
+      const chartSets = {
+        '6m': [
+          { m: 'Jun', spend: 19400, budget: 26000, blocked: 2100 },
+          { m: 'Jul', spend: 22800, budget: 27000, blocked: 3400 },
+          { m: 'Aug', spend: 20150, budget: 27000, blocked: 1850 },
+          { m: 'Sep', spend: 24900, budget: 29000, blocked: 4200 },
+          { m: 'Oct', spend: 23100, budget: 30000, blocked: 5120 },
+          { m: 'Nov', spend: 21840, budget: 30000, blocked: 6420 }
+        ],
+        '12m': [
+          { m: 'Dec', spend: 16200, budget: 22000, blocked: 1200 },
+          { m: 'Jan', spend: 17500, budget: 23000, blocked: 1600 },
+          { m: 'Feb', spend: 16900, budget: 23000, blocked: 950 },
+          { m: 'Mar', spend: 18800, budget: 24000, blocked: 2300 },
+          { m: 'Apr', spend: 20400, budget: 25000, blocked: 2750 },
+          { m: 'May', spend: 19900, budget: 25000, blocked: 1900 },
+          { m: 'Jun', spend: 19400, budget: 26000, blocked: 2100 },
+          { m: 'Jul', spend: 22800, budget: 27000, blocked: 3400 },
+          { m: 'Aug', spend: 20150, budget: 27000, blocked: 1850 },
+          { m: 'Sep', spend: 24900, budget: 29000, blocked: 4200 },
+          { m: 'Oct', spend: 23100, budget: 30000, blocked: 5120 },
+          { m: 'Nov', spend: 21840, budget: 30000, blocked: 6420 }
+        ]
+      };
+
+      function renderChart(horizon) {
+        const svg = document.getElementById('spendChartSvg');
+        const tooltip = document.getElementById('chartTooltip');
+        const data = chartSets[horizon];
+        const W = 720, H = 250, padL = 48, padR = 16, padT = 18, padB = 34;
+        const plotW = W - padL - padR;
+        const plotH = H - padT - padB;
+        const maxVal = 34000;
+
+        let html = '';
+        // Horizontal grid lines
+        [0, 10000, 20000, 30000].forEach(val => {
+          const y = padT + plotH - (val / maxVal) * plotH;
+          html += '<line x1="' + padL + '" y1="' + y + '" x2="' + (W - padR) + '" y2="' + y + '" stroke="#E2E8F0" stroke-dasharray="4 4" />';
+          html += '<text x="' + (padL - 8) + '" y="' + (y + 4) + '" text-anchor="end" fill="#64748B" font-size="11" font-family="JetBrains Mono, monospace">$' + (val / 1000) + 'k</text>';
+        });
+
+        const step = plotW / data.length;
+        const barW = Math.min(28, step * 0.34);
+
+        // Smooth budget line points
+        const pts = data.map((d, i) => {
+          const cx = padL + i * step + step / 2;
+          const cy = padT + plotH - (d.budget / maxVal) * plotH;
+          return cx + ',' + cy;
+        }).join(' ');
+
+        html += '<polyline fill="none" stroke="#93C5FD" stroke-width="2.5" stroke-dasharray="5 4" points="' + pts + '" />';
+
+        data.forEach((d, i) => {
+          const cx = padL + i * step + step / 2;
+          const spendH = (d.spend / maxVal) * plotH;
+          const blockH = (d.blocked / maxVal) * plotH;
+          const spendY = padT + plotH - spendH;
+          const blockY = padT + plotH - blockH;
+
+          html +=
+            '<g class="chart-col" data-idx="' + i + '" style="cursor:pointer;">' +
+              '<rect x="' + (cx - step / 2 + 2) + '" y="' + padT + '" width="' + (step - 4) + '" height="' + plotH + '" fill="transparent" />' +
+              '<rect x="' + (cx - barW - 2) + '" y="' + spendY + '" width="' + barW + '" height="' + spendH + '" rx="6" fill="#2563EB" />' +
+              '<rect x="' + (cx + 2) + '" y="' + blockY + '" width="' + Math.max(10, barW * 0.62) + '" height="' + blockH + '" rx="5" fill="#EF4444" />' +
+              '<circle cx="' + cx + '" cy="' + (padT + plotH - (d.budget / maxVal) * plotH) + '" r="4" fill="#FFFFFF" stroke="#2563EB" stroke-width="2" />' +
+              '<text x="' + cx + '" y="' + (H - 10) + '" text-anchor="middle" fill="#475569" font-size="11.5" font-weight="600">' + d.m + '</text>' +
+            '</g>';
+        });
+
+        svg.innerHTML = html;
+
+        svg.querySelectorAll('.chart-col').forEach(col => {
+          col.addEventListener('mouseenter', () => {
+            const d = data[Number(col.dataset.idx)];
+            tooltip.innerHTML =
+              '<div style="font-weight:700;margin-bottom:3px;">' + d.m + ' 2026 Telemetry</div>' +
+              '<div>Cleared Spend: <strong>$' + d.spend.toLocaleString() + '</strong></div>' +
+              '<div>Budget Cap: $' + d.budget.toLocaleString() + '</div>' +
+              '<div style="color:#FCA5A5;">Blocked Anomalies: $' + d.blocked.toLocaleString() + '</div>';
+            tooltip.classList.add('visible');
+          });
+          col.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+        });
+      }
+
+      document.querySelectorAll('.seg-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderChart(btn.dataset.horizon);
+        });
+      });
+
+      setInterval(() => {
+        const d = new Date();
+        document.getElementById('syncClock').textContent = d.toISOString().slice(11, 19) + ' UTC';
+      }, 1000);
+
+      updateKPIs();
+      renderTable();
+      renderChart('6m');
+    })();
+  </script>
+</body>
+</html>

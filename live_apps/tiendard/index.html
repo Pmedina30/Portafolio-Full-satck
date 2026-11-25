@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TiendaRD — Compras USA a República Dominicana sin sobrecargos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --surface-tint: #F4F6F2;
+      --surface-card: #FAFBF9;
+      --ink: #0E0F0C;
+      --ink-secondary: #454745;
+      --ink-muted: #6A6C6A;
+      --border: #E2E5DF;
+      --wise-lime: #9FE870;
+      --wise-lime-hover: #8BD95A;
+      --wise-forest: #163300;
+      --emerald: #059669;
+      --amber: #D97706;
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --shadow-card: 0 14px 36px -10px rgba(14, 15, 12, 0.08), 0 2px 6px rgba(14, 15, 12, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      font-variant-numeric: tabular-nums;
+      overflow-x: hidden;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Top Clean Wise-Model Navbar */
+    .navbar-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(226, 229, 223, 0.75);
+    }
+
+    .navbar {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 900;
+      font-size: 1.4rem;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-flag {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: var(--wise-lime);
+      color: var(--ink);
+      display: grid;
+      place-items: center;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.92rem;
+      font-weight: 600;
+      padding: 8px 15px;
+      border-radius: 999px;
+      transition: background 0.18s ease;
+    }
+
+    .nav-links a:hover {
+      background: var(--surface-tint);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .curr-toggle {
+      display: inline-flex;
+      align-items: center;
+      background: var(--surface-tint);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 3px;
+    }
+
+    .curr-btn {
+      border: none;
+      background: transparent;
+      color: var(--ink-secondary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      padding: 5px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .curr-btn.active {
+      background: var(--ink);
+      color: #FFFFFF;
+    }
+
+    .cart-trigger {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--surface-tint);
+      border: 1px solid var(--border);
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 9px 15px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.16s ease;
+    }
+
+    .cart-trigger:hover {
+      background: #E8ECE5;
+    }
+
+    .cart-count {
+      background: var(--ink);
+      color: var(--wise-lime);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 1px 7px;
+      border-radius: 999px;
+    }
+
+    .btn-lime {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--wise-lime);
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 11px 22px;
+      border-radius: 999px;
+      border: none;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .btn-lime:hover {
+      background: var(--wise-lime-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px -6px rgba(159, 232, 112, 0.65);
+    }
+
+    .btn-lime.lg {
+      font-size: 1.04rem;
+      padding: 16px 32px;
+    }
+
+    .btn-outline-dark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #FFFFFF;
+      color: var(--ink);
+      border: 1.5px solid var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 15px 28px;
+      border-radius: 999px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.16s ease;
+    }
+
+    .btn-outline-dark:hover {
+      background: var(--surface-tint);
+    }
+
+    /* Wise Centered Hero */
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 44px 24px 24px;
+      text-align: center;
+    }
+
+    .social-proof-strip {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: var(--surface-tint);
+      border: 1px solid var(--border);
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 26px;
+    }
+
+    .proof-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .proof-divider {
+      width: 1px;
+      height: 14px;
+      background: #CBD0C7;
+    }
+
+    .hero-headline {
+      font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2.8rem, 6.2vw, 5.2rem);
+      line-height: 0.96;
+      letter-spacing: -0.045em;
+      text-transform: uppercase;
+      color: var(--ink);
+      max-width: 15ch;
+      margin: 0 auto 22px;
+    }
+
+    .hero-sub {
+      font-size: clamp(1.04rem, 1.35vw, 1.22rem);
+      color: var(--ink-secondary);
+      max-width: 56ch;
+      margin: 0 auto 30px;
+      line-height: 1.55;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    /* 3D Interactive Three.js Globe & Orbiting Gold Coins Stage */
+    .globe-stage-wrap {
+      position: relative;
+      max-width: 1020px;
+      margin: 0 auto;
+      height: 410px;
+      border-radius: 32px;
+      background: radial-gradient(circle at 50% 54%, rgba(159, 232, 112, 0.24) 0%, rgba(14, 165, 233, 0.08) 42%, rgba(255, 255, 255, 0) 72%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #globeCanvasContainer {
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    #globeCanvasContainer:active {
+      cursor: grabbing;
+    }
+
+    .globe-badge {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      border-radius: 999px;
+      padding: 9px 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--ink);
+      pointer-events: none;
+    }
+
+    .globe-badge.left {
+      top: 38px;
+      left: 36px;
+    }
+
+    .globe-badge.right {
+      bottom: 42px;
+      right: 36px;
+    }
+
+    .globe-hint {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      background: rgba(255, 255, 255, 0.85);
+      padding: 4px 12px;
+      border-radius: 999px;
+      pointer-events: none;
+    }
+
+    /* Section Container */
+    .section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 68px 24px;
+    }
+
+    /* Wise 2-Column Landed Cost & DGA $200 Calculator */
+    .calc-band {
+      background: var(--surface-tint);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .eyebrow-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--wise-forest);
+      color: var(--wise-lime);
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 6px 13px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 900;
+      font-size: clamp(2rem, 3.5vw, 2.9rem);
+      line-height: 1.04;
+      letter-spacing: -0.035em;
+      margin-bottom: 16px;
+    }
+
+    .section-copy {
+      color: var(--ink-secondary);
+      font-size: 1.02rem;
+      margin-bottom: 26px;
+      max-width: 50ch;
+    }
+
+    .dga-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .dga-point {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      border-radius: 16px;
+    }
+
+    .dga-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--wise-lime);
+      color: var(--ink);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    /* Wise Calculator Card */
+    .wise-calc-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      box-shadow: 0 24px 56px -14px rgba(14, 15, 12, 0.1);
+    }
+
+    .field-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--ink-secondary);
+      margin-bottom: 8px;
+    }
+
+    .wise-input-box {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid #C5C9C0;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 18px;
+      transition: border-color 0.16s ease;
+    }
+
+    .wise-input-box:focus-within {
+      border-color: var(--ink);
+    }
+
+    .wise-input {
+      flex: 1;
+      border: none;
+      padding: 14px 16px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: var(--ink);
+      outline: none;
+      width: 100%;
+    }
+
+    .wise-unit {
+      background: var(--surface-tint);
+      padding: 14px 18px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 0.92rem;
+      border-left: 1px solid var(--border);
+      color: var(--ink);
+    }
+
+    .slider-row {
+      margin-bottom: 18px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--wise-forest);
+      cursor: pointer;
+    }
+
+    .wise-select {
+      width: 100%;
+      padding: 13px 15px;
+      border: 1.5px solid #C5C9C0;
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--ink);
+      background: #FFFFFF;
+      margin-bottom: 18px;
+      outline: none;
+    }
+
+    .dga-banner {
+      padding: 12px 15px;
+      border-radius: 14px;
+      font-size: 0.84rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .dga-banner.exempt {
+      background: #ECFDF5;
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+    }
+
+    .dga-banner.taxed {
+      background: #FFFBEB;
+      color: #92400E;
+      border: 1px solid #FDE68A;
+    }
+
+    /* Wise Fee Timeline Breakdown */
+    .fee-timeline {
+      border-left: 2px solid var(--border);
+      margin: 6px 0 20px 10px;
+      padding-left: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .fee-row {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.86rem;
+      color: var(--ink-secondary);
+    }
+
+    .fee-row::before {
+      content: '';
+      position: absolute;
+      left: -23px;
+      top: 6px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 2px solid var(--ink-muted);
+    }
+
+    .calc-total-box {
+      background: var(--surface-tint);
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .calc-total-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 900;
+      font-size: 1.75rem;
+      letter-spacing: -0.03em;
+    }
+
+    /* Marketplace Grid */
+    .market-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .prod-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .prod-card:hover {
+      transform: translateY(-3px);
+      border-color: #9FE870;
+    }
+
+    .prod-visual {
+      height: 138px;
+      border-radius: 16px;
+      background: var(--surface-tint);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .prod-dga-tag {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .prod-dga-tag.free {
+      background: var(--wise-lime);
+      color: var(--ink);
+    }
+
+    .prod-dga-tag.duty0 {
+      background: #DBEAFE;
+      color: #1E40AF;
+    }
+
+    .prod-store {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .prod-name {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.12rem;
+      margin: 4px 0 8px;
+    }
+
+    .prod-meta {
+      font-size: 0.82rem;
+      color: var(--ink-secondary);
+      margin-bottom: 16px;
+    }
+
+    .prod-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .prod-price {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 900;
+      font-size: 1.28rem;
+    }
+
+    .prod-courier-est {
+      font-size: 0.74rem;
+      color: var(--ink-muted);
+    }
+
+    /* Order Tracker (#TRD-2026-1002) */
+    .tracker-card {
+      background: var(--wise-forest);
+      color: #FFFFFF;
+      border-radius: 28px;
+      padding: 36px;
+      margin-top: 64px;
+    }
+
+    .tracker-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .tracker-search {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tracker-input {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      color: #FFFFFF;
+      padding: 11px 16px;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      outline: none;
+      width: 220px;
+    }
+
+    .tracker-steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .t-step {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .t-step.done {
+      background: rgba(159, 232, 112, 0.16);
+      border-color: var(--wise-lime);
+    }
+
+    .t-step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.18);
+      display: grid;
+      place-items: center;
+      font-size: 0.75rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .t-step.done .t-step-num {
+      background: var(--wise-lime);
+      color: var(--ink);
+    }
+
+    .t-step-title {
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 4px;
+    }
+
+    .t-step-time {
+      font-size: 0.74rem;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    /* Slide-over Cart Drawer */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(14, 15, 12, 0.48);
+      z-index: 80;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      max-width: 430px;
+      height: 100vh;
+      background: #FFFFFF;
+      z-index: 90;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transform: translateX(100%);
+      transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: -18px 0 48px rgba(14, 15, 12, 0.18);
+    }
+
+    .cart-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-items {
+      flex: 1;
+      overflow-y: auto;
+      margin: 18px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .drawer-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: var(--surface-tint);
+      border: 1px solid var(--border);
+    }
+
+    .qty-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    footer {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px 24px 52px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      font-size: 0.84rem;
+      color: var(--ink-muted);
+    }
+
+    @media (max-width: 1024px) {
+      .calc-grid {
+        grid-template-columns: 1fr;
+      }
+      .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .tracker-steps {
+        grid-template-columns: 1fr 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+      .globe-badge {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .product-grid,
+      .tracker-steps {
+        grid-template-columns: 1fr;
+      }
+      .globe-stage-wrap {
+        height: 320px;
+      }
+      .proof-divider {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Clean Wise-Model Navbar -->
+  <div class="navbar-wrap">
+    <nav class="navbar" aria-label="Navegación Principal">
+      <a href="#" class="brand">
+        <span class="brand-flag">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14" />
+            <path d="m13 6 6 6-6 6" />
+          </svg>
+        </span>
+        <span>TiendaRD</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#marketplace">Comprar USA</a></li>
+        <li><a href="#rastreo">Casillero Miami</a></li>
+        <li><a href="#calculadora">Aduanas DGA</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <div class="curr-toggle" role="group" aria-label="Selector de moneda">
+          <button type="button" class="curr-btn active" data-curr="USD">USD</button>
+          <button type="button" class="curr-btn" data-curr="DOP">DOP</button>
+        </div>
+
+        <button type="button" class="cart-trigger" id="openCartBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="cart-count tabular" id="cartBadge">2</span>
+        </button>
+
+        <button type="button" class="btn-lime" id="lockerBtn">Crear casillero</button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Centered Wise-Model Hero -->
+  <header class="hero">
+    <div class="social-proof-strip">
+      <span class="proof-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="#16A34A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>4.9 App Store · 18K reseñas</span>
+      </span>
+      <span class="proof-divider"></span>
+      <span class="proof-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="#16A34A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>4.9 Google Play · 45K envíos RD</span>
+      </span>
+    </div>
+
+    <h1 class="hero-headline">AHORRA CUANDO COMPRAS EN USA</h1>
+
+    <p class="hero-sub">
+      Compra en Amazon, Apple o B&amp;H con dirección propia en Doral, Miami. Aprovecha la exención DGA bajo $200 USD, tasa real sin margen oculto y entrega aérea en 48 horas en Santo Domingo y Santiago.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="#calculadora" class="btn-lime lg">
+        <span>Calcular envío ahora</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14M19 12l-7 7-7-7" />
+        </svg>
+      </a>
+      <a href="#marketplace" class="btn-outline-dark">Ver catálogo Tech USA</a>
+    </div>
+
+    <!-- 3D Interactive Three.js Globe + 4 Orbiting Gold Coins -->
+    <div class="globe-stage-wrap" aria-label="Globo 3D interactivo de ruta comercial Miami a República Dominicana">
+      <div class="globe-badge left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>
+        <span>Exención DGA &lt; $200 USD · $0 Impuestos</span>
+      </div>
+      <div id="globeCanvasContainer"></div>
+      <div class="globe-badge right">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0E0F0C" stroke-width="2.2"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+        <span>Vuelo Diario MIA → SDQ · Tasa 59.20</span>
+      </div>
+      <span class="globe-hint">Arrastra el globo 3D para explorar la ruta Miami → Santo Domingo</span>
+    </div>
+  </header>
+
+  <!-- Below the Fold: Wise-Style 2-Column Landed Cost & DGA $200 Calculator -->
+  <section class="calc-band" id="calculadora">
+    <div class="section calc-grid">
+      <div>
+        <span class="eyebrow-tag">Transparencia Aduanal DGA</span>
+        <h2 class="section-title">Cero sorpresas al retirar tu paquete en RD.</h2>
+        <p class="section-copy">
+          Bajo el Decreto 402-05 de la Dirección General de Aduanas (DGA), toda compra personal con valor FOB hasta <strong>$200.00 USD</strong> entra 100% libre de arancel e ITBIS. Si superas $200 USD, calculamos el impuesto exacto al centavo antes de que compres.
+        </p>
+
+        <div class="dga-highlights">
+          <div class="dga-point">
+            <span class="dga-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            <div>
+              <div style="font-weight:800;font-size:0.95rem;">Peso real por libra sin redondeo abusivo</div>
+              <div style="font-size:0.84rem;color:var(--ink-secondary);">$4.25 USD / lb todo incluido desde nuestro almacén en Doral FL 33122.</div>
+            </div>
+          </div>
+
+          <div class="dga-point">
+            <span class="dga-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            </span>
+            <div>
+              <div style="font-weight:800;font-size:0.95rem;">Laptops y Celulares: 0% Arancel Aduanal</div>
+              <div style="font-size:0.84rem;color:var(--ink-secondary);">Incluso sobre $200 USD, equipos de cómputo pagan 0% de arancel (solo 18% ITBIS).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Calculator Card -->
+      <div class="wise-calc-card">
+        <div class="field-label">
+          <span>Valor del artículo en tienda USA (FOB)</span>
+          <span class="mono" style="font-size:0.78rem;">Tasa: 1 USD = RD$ 59.20</span>
+        </div>
+        <div class="wise-input-box">
+          <input type="number" id="fobInput" class="wise-input tabular" value="189" min="5" max="5000" step="1" />
+          <span class="wise-unit">USD</span>
+        </div>
+
+        <div class="slider-row">
+          <div class="field-label">
+            <span>Peso estimado del paquete</span>
+            <strong class="tabular" id="weightLabel">1.5 lbs</strong>
+          </div>
+          <input type="range" id="weightSlider" min="0.5" max="25" step="0.5" value="1.5" />
+        </div>
+
+        <div class="field-label">
+          <span>Categoría Arancelaria DGA</span>
+        </div>
+        <select id="catSelect" class="wise-select">
+          <option value="laptop">Laptops, Tablets y Smartphones (0% Arancel)</option>
+          <option value="audio" selected>Audio, Accesorios y Periféricos (8% Arancel si &gt; $200)</option>
+          <option value="fashion">Ropa, Calzado y Hogar (20% Arancel si &gt; $200)</option>
+        </select>
+
+        <div class="dga-banner exempt" id="dgaStatusBanner">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          <span id="dgaStatusText">EXENTO DGA (&le; $200 USD): $0.00 en Arancel e ITBIS</span>
+        </div>
+
+        <div class="fee-timeline tabular">
+          <div class="fee-row">
+            <span>Flete aéreo Miami → RD (<span id="tlLbs">1.5</span> lbs × $4.25)</span>
+            <strong id="tlFreight">$6.38</strong>
+          </div>
+          <div class="fee-row">
+            <span>Seguro de carga 100% + Gestión DGA</span>
+            <strong id="tlHandling">$2.95</strong>
+          </div>
+          <div class="fee-row">
+            <span>Impuestos Aduanas DGA (Arancel + ITBIS)</span>
+            <strong id="tlTaxes">$0.00</strong>
+          </div>
+        </div>
+
+        <div class="calc-total-box">
+          <div>
+            <div style="font-size:0.8rem;font-weight:700;color:var(--ink-secondary);">Costo total puesto en tus manos</div>
+            <div class="mono" style="font-size:0.78rem;color:var(--ink-muted);" id="calcSecondaryTotal">Equivalente: RD$ 11,741.14</div>
+          </div>
+          <div class="calc-total-val tabular" id="calcPrimaryTotal">$198.33</div>
+        </div>
+
+        <button type="button" class="btn-lime" style="width:100%;padding:15px;" id="copyQuoteBtn">
+          Reservar tarifa en mi Casillero #TRD
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Curated USA Tech Marketplace + Order Tracker -->
+  <main class="section" id="marketplace">
+    <div class="market-head">
+      <div>
+        <span class="eyebrow-tag">Catálogo Verificado USA → RD</span>
+        <h2 class="section-title">Favoritos Tech con envío directo a RD</h2>
+      </div>
+      <p style="color:var(--ink-secondary);font-size:0.94rem;max-width:44ch;">
+        Haz clic en cualquier producto para agregarlo a tu consolidación aérea o simular sus impuestos exactos.
+      </p>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+
+    <!-- Live Order Tracker (#TRD-2026-1002) -->
+    <section class="tracker-card" id="rastreo" aria-label="Rastreador de paquetes en vivo">
+      <div class="tracker-top">
+        <div>
+          <div class="mono" style="color:var(--wise-lime);font-size:0.78rem;font-weight:600;margin-bottom:4px;">LIVE TELEMETRY · ADUANAS SDQ &amp; MIAMI HUB</div>
+          <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.65rem;font-weight:800;">Rastreo de Guía Aérea <span class="mono" id="activeTrackId">#TRD-2026-1002</span></h3>
+        </div>
+        <div class="tracker-search">
+          <input type="text" id="trackInput" class="tracker-input" value="#TRD-2026-1002" aria-label="Código de rastreo" />
+          <button type="button" class="btn-lime" id="trackBtn">Consultar guía</button>
+        </div>
+      </div>
+
+      <div class="tracker-steps" id="trackerSteps"></div>
+    </section>
+  </main>
+
+  <!-- Slide-over Cart Drawer -->
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="Carrito de consolidación Miami">
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--border);">
+        <div>
+          <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.2rem;">Tu Casillero Miami</h3>
+          <p class="mono" style="font-size:0.74rem;color:var(--ink-muted);">8400 NW 25th St, Doral FL 33122</p>
+        </div>
+        <button type="button" id="closeCartBtn" class="qty-btn" aria-label="Cerrar carrito">×</button>
+      </div>
+
+      <div id="cartSplitNotice" style="margin-top:12px;padding:10px 12px;border-radius:12px;background:#ECFDF5;color:#065F46;font-size:0.78rem;font-weight:600;"></div>
+    </div>
+
+    <div class="drawer-items" id="drawerItems"></div>
+
+    <div style="border-top:1px solid var(--border);padding-top:16px;">
+      <div style="display:flex;justify-content:space-between;font-size:0.86rem;margin-bottom:6px;">
+        <span>Subtotal artículos USA</span>
+        <strong class="tabular" id="cartSubVal">$0.00</strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.86rem;margin-bottom:12px;">
+        <span>Courier + Gestión DGA optimizada</span>
+        <strong class="tabular" id="cartShipVal">$0.00</strong>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:1.15rem;font-weight:900;margin-bottom:14px;">
+        <span>Total puesto en RD</span>
+        <span class="tabular" id="cartGrandVal">$0.00</span>
+      </div>
+      <button type="button" class="btn-lime" style="width:100%;padding:14px;" id="checkoutBtn">
+        Despachar vuelo a Santo Domingo
+      </button>
+    </div>
+  </aside>
+
+  <footer>
+    <div>TiendaRD Logistics S.R.L. · Operador Courier Autorizado DGA República Dominicana</div>
+    <div class="mono">DORAL MIA HUB · AEROPUERTO AILA SDQ · TASA REAL GARANTIZADA</div>
+  </footer>
+
+  <!-- Interactive UI Logic (Calculator, Marketplace, Cart, Tracker) -->
+  <script>
+    (function () {
+      const RATE_DOP = 59.20;
+      let displayCurr = 'USD';
+
+      const products = [
+        {
+          id: 'airpods-pro-2',
+          name: 'Apple AirPods Pro 2 (USB-C)',
+          store: 'Amazon USA · Envío Prime',
+          usd: 189.00,
+          lbs: 0.8,
+          cat: 'audio',
+          tag: 'Exento DGA < $200',
+          tagClass: 'free',
+          svg: '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#0E0F0C" stroke-width="1.7"><rect x="3" y="6" width="18" height="14" rx="5"/><path d="M3 12h18"/><circle cx="12" cy="15.5" r="1"/></svg>'
+        },
+        {
+          id: 'macbook-air-m3',
+          name: 'MacBook Air 13" Chip M3 (16GB)',
+          store: 'Apple Store USA · Oficial',
+          usd: 999.00,
+          lbs: 4.2,
+          cat: 'laptop',
+          tag: '0% Arancel Laptop',
+          tagClass: 'duty0',
+          svg: '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#0E0F0C" stroke-width="1.7"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg>'
+        },
+        {
+          id: 'baseus-100w',
+          name: 'Baseus 100W GaN II 4-Port Charger',
+          store: 'Amazon USA · Deal Directo',
+          usd: 39.00,
+          lbs: 0.7,
+          cat: 'audio',
+          tag: 'Exento DGA < $200',
+          tagClass: 'free',
+          svg: '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#0E0F0C" stroke-width="1.7"><rect x="6" y="7" width="12" height="13" rx="2"/><path d="M9 7V3M15 7V3M12 11l-2 3h4l-2 3"/></svg>'
+        },
+        {
+          id: 'sony-xm5',
+          name: 'Sony WH-1000XM5 Noise Canceling',
+          store: 'B&H Photo NYC',
+          usd: 278.00,
+          lbs: 1.8,
+          cat: 'audio',
+          tag: 'Cálculo DGA Exacto',
+          tagClass: 'duty0',
+          svg: '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#0E0F0C" stroke-width="1.7"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>'
+        },
+        {
+          id: 'keychron-q1',
+          name: 'Keychron Q1 Pro Wireless QMK',
+          store: 'Keychron Direct USA',
+          usd: 194.00,
+          lbs: 3.9,
+          cat: 'audio',
+          tag: 'Exento DGA < $200',
+          tagClass: 'free',
+          svg: '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#0E0F0C" stroke-width="1.7"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M8 14h8"/></svg>'
+        },
+        {
+          id: 'ssd-samsung-2tb',
+          name: 'Samsung T9 Portable SSD 2TB',
+          store: 'Amazon USA · Prime',
+          usd: 169.00,
+          lbs: 0.6,
+          cat: 'laptop',
+          tag: 'Exento DGA < $200',
+          tagClass: 'free',
+          svg: '<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#0E0F0C" stroke-width="1.7"><rect x="4" y="6" width="16" height="12" rx="3"/><path d="M8 12h4"/><circle cx="16" cy="12" r="1"/></svg>'
+        }
+      ];
+
+      let cart = [
+        { id: 'airpods-pro-2', qty: 1 },
+        { id: 'baseus-100w', qty: 1 }
+      ];
+
+      const trackingDB = {
+        '#TRD-2026-1002': [
+          { title: 'Recibido Doral FL', time: '23 Nov, 14:10 · Almacén NW 25th', done: true },
+          { title: 'Consolidación MIA', time: '24 Nov, 04:30 · Guía #80912', done: true },
+          { title: 'Vuelo Carga SDQ', time: '24 Nov, 11:45 · Aterrizó AILA', done: true },
+          { title: 'Validación DGA Exento', time: '25 Nov, 08:20 · $0.00 Impuestos', done: true },
+          { title: 'Listo en Piantini', time: 'Hoy · Retiro o Delivery Express', done: true }
+        ],
+        '#TRD-2026-1015': [
+          { title: 'Recibido Doral FL', time: 'Hoy, 09:12 · Escaneado', done: true },
+          { title: 'Consolidación MIA', time: 'Hoy, 11:00 · En pallet aéreo', done: true },
+          { title: 'Vuelo Carga SDQ', time: 'Salida 18:30 EST', done: false },
+          { title: 'Validación DGA', time: 'Pre-declarado sin cargos', done: false },
+          { title: 'Entrega Domicilio', time: 'Mañana antes de 4:00 PM', done: false }
+        ]
+      };
+
+      function fmtMoney(usdVal) {
+        if (displayCurr === 'USD') {
+          return '$' + usdVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        return 'RD$ ' + (usdVal * RATE_DOP).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+
+      function computeLanded(fobUSD, lbs, cat) {
+        const freight = lbs * 4.25;
+        const handling = Math.max(2.50, fobUSD * 0.015);
+        let taxes = 0;
+        const exempt = fobUSD <= 200;
+        if (!exempt) {
+          const cif = fobUSD + freight + handling;
+          const dutyRate = cat === 'laptop' ? 0 : cat === 'audio' ? 0.08 : 0.20;
+          const duty = cif * dutyRate;
+          const itbis = (cif + duty) * 0.18;
+          taxes = duty + itbis;
+        }
+        return {
+          exempt,
+          freight,
+          handling,
+          taxes,
+          totalUSD: fobUSD + freight + handling + taxes
+        };
+      }
+
+      function updateCalculator() {
+        const fob = Math.max(1, parseFloat(document.getElementById('fobInput').value) || 0);
+        const lbs = parseFloat(document.getElementById('weightSlider').value) || 1;
+        const cat = document.getElementById('catSelect').value;
+
+        document.getElementById('weightLabel').textContent = lbs.toFixed(1) + ' lbs';
+        document.getElementById('tlLbs').textContent = lbs.toFixed(1);
+
+        const res = computeLanded(fob, lbs, cat);
+        const banner = document.getElementById('dgaStatusBanner');
+        const bannerTxt = document.getElementById('dgaStatusText');
+
+        if (res.exempt) {
+          banner.className = 'dga-banner exempt';
+          bannerTxt.textContent = 'EXENTO DGA (≤ $200 USD): $0.00 en Arancel e ITBIS';
+        } else {
+          banner.className = 'dga-banner taxed';
+          bannerTxt.textContent = cat === 'laptop'
+            ? 'Mayor a $200 USD: 0% Arancel Cómputo + 18% ITBIS DGA incluido'
+            : 'Mayor a $200 USD: Liquidación DGA (Arancel + 18% ITBIS) calculada';
+        }
+
+        document.getElementById('tlFreight').textContent = fmtMoney(res.freight);
+        document.getElementById('tlHandling').textContent = fmtMoney(res.handling);
+        document.getElementById('tlTaxes').textContent = fmtMoney(res.taxes);
+        document.getElementById('calcPrimaryTotal').textContent = fmtMoney(res.totalUSD);
+
+        if (displayCurr === 'USD') {
+          document.getElementById('calcSecondaryTotal').textContent =
+            'Equivalente: RD$ ' + (res.totalUSD * RATE_DOP).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        } else {
+          document.getElementById('calcSecondaryTotal').textContent =
+            'Equivalente: $' + res.totalUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' USD';
+        }
+      }
+
+      function renderMarketplace() {
+        const grid = document.getElementById('productGrid');
+        grid.innerHTML = products.map(p => {
+          const est = computeLanded(p.usd, p.lbs, p.cat);
+          const shipOnly = est.freight + est.handling + est.taxes;
+          return (
+            '<article class="prod-card">' +
+              '<div>' +
+                '<div class="prod-visual">' +
+                  '<span class="prod-dga-tag ' + p.tagClass + '">' + p.tag + '</span>' +
+                  p.svg +
+                '</div>' +
+                '<div class="prod-store">' + p.store + '</div>' +
+                '<h3 class="prod-name">' + p.name + '</h3>' +
+                '<div class="prod-meta">Peso estimado: <strong>' + p.lbs + ' lbs</strong> · Courier + DGA: <strong>' + fmtMoney(shipOnly) + '</strong></div>' +
+              '</div>' +
+              '<div class="prod-bottom">' +
+                '<div>' +
+                  '<div class="prod-price tabular">' + fmtMoney(p.usd) + '</div>' +
+                  '<div class="prod-courier-est">Precio tienda USA</div>' +
+                '</div>' +
+                '<button type="button" class="btn-lime" data-add="' + p.id + '" style="padding:10px 16px;font-size:0.84rem;">Agregar</button>' +
+              '</div>' +
+            '</article>'
+          );
+        }).join('');
+      }
+
+      function renderCart() {
+        const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+        document.getElementById('cartBadge').textContent = totalQty;
+
+        const container = document.getElementById('drawerItems');
+        let subUSD = 0;
+        let shipUSD = 0;
+
+        if (cart.length === 0) {
+          container.innerHTML = '<div style="text-align:center;color:var(--ink-muted);padding:36px 0;">Tu casillero está vacío. Agrega productos del catálogo USA.</div>';
+        } else {
+          container.innerHTML = cart.map(item => {
+            const p = products.find(x => x.id === item.id);
+            const itemCalc = computeLanded(p.usd, p.lbs, p.cat);
+            subUSD += p.usd * item.qty;
+            shipUSD += (itemCalc.freight + itemCalc.handling + itemCalc.taxes) * item.qty;
+            return (
+              '<div class="drawer-item">' +
+                '<div>' +
+                  '<div style="font-weight:800;font-size:0.88rem;">' + p.name + '</div>' +
+                  '<div class="tabular" style="font-size:0.8rem;color:var(--ink-secondary);">' + fmtMoney(p.usd) + ' × ' + item.qty + '</div>' +
+                '</div>' +
+                '<div style="display:flex;align-items:center;gap:6px;">' +
+                  '<button type="button" class="qty-btn" data-delta="-1" data-id="' + p.id + '">−</button>' +
+                  '<span class="tabular" style="font-weight:700;min-width:18px;text-align:center;">' + item.qty + '</span>' +
+                  '<button type="button" class="qty-btn" data-delta="1" data-id="' + p.id + '">+</button>' +
+                '</div>' +
+              '</div>'
+            );
+          }).join('');
+        }
+
+        document.getElementById('cartSplitNotice').textContent =
+          'Optimización Smart-Split activa: cada artículo menor a $200 USD viaja con guía individual exenta de DGA.';
+        document.getElementById('cartSubVal').textContent = fmtMoney(subUSD);
+        document.getElementById('cartShipVal').textContent = fmtMoney(shipUSD);
+        document.getElementById('cartGrandVal').textContent = fmtMoney(subUSD + shipUSD);
+      }
+
+      function renderTracker(code) {
+        const normalized = code.trim().toUpperCase();
+        const steps = trackingDB[normalized] || trackingDB['#TRD-2026-1002'];
+        document.getElementById('activeTrackId').textContent = trackingDB[normalized] ? normalized : '#TRD-2026-1002';
+        document.getElementById('trackerSteps').innerHTML = steps.map((s, idx) => (
+          '<div class="t-step ' + (s.done ? 'done' : '') + '">' +
+            '<div class="t-step-num">' + (idx + 1) + '</div>' +
+            '<div class="t-step-title">' + s.title + '</div>' +
+            '<div class="t-step-time">' + s.time + '</div>' +
+          '</div>'
+        )).join('');
+      }
+
+      function toggleDrawer(open) {
+        document.getElementById('cartDrawer').classList.toggle('open', open);
+        document.getElementById('drawerBackdrop').classList.toggle('open', open);
+      }
+
+      document.getElementById('fobInput').addEventListener('input', updateCalculator);
+      document.getElementById('weightSlider').addEventListener('input', updateCalculator);
+      document.getElementById('catSelect').addEventListener('change', updateCalculator);
+
+      document.querySelectorAll('.curr-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.curr-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          displayCurr = btn.dataset.curr;
+          updateCalculator();
+          renderMarketplace();
+          renderCart();
+        });
+      });
+
+      document.getElementById('productGrid').addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-add]');
+        if (!btn) return;
+        const found = cart.find(i => i.id === btn.dataset.add);
+        if (found) found.qty += 1;
+        else cart.push({ id: btn.dataset.add, qty: 1 });
+        renderCart();
+        toggleDrawer(true);
+      });
+
+      document.getElementById('drawerItems').addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-delta]');
+        if (!btn) return;
+        const item = cart.find(i => i.id === btn.dataset.id);
+        if (!item) return;
+        item.qty += Number(btn.dataset.delta);
+        if (item.qty <= 0) cart = cart.filter(i => i.id !== btn.dataset.id);
+        renderCart();
+      });
+
+      document.getElementById('openCartBtn').addEventListener('click', () => toggleDrawer(true));
+      document.getElementById('closeCartBtn').addEventListener('click', () => toggleDrawer(false));
+      document.getElementById('drawerBackdrop').addEventListener('click', () => toggleDrawer(false));
+
+      document.getElementById('checkoutBtn').addEventListener('click', () => {
+        toggleDrawer(false);
+        document.getElementById('trackInput').value = '#TRD-2026-1015';
+        renderTracker('#TRD-2026-1015');
+        document.getElementById('rastreo').scrollIntoView({ behavior: 'smooth' });
+      });
+
+      document.getElementById('lockerBtn').addEventListener('click', () => {
+        toggleDrawer(true);
+      });
+
+      document.getElementById('copyQuoteBtn').addEventListener('click', (e) => {
+        e.currentTarget.textContent = 'Tarifa garantizada en Casillero #TRD-8841';
+        setTimeout(() => {
+          document.getElementById('copyQuoteBtn').textContent = 'Reservar tarifa en mi Casillero #TRD';
+        }, 2600);
+      });
+
+      document.getElementById('trackBtn').addEventListener('click', () => {
+        renderTracker(document.getElementById('trackInput').value);
+      });
+
+      updateCalculator();
+      renderMarketplace();
+      renderCart();
+      renderTracker('#TRD-2026-1002');
+    })();
+  </script>
+
+  <!-- Three.js 3D WebGL Oceanic Globe + 4 Orbiting Metallic Gold Coins -->
+  <script type="module">
+    import * as THREE from '/vendor/three.module.min.js';
+
+    const container = document.getElementById('globeCanvasContainer');
+    if (container && THREE) {
+      const scene = new THREE.Scene();
+      const w = container.clientWidth || 900;
+      const h = container.clientHeight || 410;
+
+      const camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 100);
+      camera.position.set(0, 0.35, 6.2);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setSize(w, h);
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      container.appendChild(renderer.domElement);
+
+      // Build Rich Procedural Cyan-Emerald-Blue Earth Texture on 2D Canvas
+      function createEarthTexture() {
+        const c = document.createElement('canvas');
+        c.width = 1024;
+        c.height = 512;
+        const ctx = c.getContext('2d');
+
+        const oceanGrad = ctx.createLinearGradient(0, 0, 0, 512);
+        oceanGrad.addColorStop(0, '#0284C7');
+        oceanGrad.addColorStop(0.5, '#0EA5E9');
+        oceanGrad.addColorStop(1, '#0369A1');
+        ctx.fillStyle = oceanGrad;
+        ctx.fillRect(0, 0, 1024, 512);
+
+        // Subtle Lat/Lon Grid
+        ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+        ctx.lineWidth = 1;
+        for (let x = 0; x < 1024; x += 64) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 512); ctx.stroke();
+        }
+        for (let y = 0; y < 512; y += 64) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1024, y); ctx.stroke();
+        }
+
+        // Stylized Emerald & Wise-Lime Continents
+        const drawContinent = (pts, fill) => {
+          ctx.fillStyle = fill;
+          ctx.beginPath();
+          ctx.moveTo(pts[0][0], pts[0][1]);
+          for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+          ctx.closePath();
+          ctx.fill();
+        };
+
+        // North America & Florida
+        drawContinent([[140,85],[295,75],[325,155],[282,215],[265,232],[230,220],[170,175]], '#10B981');
+        // Caribbean & Dominican Republic Highlight
+        ctx.fillStyle = '#9FE870';
+        ctx.beginPath(); ctx.arc(298, 242, 11, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(278, 236, 7, 0, Math.PI * 2); ctx.fill();
+        // South America
+        drawContinent([[285,268],[365,285],[388,365],[335,455],[295,420],[275,320]], '#34D399');
+        // Europe & Africa
+        drawContinent([[475,95],[585,82],[610,165],[545,185],[480,155]], '#10B981');
+        drawContinent([[480,198],[595,205],[625,315],[565,415],[505,365],[472,265]], '#34D399');
+        // Asia & Oceania
+        drawContinent([[625,90],[845,95],[880,220],[765,265],[655,210]], '#10B981');
+        drawContinent([[795,335],[885,335],[895,405],[810,410]], '#6EE7B7');
+
+        // Glowing Miami -> RD Trade Route Arc
+        ctx.strokeStyle = '#FDE047';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(268, 216);
+        ctx.quadraticCurveTo(292, 220, 298, 242);
+        ctx.stroke();
+
+        const tex = new THREE.CanvasTexture(c);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        return tex;
+      }
+
+      // Build Embossed Gold Coin Face Texture
+      function createCoinFaceTexture() {
+        const c = document.createElement('canvas');
+        c.width = 256;
+        c.height = 256;
+        const ctx = c.getContext('2d');
+        const g = ctx.createRadialGradient(96, 90, 12, 128, 128, 126);
+        g.addColorStop(0, '#FEF08A');
+        g.addColorStop(0.55, '#F59E0B');
+        g.addColorStop(1, '#B45309');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, 256, 256);
+
+        ctx.strokeStyle = '#FDE047';
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.arc(128, 128, 104, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = '#FEF9C3';
+        ctx.font = '900 108px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('$', 128, 134);
+
+        const tex = new THREE.CanvasTexture(c);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        return tex;
+      }
+
+      const worldGroup = new THREE.Group();
+      scene.add(worldGroup);
+
+      // Oceanic Globe
+      const globeGeo = new THREE.SphereGeometry(1.58, 64, 64);
+      const globeMat = new THREE.MeshStandardMaterial({
+        map: createEarthTexture(),
+        roughness: 0.34,
+        metalness: 0.12
+      });
+      const globeMesh = new THREE.Mesh(globeGeo, globeMat);
+      globeMesh.rotation.y = -1.15;
+      globeMesh.rotation.x = 0.18;
+      worldGroup.add(globeMesh);
+
+      // Subtle Orbital Ring Halo
+      const ringGeo = new THREE.TorusGeometry(2.32, 0.014, 16, 120);
+      const ringMat = new THREE.MeshBasicMaterial({ color: 0x9FE870, transparent: true, opacity: 0.65 });
+      const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+      ringMesh.rotation.x = Math.PI * 0.42;
+      ringMesh.rotation.y = 0.22;
+      worldGroup.add(ringMesh);
+
+      // 4 Gleaming 3D Metallic Gold Coins Orbiting the Globe
+      const coinFaceTex = createCoinFaceTexture();
+      const coinRimMat = new THREE.MeshStandardMaterial({
+        color: 0xF59E0B,
+        metalness: 0.85,
+        roughness: 0.18
+      });
+      const coinCapMat = new THREE.MeshStandardMaterial({
+        map: coinFaceTex,
+        color: 0xFDE047,
+        metalness: 0.85,
+        roughness: 0.22
+      });
+      const coinGeo = new THREE.CylinderGeometry(0.32, 0.32, 0.075, 40);
+
+      const coins = [];
+      const orbitConfigs = [
+        { radius: 2.32, speed: 0.95, phase: 0.2, tiltX: 0.38, tiltZ: 0.22 },
+        { radius: 2.48, speed: -0.78, phase: 1.9, tiltX: -0.32, tiltZ: 0.44 },
+        { radius: 2.22, speed: 0.86, phase: 3.5, tiltX: 0.52, tiltZ: -0.28 },
+        { radius: 2.55, speed: -0.68, phase: 5.0, tiltX: -0.18, tiltZ: -0.45 }
+      ];
+
+      orbitConfigs.forEach(cfg => {
+        const pivot = new THREE.Group();
+        pivot.rotation.x = cfg.tiltX;
+        pivot.rotation.z = cfg.tiltZ;
+        const coin = new THREE.Mesh(coinGeo, [coinRimMat, coinCapMat, coinCapMat]);
+        coin.rotation.x = Math.PI * 0.5;
+        pivot.add(coin);
+        worldGroup.add(pivot);
+        coins.push({ pivot, coin, cfg });
+      });
+
+      // Studio Lighting
+      scene.add(new THREE.AmbientLight(0xFFFFFF, 1.35));
+      const sunLight = new THREE.DirectionalLight(0xFFFFFF, 2.2);
+      sunLight.position.set(5, 4, 6);
+      scene.add(sunLight);
+
+      const goldRim = new THREE.PointLight(0xFDE047, 2.4, 14);
+      goldRim.position.set(-4, 2.5, 4);
+      scene.add(goldRim);
+
+      const limeFill = new THREE.PointLight(0x9FE870, 1.6, 12);
+      limeFill.position.set(3, -3, 3);
+      scene.add(limeFill);
+
+      // Smooth Mouse / Touch Drag Interaction
+      let isDragging = false;
+      let prevX = 0, prevY = 0;
+      let velY = 0, velX = 0;
+
+      const onDown = (x, y) => { isDragging = true; prevX = x; prevY = y; };
+      const onMove = (x, y) => {
+        if (!isDragging) return;
+        const dx = x - prevX;
+        const dy = y - prevY;
+        velY = dx * 0.008;
+        velX = dy * 0.005;
+        worldGroup.rotation.y += velY;
+        worldGroup.rotation.x = Math.max(-0.65, Math.min(0.65, worldGroup.rotation.x + velX));
+        prevX = x;
+        prevY = y;
+      };
+      const onUp = () => { isDragging = false; };
+
+      container.addEventListener('pointerdown', e => onDown(e.clientX, e.clientY));
+      window.addEventListener('pointermove', e => onMove(e.clientX, e.clientY));
+      window.addEventListener('pointerup', onUp);
+
+      window.addEventListener('resize', () => {
+        const nw = container.clientWidth;
+        const nh = container.clientHeight;
+        if (!nw || !nh) return;
+        camera.aspect = nw / nh;
+        camera.updateProjectionMatrix();
+        renderer.setSize(nw, nh);
+      });
+
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const t = clock.getElapsedTime();
+
+        if (!isDragging) {
+          globeMesh.rotation.y += 0.0045;
+          velY *= 0.94;
+          velX *= 0.94;
+          worldGroup.rotation.y += velY;
+        }
+
+        coins.forEach(({ coin, cfg }) => {
+          const angle = t * cfg.speed + cfg.phase;
+          coin.position.set(Math.cos(angle) * cfg.radius, 0, Math.sin(angle) * cfg.radius);
+          coin.rotation.z = t * 2.2 + cfg.phase;
+          coin.rotation.y = Math.sin(t * 1.6 + cfg.phase) * 0.45;
+        });
+
+        renderer.render(scene, camera);
+      }
+      animate();
+    }
+  </script>
+</body>
+</html>

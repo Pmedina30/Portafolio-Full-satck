@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ApexLend — Intelligent Credit Infrastructure &amp; Underwriting OS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #FFFFFF;
+      --surface-subtle: #F8FAFC;
+      --surface-card: #FFFFFF;
+      --ink: #090D16;
+      --ink-secondary: #475569;
+      --ink-muted: #64748B;
+      --border: #E2E8F0;
+      --sapphire: #2563EB;
+      --emerald: #10B981;
+      --coral: #F43F5E;
+      --violet: #7C3AED;
+      --amber: #F59E0B;
+      --cyan: #06B6D4;
+      --shadow-elevated: 0 20px 50px -12px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.03);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      font-variant-numeric: tabular-nums;
+      overflow-x: hidden;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .serif {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    /* Top Minimalist Lightspark-Style Navbar */
+    .navbar {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      position: relative;
+      z-index: 30;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.28rem;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: var(--ink);
+      color: #FFFFFF;
+      display: grid;
+      place-items: center;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 999px;
+      transition: color 0.16s ease, background 0.16s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink);
+      background: var(--surface-subtle);
+    }
+
+    .nav-cta-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-black {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: var(--ink);
+      color: #FFFFFF;
+      border: 1px solid var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 12px 24px;
+      border-radius: 999px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      box-shadow: 0 12px 28px -8px rgba(9, 13, 22, 0.35);
+    }
+
+    .btn-black:hover {
+      background: #1E293B;
+      transform: translateY(-1px);
+    }
+
+    .btn-bordered {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #FFFFFF;
+      color: var(--ink);
+      border: 1px solid #CBD5E1;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 12px 24px;
+      border-radius: 999px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.18s ease, background 0.18s ease;
+    }
+
+    .btn-bordered:hover {
+      border-color: var(--ink);
+      background: var(--surface-subtle);
+    }
+
+    /* Pure #FFFFFF Lightspark Orbital Hero */
+    .orbital-hero {
+      position: relative;
+      background: #FFFFFF;
+      min-height: 680px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 24px 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Subtle Geometric Orbital Guide Rings */
+    .orbit-svg-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero-center-stack {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      max-width: 640px;
+      padding: 36px 16px;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(248, 250, 252, 0.85);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--ink-secondary);
+      margin-bottom: 22px;
+    }
+
+    .hero-headline {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.65rem, 4.9vw, 4.35rem);
+      line-height: 1.04;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 1.25vw, 1.14rem);
+      color: var(--ink-secondary);
+      max-width: 48ch;
+      margin: 0 auto 30px;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    /* 6 Orbital Frosted-Glass FinTech UI Cards */
+    .orbital-ring {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 6;
+    }
+
+    .orbit-card-wrap {
+      position: absolute;
+      pointer-events: auto;
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .orbit-aura {
+      position: absolute;
+      inset: -22px;
+      border-radius: 50%;
+      filter: blur(26px);
+      opacity: 0.52;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .orbit-card {
+      background: rgba(255, 255, 255, 0.76);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.92);
+      box-shadow:
+        0 18px 40px -12px rgba(15, 23, 42, 0.12),
+        0 0 0 1px rgba(15, 23, 42, 0.05);
+      border-radius: 20px;
+      padding: 14px 18px;
+      min-width: 215px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      animation: floatCard 6s ease-in-out infinite;
+    }
+
+    .orbit-card:hover {
+      border-color: #CBD5E1;
+      box-shadow: 0 24px 48px -12px rgba(15, 23, 42, 0.18);
+    }
+
+    .orbit-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      color: #FFFFFF;
+    }
+
+    .orbit-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 0.96rem;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+
+    .orbit-lbl {
+      font-size: 0.74rem;
+      font-weight: 500;
+      color: var(--ink-muted);
+      margin-top: 1px;
+    }
+
+    /* Orbital Positions around Center Copy */
+    .pos-1 { top: 54px; left: 6%; }
+    .pos-1 .orbit-card { animation-delay: 0s; }
+
+    .pos-2 { top: 44%; left: 2.5%; }
+    .pos-2 .orbit-card { animation-delay: -1.2s; }
+
+    .pos-3 { bottom: 96px; left: 8%; }
+    .pos-3 .orbit-card { animation-delay: -2.4s; }
+
+    .pos-4 { top: 54px; right: 6%; }
+    .pos-4 .orbit-card { animation-delay: -0.8s; }
+
+    .pos-5 { top: 44%; right: 2.5%; }
+    .pos-5 .orbit-card { animation-delay: -2.0s; }
+
+    .pos-6 { bottom: 96px; right: 8%; }
+    .pos-6 .orbit-card { animation-delay: -3.4s; }
+
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* Bottom Monochrome FinTech Trust Strip */
+    .trust-strip {
+      position: relative;
+      z-index: 10;
+      max-width: 1120px;
+      margin: 12px auto 0;
+      padding: 24px 24px 12px;
+      border-top: 1px solid #F1F5F9;
+      text-align: center;
+      width: 100%;
+    }
+
+    .trust-caption {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #94A3B8;
+      margin-bottom: 16px;
+    }
+
+    .trust-logos {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 42px;
+      color: #64748B;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: 0.12em;
+    }
+
+    .trust-logos span {
+      opacity: 0.72;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .trust-logos span:hover {
+      opacity: 1;
+      color: var(--ink);
+    }
+
+    /* Below the Fold: Institutional Loan Configurator */
+    .workspace {
+      background: var(--surface-subtle);
+      border-top: 1px solid var(--border);
+      padding: 72px 24px 96px;
+    }
+
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+
+    .section-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+      letter-spacing: -0.035em;
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: 1.02fr 0.98fr;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: var(--shadow-elevated);
+    }
+
+    .control-group {
+      margin-bottom: 26px;
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+
+    .control-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--ink-secondary);
+    }
+
+    .control-readout {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.45rem;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      accent-color: var(--ink);
+      cursor: pointer;
+    }
+
+    .range-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      color: var(--ink-muted);
+      margin-top: 6px;
+    }
+
+    /* Credit Tier Selector */
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .tier-btn {
+      background: var(--surface-subtle);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .tier-btn.active {
+      background: #090D16;
+      border-color: #090D16;
+      color: #FFFFFF;
+    }
+
+    .tier-name {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.86rem;
+    }
+
+    .tier-apr {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .tier-sub {
+      font-size: 0.7rem;
+      opacity: 0.72;
+      margin-top: 2px;
+    }
+
+    .autopay-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      margin-top: 18px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #065F46;
+    }
+
+    /* Output Telemetry Card */
+    .monthly-hero-box {
+      background: linear-gradient(145deg, #090D16 0%, #1E293B 100%);
+      color: #FFFFFF;
+      border-radius: 20px;
+      padding: 26px;
+      margin-bottom: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .monthly-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.2rem, 3.6vw, 3rem);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-top: 6px;
+    }
+
+    /* Visual Principal vs Interest Stacked Bar */
+    .stacked-section {
+      margin-bottom: 22px;
+    }
+
+    .stacked-bar {
+      height: 18px;
+      width: 100%;
+      border-radius: 999px;
+      background: #E2E8F0;
+      overflow: hidden;
+      display: flex;
+      margin: 10px 0 12px;
+    }
+
+    .bar-principal {
+      background: #2563EB;
+      height: 100%;
+      transition: width 0.25s ease;
+    }
+
+    .bar-interest {
+      background: #7C3AED;
+      height: 100%;
+      transition: width 0.25s ease;
+    }
+
+    .breakdown-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .bm-box {
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 13px 14px;
+    }
+
+    .bm-lbl {
+      font-size: 0.75rem;
+      color: var(--ink-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bm-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.12rem;
+      margin-top: 4px;
+    }
+
+    /* API JSON Drawer Block */
+    .api-box {
+      background: #0B1120;
+      color: #E2E8F0;
+      border-radius: 16px;
+      padding: 16px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      line-height: 1.55;
+      overflow-x: auto;
+    }
+
+    /* Dynamic Amortization Schedule Table */
+    .amort-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .table-wrap {
+      max-height: 420px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #F8FAFC;
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-muted);
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #F1F5F9;
+      font-size: 0.86rem;
+    }
+
+    tbody tr:hover {
+      background: #F8FAFC;
+    }
+
+    footer {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 28px 24px 48px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+    }
+
+    @media (max-width: 1140px) {
+      .orbital-ring {
+        position: static;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        width: 100%;
+        max-width: 760px;
+        margin-top: 24px;
+      }
+      .orbit-card-wrap {
+        position: relative;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+      }
+      .config-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .orbital-ring,
+      .tier-grid,
+      .breakdown-metrics {
+        grid-template-columns: 1fr;
+      }
+      .trust-logos {
+        gap: 22px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Clean Lightspark-Model Navbar -->
+  <nav class="navbar" aria-label="Primary Navigation">
+    <a href="#" class="brand">
+      <span class="brand-mark">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 22 19 2 19" />
+        </svg>
+      </span>
+      <span>ApexLend</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#simulator">Credit Engine</a></li>
+      <li><a href="#api-telemetry">Underwriting API</a></li>
+      <li><a href="#amortization">Amortization Ledger</a></li>
+      <li><a href="#simulator">Capital Markets</a></li>
+    </ul>
+
+    <div class="nav-cta-group">
+      <a href="#api-telemetry" class="btn-bordered" style="padding:9px 18px;font-size:0.85rem;">API v4.2</a>
+      <a href="#simulator" class="btn-black" style="padding:9px 18px;font-size:0.85rem;">Simulate Loan</a>
+    </div>
+  </nav>
+
+  <!-- Pure #FFFFFF Orbital Hero Surrounded by 6 Floating Frosted-Glass FinTech Cards -->
+  <header class="orbital-hero" id="orbitalHero">
+    <svg class="orbit-svg-bg" viewBox="0 0 1400 680" fill="none" aria-hidden="true">
+      <ellipse cx="700" cy="320" rx="460" ry="235" stroke="#F1F5F9" stroke-width="1.5" stroke-dasharray="6 6" />
+      <ellipse cx="700" cy="320" rx="610" ry="305" stroke="#F8FAFC" stroke-width="1.5" />
+    </svg>
+
+    <div class="hero-center-stack">
+      <div class="hero-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.6"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg>
+        <span>DETERMINISTIC UNDERWRITING · SUB-SECOND SETTLEMENT</span>
+      </div>
+
+      <h1 class="hero-headline">
+        The intelligent platform for <span class="serif">modern</span> credit
+      </h1>
+
+      <p class="hero-sub">
+        Programmatic credit facilities, real-time cashflow underwriting, and automated amortization rails engineered for high-velocity platforms.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#simulator" class="btn-black">
+          <span>Simulate Loan</span>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+        <a href="#api-telemetry" class="btn-bordered">Underwriting API</a>
+      </div>
+    </div>
+
+    <!-- 6 Orbital Floating Frosted-Glass Colorful FinTech UI Cards -->
+    <div class="orbital-ring" id="orbitalRing">
+      <!-- 1. Emerald Approval -->
+      <div class="orbit-card-wrap pos-1" data-depth="18" data-preset-amt="25000" data-preset-tier="prime">
+        <div class="orbit-aura" style="background:radial-gradient(circle, rgba(16,185,129,0.55) 0%, transparent 70%);"></div>
+        <div class="orbit-card">
+          <div class="orbit-icon" style="background:linear-gradient(135deg,#10B981,#059669);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          <div>
+            <div class="orbit-val tabular">+$25,000 Approved</div>
+            <div class="orbit-lbl">Auto-Decision · 140ms</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Coral Instant Disbursement -->
+      <div class="orbit-card-wrap pos-2" data-depth="26" data-preset-amt="50000" data-preset-tier="standard">
+        <div class="orbit-aura" style="background:radial-gradient(circle, rgba(244,63,94,0.48) 0%, transparent 70%);"></div>
+        <div class="orbit-card">
+          <div class="orbit-icon" style="background:linear-gradient(135deg,#F43F5E,#E11D48);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div>
+            <div class="orbit-val tabular">0.8s Wire</div>
+            <div class="orbit-lbl">Instant FedNow Disbursement</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Amber Escrow Shield -->
+      <div class="orbit-card-wrap pos-3" data-depth="15" data-preset-amt="75000" data-preset-tier="prime">
+        <div class="orbit-aura" style="background:radial-gradient(circle, rgba(245,158,11,0.5) 0%, transparent 70%);"></div>
+        <div class="orbit-card">
+          <div class="orbit-icon" style="background:linear-gradient(135deg,#F59E0B,#D97706);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <div class="orbit-val">Escrow Shield</div>
+            <div class="orbit-lbl">100% Collateral Verified</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Sapphire Fixed APR -->
+      <div class="orbit-card-wrap pos-4" data-depth="22" data-preset-amt="40000" data-preset-tier="prime">
+        <div class="orbit-aura" style="background:radial-gradient(circle, rgba(37,99,235,0.5) 0%, transparent 70%);"></div>
+        <div class="orbit-card">
+          <div class="orbit-icon" style="background:linear-gradient(135deg,#3B82F6,#1D4ED8);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+          </div>
+          <div>
+            <div class="orbit-val tabular">11.9% Prime</div>
+            <div class="orbit-lbl">Sapphire Fixed APR Lock</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Violet FICO Telemetry -->
+      <div class="orbit-card-wrap pos-5" data-depth="28" data-preset-amt="60000" data-preset-tier="prime">
+        <div class="orbit-aura" style="background:radial-gradient(circle, rgba(124,58,237,0.5) 0%, transparent 70%);"></div>
+        <div class="orbit-card">
+          <div class="orbit-icon" style="background:linear-gradient(135deg,#8B5CF6,#6D28D9);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+          </div>
+          <div>
+            <div class="orbit-val tabular">794 Score</div>
+            <div class="orbit-lbl">Live Bureau + Cashflow API</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Cyan Auto-Pay -->
+      <div class="orbit-card-wrap pos-6" data-depth="19" data-preset-amt="35000" data-preset-tier="standard">
+        <div class="orbit-aura" style="background:radial-gradient(circle, rgba(6,182,212,0.52) 0%, transparent 70%);"></div>
+        <div class="orbit-card">
+          <div class="orbit-icon" style="background:linear-gradient(135deg,#06B6D4,#0891B2);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/></svg>
+          </div>
+          <div>
+            <div class="orbit-val">Auto-Pay Active</div>
+            <div class="orbit-lbl">-0.25% Direct ACH Rebate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Monochrome FinTech Trust Strip -->
+    <div class="trust-strip">
+      <div class="trust-caption">INTEGRATED WITH INSTITUTIONAL BANKING &amp; TREASURY RAILS</div>
+      <div class="trust-logos" aria-label="Partner Platforms">
+        <span>STRIPE</span>
+        <span>PLAID</span>
+        <span>REVOLUT</span>
+        <span>MERCURY</span>
+        <span>WISE</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Below the Fold: Interactive Institutional Loan Configurator -->
+  <main class="workspace" id="simulator">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <div class="mono" style="font-size:0.76rem;font-weight:600;color:var(--sapphire);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;">
+            Real-Time Credit Structuring Engine
+          </div>
+          <h2 class="section-title">Institutional Loan Configurator</h2>
+        </div>
+        <p style="color:var(--ink-secondary);font-size:0.95rem;max-width:48ch;">
+          Adjust facility principal, amortization horizon, and risk tier to compute exact monthly debt service and full principal-interest schedules.
+        </p>
+      </div>
+
+      <div class="config-grid">
+        <!-- Sliders & Tier Controls -->
+        <section class="card" aria-label="Loan Facility Parameters">
+          <div class="control-group">
+            <div class="control-header">
+              <label for="principalSlider" class="control-label">Facility Principal Amount</label>
+              <span class="control-readout tabular" id="principalReadout">$35,000</span>
+            </div>
+            <input type="range" id="principalSlider" min="2000" max="100000" step="500" value="35000" />
+            <div class="range-ticks tabular">
+              <span>$2,000</span>
+              <span>$25,000</span>
+              <span>$50,000</span>
+              <span>$75,000</span>
+              <span>$100,000</span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <div class="control-header">
+              <label for="termSlider" class="control-label">Repayment Term Horizon</label>
+              <span class="control-readout tabular" id="termReadout">36 Months</span>
+            </div>
+            <input type="range" id="termSlider" min="6" max="72" step="6" value="36" />
+            <div class="range-ticks tabular">
+              <span>6 mo</span>
+              <span>24 mo</span>
+              <span>36 mo</span>
+              <span>48 mo</span>
+              <span>72 mo</span>
+            </div>
+          </div>
+
+          <div class="control-group" style="margin-bottom:0;">
+            <span class="control-label">Underwriting Credit Tier</span>
+            <div class="tier-grid" id="tierSelector">
+              <button type="button" class="tier-btn active" data-tier="prime" data-apr="9.9">
+                <div class="tier-name">Prime Tier</div>
+                <div class="tier-apr">9.9% APR</div>
+                <div class="tier-sub">FICO 740+ · Plaid Verified</div>
+              </button>
+              <button type="button" class="tier-btn" data-tier="standard" data-apr="12.9">
+                <div class="tier-name">Standard</div>
+                <div class="tier-apr">12.9% APR</div>
+                <div class="tier-sub">FICO 680–739 · Cashflow</div>
+              </button>
+              <button type="button" class="tier-btn" data-tier="growth" data-apr="16.5">
+                <div class="tier-name">Growth</div>
+                <div class="tier-apr">16.5% APR</div>
+                <div class="tier-sub">Working Capital Line</div>
+              </button>
+            </div>
+
+            <label class="autopay-row" style="cursor:pointer;">
+              <span>Enable Automated ACH Sweep (-0.25% APR Rate Reduction)</span>
+              <input type="checkbox" id="autopayCheck" checked style="width:18px;height:18px;accent-color:#059669;" />
+            </label>
+          </div>
+        </section>
+
+        <!-- Live Payment & Stacked Breakdown + API JSON -->
+        <section class="card" id="api-telemetry" aria-label="Computed Facility Output">
+          <div class="monthly-hero-box">
+            <div>
+              <div class="mono" style="font-size:0.74rem;color:#94A3B8;text-transform:uppercase;">Estimated Monthly Payment</div>
+              <div class="monthly-val tabular" id="monthlyPaymentVal">$1,123.51</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="mono" style="font-size:0.75rem;color:#4ADE80;" id="effectiveAprBadge">Effective APR: 9.65%</div>
+              <div style="font-size:0.78rem;color:#CBD5E1;margin-top:4px;">Zero prepayment penalty</div>
+            </div>
+          </div>
+
+          <div class="stacked-section">
+            <div style="display:flex;justify-content:space-between;font-size:0.82rem;font-weight:700;">
+              <span>Principal vs. Interest Composition</span>
+              <span class="mono" id="principalPctLabel">86.5% Principal / 13.5% Interest</span>
+            </div>
+            <div class="stacked-bar">
+              <div class="bar-principal" id="barPrincipal" style="width:86.5%;"></div>
+              <div class="bar-interest" id="barInterest" style="width:13.5%;"></div>
+            </div>
+          </div>
+
+          <div class="breakdown-metrics tabular">
+            <div class="bm-box">
+              <div class="bm-lbl"><span style="width:8px;height:8px;border-radius:50%;background:#2563EB;"></span>Net Principal</div>
+              <div class="bm-val" id="outPrincipal">$35,000.00</div>
+            </div>
+            <div class="bm-box">
+              <div class="bm-lbl"><span style="width:8px;height:8px;border-radius:50%;background:#7C3AED;"></span>Total Interest</div>
+              <div class="bm-val" id="outInterest">$5,446.36</div>
+            </div>
+            <div class="bm-box">
+              <div class="bm-lbl"><span style="width:8px;height:8px;border-radius:50%;background:#10B981;"></span>Total Payoff</div>
+              <div class="bm-val" id="outTotal">$40,446.36</div>
+            </div>
+          </div>
+
+          <div class="api-box" id="apiJsonPreview"></div>
+        </section>
+      </div>
+
+      <!-- Dynamic Amortization Schedule Table -->
+      <section class="card" id="amortization" aria-label="Dynamic Amortization Schedule">
+        <div class="amort-header">
+          <div>
+            <h3 style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.22rem;">Dynamic Amortization Ledger</h3>
+            <p style="font-size:0.84rem;color:var(--ink-muted);">Exact month-by-month principal reduction and interest accrual schedule</p>
+          </div>
+          <button type="button" class="btn-bordered" id="exportCsvBtn" style="padding:9px 18px;font-size:0.82rem;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Export CSV Schedule</span>
+          </button>
+        </div>
+
+        <div class="table-wrap">
+          <table class="tabular">
+            <thead>
+              <tr>
+                <th>Installment</th>
+                <th>Scheduled Payment</th>
+                <th>Principal Applied</th>
+                <th>Interest Accrued</th>
+                <th style="text-align:right;">Remaining Balance</th>
+              </tr>
+            </thead>
+            <tbody id="amortBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div>ApexLend Credit Infrastructure Inc. · Programmable Underwriting &amp; Servicing OS</div>
+    <div class="mono">SOC2 TYPE II · TRUTH-IN-LENDING REG Z ENGINE · REST API v4.2</div>
+  </footer>
+
+  <script>
+    (function () {
+      let baseApr = 9.9;
+      let activeTierName = 'PRIME';
+      let currentSchedule = [];
+
+      const principalSlider = document.getElementById('principalSlider');
+      const termSlider = document.getElementById('termSlider');
+      const autopayCheck = document.getElementById('autopayCheck');
+
+      function fmt(n) {
+        return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+
+      function computeLoan() {
+        const P = parseFloat(principalSlider.value);
+        const n = parseInt(termSlider.value, 10);
+        const discount = autopayCheck.checked ? 0.25 : 0;
+        const effectiveApr = Math.max(1, baseApr - discount);
+        const r = (effectiveApr / 100) / 12;
+
+        const monthly = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+        const totalPayoff = monthly * n;
+        const totalInterest = totalPayoff - P;
+
+        document.getElementById('principalReadout').textContent = '$' + P.toLocaleString('en-US');
+        document.getElementById('termReadout').textContent = n + ' Months';
+        document.getElementById('monthlyPaymentVal').textContent = fmt(monthly);
+        document.getElementById('effectiveAprBadge').textContent = 'Effective APR: ' + effectiveApr.toFixed(2) + '%';
+
+        document.getElementById('outPrincipal').textContent = fmt(P);
+        document.getElementById('outInterest').textContent = fmt(totalInterest);
+        document.getElementById('outTotal').textContent = fmt(totalPayoff);
+
+        const pPct = ((P / totalPayoff) * 100).toFixed(1);
+        const iPct = (100 - parseFloat(pPct)).toFixed(1);
+        document.getElementById('barPrincipal').style.width = pPct + '%';
+        document.getElementById('barInterest').style.width = iPct + '%';
+        document.getElementById('principalPctLabel').textContent = pPct + '% Principal / ' + iPct + '% Interest';
+
+        // Live API JSON Telemetry
+        document.getElementById('apiJsonPreview').innerHTML =
+          '<div style="color:#93C5FD;margin-bottom:4px;">POST /v4/facilities/underwrite — 200 OK (118ms)</div>' +
+          '{ "tier": "' + activeTierName + '", "principal_usd": ' + P + ', "term_months": ' + n +
+          ', "apr_pct": ' + effectiveApr.toFixed(2) + ', "monthly_payment": ' + monthly.toFixed(2) +
+          ', "decision": "APPROVED_INSTANT_WIRE" }';
+
+        // Build Full Amortization Schedule
+        let balance = P;
+        currentSchedule = [];
+        const rowsHtml = [];
+        for (let m = 1; m <= n; m++) {
+          const intPart = balance * r;
+          let prinPart = monthly - intPart;
+          if (m === n) {
+            prinPart = balance;
+            balance = 0;
+          } else {
+            balance = Math.max(0, balance - prinPart);
+          }
+          currentSchedule.push({ m, pmt: prinPart + intPart, prin: prinPart, int: intPart, bal: balance });
+          rowsHtml.push(
+            '<tr>' +
+              '<td class="mono" style="color:#475569;">Month #' + String(m).padStart(2, '0') + '</td>' +
+              '<td style="font-weight:700;">' + fmt(prinPart + intPart) + '</td>' +
+              '<td style="color:#2563EB;font-weight:600;">' + fmt(prinPart) + '</td>' +
+              '<td style="color:#7C3AED;">' + fmt(intPart) + '</td>' +
+              '<td style="text-align:right;font-weight:600;">' + fmt(balance) + '</td>' +
+            '</tr>'
+          );
+        }
+        document.getElementById('amortBody').innerHTML = rowsHtml.join('');
+      }
+
+      principalSlider.addEventListener('input', computeLoan);
+      termSlider.addEventListener('input', computeLoan);
+      autopayCheck.addEventListener('change', computeLoan);
+
+      document.getElementById('tierSelector').addEventListener('click', (e) => {
+        const btn = e.target.closest('.tier-btn');
+        if (!btn) return;
+        document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        baseApr = parseFloat(btn.dataset.apr);
+        activeTierName = btn.dataset.tier.toUpperCase();
+        computeLoan();
+      });
+
+      // Clicking any of the 6 Orbital Cards loads its facility preset into the simulator
+      document.querySelectorAll('.orbit-card-wrap').forEach(card => {
+        card.addEventListener('click', () => {
+          const amt = card.dataset.presetAmt;
+          const tier = card.dataset.presetTier;
+          if (amt) principalSlider.value = amt;
+          if (tier) {
+            const matchBtn = document.querySelector('.tier-btn[data-tier="' + tier + '"]');
+            if (matchBtn) matchBtn.click();
+          }
+          computeLoan();
+          document.getElementById('simulator').scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      // Subtle Mouse Parallax on Orbital Cards (Desktop)
+      const hero = document.getElementById('orbitalHero');
+      hero.addEventListener('mousemove', (e) => {
+        if (window.innerWidth <= 1140) return;
+        const rect = hero.getBoundingClientRect();
+        const nx = (e.clientX - rect.left) / rect.width - 0.5;
+        const ny = (e.clientY - rect.top) / rect.height - 0.5;
+        document.querySelectorAll('.orbit-card-wrap').forEach(el => {
+          const d = parseFloat(el.dataset.depth || 20);
+          el.style.transform = 'translate3d(' + (nx * d).toFixed(1) + 'px, ' + (ny * d).toFixed(1) + 'px, 0)';
+        });
+      });
+
+      hero.addEventListener('mouseleave', () => {
+        document.querySelectorAll('.orbit-card-wrap').forEach(el => {
+          el.style.transform = 'translate3d(0,0,0)';
+        });
+      });
+
+      // CSV Schedule Export
+      document.getElementById('exportCsvBtn').addEventListener('click', () => {
+        const header = 'Month,Payment_USD,Principal_USD,Interest_USD,Remaining_Balance_USD\n';
+        const body = currentSchedule.map(r =>
+          [r.m, r.pmt.toFixed(2), r.prin.toFixed(2), r.int.toFixed(2), r.bal.toFixed(2)].join(',')
+        ).join('\n');
+        const blob = new Blob([header + body], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'apexlend-amortization-schedule.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      computeLoan();
+    })();
+  </script>
+</body>
+</html>

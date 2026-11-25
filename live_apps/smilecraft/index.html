@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmileCraft Dental Concierge — Precision Dentistry, Designed Around Calm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-ivory: #faf8f5;
+      --bg-sand: #f3efe8;
+      --bg-white: #ffffff;
+      --emerald-deep: #064e3b;
+      --emerald-hover: #04392b;
+      --emerald-mid: #047857;
+      --sage-bg: #ecfdf5;
+      --sage-border: #a7f3d0;
+      --ink-primary: #14221d;
+      --ink-secondary: #4a5a53;
+      --ink-muted: #76857e;
+      --border-warm: #e6e1d7;
+      --font-serif: 'Instrument Serif', serif;
+      --font-display: 'Plus Jakarta Sans', sans-serif;
+      --font-sans: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg-ivory);
+      color: var(--ink-primary);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--bg-ivory);
+      min-height: 100vh;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Navigation */
+    header.calm-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(250, 248, 245, 0.88);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-warm);
+    }
+
+    .nav-container {
+      max-width: 1340px;
+      margin: 0 auto;
+      padding: 1rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .brand-link {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      text-decoration: none;
+      color: var(--ink-primary);
+    }
+
+    .brand-crest {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      background: var(--emerald-deep);
+      color: #ecfdf5;
+      display: grid;
+      place-items: center;
+    }
+
+    .brand-word {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.06rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: var(--ink-secondary);
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: color 0.18s ease;
+    }
+
+    .nav-menu a:hover {
+      color: var(--emerald-deep);
+    }
+
+    .btn-emerald-pill {
+      background: var(--emerald-deep);
+      color: #ffffff;
+      border: none;
+      padding: 0.68rem 1.35rem;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      text-decoration: none;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn-emerald-pill:hover {
+      background: var(--emerald-hover);
+      transform: translateY(-1px);
+    }
+
+    .sage-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      background: var(--sage-bg);
+      border: 1px solid var(--sage-border);
+      color: var(--emerald-deep);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* Hero Section */
+    .hero-sanctuary {
+      max-width: 1340px;
+      margin: 0 auto;
+      padding: 3.5rem 1.75rem 4rem;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .hero-h1 {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-size: clamp(2.9rem, 4.7vw, 4.4rem);
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      margin-top: 1rem;
+      color: var(--ink-primary);
+    }
+
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--emerald-deep);
+    }
+
+    .hero-sub {
+      margin-top: 1.15rem;
+      font-size: 1.02rem;
+      line-height: 1.7;
+      color: var(--ink-secondary);
+      max-width: 540px;
+    }
+
+    .hero-actions {
+      margin-top: 1.85rem;
+      display: flex;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-ivory-outline {
+      background: var(--bg-white);
+      color: var(--ink-primary);
+      border: 1px solid var(--border-warm);
+      padding: 0.68rem 1.3rem;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .btn-ivory-outline:hover {
+      border-color: var(--emerald-deep);
+    }
+
+    /* Architectural Sanctuary Visual Card */
+    .sanctuary-showcase {
+      background: var(--bg-white);
+      border: 1px solid var(--border-warm);
+      border-radius: 26px;
+      padding: 2rem;
+      box-shadow: 0 24px 55px rgba(20, 34, 29, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 1.35rem;
+    }
+
+    .sanctuary-art {
+      background: linear-gradient(145deg, #064e3b 0%, #065f46 55%, #0f766e 100%);
+      border-radius: 18px;
+      padding: 1.8rem;
+      color: #ecfdf5;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sanctuary-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+    }
+
+    .s-metric {
+      background: var(--bg-ivory);
+      border: 1px solid var(--border-warm);
+      border-radius: 14px;
+      padding: 0.9rem;
+    }
+
+    .s-metric-val {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--emerald-deep);
+    }
+
+    .s-metric-lbl {
+      font-size: 0.74rem;
+      color: var(--ink-muted);
+      margin-top: 0.18rem;
+    }
+
+    /* Section Containers */
+    .section-wrap {
+      max-width: 1340px;
+      margin: 0 auto;
+      padding: 3.2rem 1.75rem;
+      border-top: 1px solid var(--border-warm);
+    }
+
+    .sec-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .sec-h2 {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-size: clamp(2.1rem, 3.2vw, 2.85rem);
+      line-height: 1.08;
+      margin-top: 0.55rem;
+    }
+
+    /* Interactive Treatment & Smile Investment Estimator */
+    .estimator-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .treatment-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.95rem;
+    }
+
+    .tx-card {
+      background: var(--bg-white);
+      border: 1.5px solid var(--border-warm);
+      border-radius: 18px;
+      padding: 1.25rem;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.9rem;
+    }
+
+    .tx-card:hover {
+      border-color: #9ca3af;
+    }
+
+    .tx-card.selected {
+      border-color: var(--emerald-deep);
+      background: linear-gradient(180deg, #ffffff 0%, #f4fbf8 100%);
+      box-shadow: 0 10px 28px rgba(6, 78, 59, 0.08);
+    }
+
+    .tx-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .tx-check {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border-warm);
+      display: grid;
+      place-items: center;
+      color: transparent;
+      flex-shrink: 0;
+    }
+
+    .tx-card.selected .tx-check {
+      background: var(--emerald-deep);
+      border-color: var(--emerald-deep);
+      color: #ffffff;
+    }
+
+    .tx-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.98rem;
+      color: var(--ink-primary);
+    }
+
+    .tx-desc {
+      font-size: 0.8rem;
+      color: var(--ink-secondary);
+      line-height: 1.5;
+      margin-top: 0.3rem;
+    }
+
+    .tx-price-tag {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--emerald-deep);
+    }
+
+    /* Coverage Controls */
+    .coverage-bar {
+      margin-top: 1.2rem;
+      background: var(--bg-white);
+      border: 1px solid var(--border-warm);
+      border-radius: 18px;
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .plan-pills {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .plan-pill {
+      padding: 0.5rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-warm);
+      background: var(--bg-ivory);
+      color: var(--ink-secondary);
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .plan-pill.active {
+      background: var(--emerald-deep);
+      border-color: var(--emerald-deep);
+      color: #ffffff;
+    }
+
+    /* Ledger Summary Box */
+    .ledger-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border-warm);
+      border-radius: 22px;
+      padding: 1.75rem;
+      box-shadow: 0 20px 45px rgba(20, 34, 29, 0.06);
+    }
+
+    .ledger-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.7rem 0;
+      border-bottom: 1px solid var(--bg-sand);
+      font-size: 0.88rem;
+      color: var(--ink-secondary);
+    }
+
+    .ledger-total-box {
+      margin-top: 1.1rem;
+      padding: 1.15rem;
+      border-radius: 16px;
+      background: var(--sage-bg);
+      border: 1px solid var(--sage-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .net-price {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--emerald-deep);
+      letter-spacing: -0.03em;
+    }
+
+    /* Specialist Doctor Cards */
+    .doctors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.35rem;
+    }
+
+    .doc-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border-warm);
+      border-radius: 22px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.1rem;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .doc-card:hover,
+    .doc-card.active-doc {
+      transform: translateY(-2px);
+      border-color: var(--emerald-deep);
+    }
+
+    .doc-avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: var(--sage-bg);
+      border: 1px solid var(--sage-border);
+      color: var(--emerald-deep);
+      font-family: var(--font-serif);
+      font-size: 1.45rem;
+      display: grid;
+      place-items: center;
+    }
+
+    .doc-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-top: 0.75rem;
+    }
+
+    .doc-role {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--emerald-mid);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.2rem;
+    }
+
+    .doc-bio {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--ink-secondary);
+      margin-top: 0.55rem;
+    }
+
+    .btn-doc-select {
+      width: 100%;
+      padding: 0.62rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-warm);
+      background: var(--bg-ivory);
+      color: var(--ink-primary);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .doc-card.active-doc .btn-doc-select,
+    .btn-doc-select:hover {
+      background: var(--emerald-deep);
+      border-color: var(--emerald-deep);
+      color: #ffffff;
+    }
+
+    /* Appointment Day & Time Slot Picker + Digital Patient Pass */
+    .booking-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 2rem;
+      align-items: stretch;
+    }
+
+    .scheduler-box {
+      background: var(--bg-white);
+      border: 1px solid var(--border-warm);
+      border-radius: 22px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.35rem;
+    }
+
+    .day-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.55rem;
+    }
+
+    .day-btn {
+      padding: 0.75rem 0.5rem;
+      border-radius: 14px;
+      border: 1px solid var(--border-warm);
+      background: var(--bg-ivory);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.18s ease;
+    }
+
+    .day-btn.active {
+      background: var(--emerald-deep);
+      border-color: var(--emerald-deep);
+      color: #ffffff;
+    }
+
+    .day-wk {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      opacity: 0.8;
+      display: block;
+    }
+
+    .day-num {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1rem;
+      margin-top: 0.15rem;
+      display: block;
+    }
+
+    .slot-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.55rem;
+    }
+
+    .slot-btn {
+      padding: 0.6rem;
+      border-radius: 10px;
+      border: 1px solid var(--border-warm);
+      background: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--ink-primary);
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .slot-btn.active {
+      background: var(--sage-bg);
+      border-color: var(--emerald-deep);
+      color: var(--emerald-deep);
+      font-weight: 600;
+    }
+
+    .patient-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .calm-input {
+      padding: 0.7rem 0.9rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-warm);
+      background: var(--bg-ivory);
+      font-family: var(--font-sans);
+      font-size: 0.86rem;
+      color: var(--ink-primary);
+    }
+
+    .calm-input:focus {
+      outline: none;
+      border-color: var(--emerald-deep);
+      background: #ffffff;
+    }
+
+    /* Digital Patient Pass Card */
+    .patient-pass {
+      background: linear-gradient(165deg, #064e3b 0%, #032e23 100%);
+      color: #f0fdf4;
+      border-radius: 24px;
+      padding: 1.85rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.25rem;
+      box-shadow: 0 24px 50px rgba(6, 78, 59, 0.22);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pass-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      padding-bottom: 1rem;
+    }
+
+    .pass-status {
+      padding: 0.28rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(167, 243, 208, 0.18);
+      border: 1px solid rgba(167, 243, 208, 0.45);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: #a7f3d0;
+    }
+
+    .pass-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .pass-lbl {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #a7f3d0;
+      opacity: 0.8;
+    }
+
+    .pass-val {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 0.94rem;
+      margin-top: 0.2rem;
+    }
+
+    .pass-qr-row {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 0.95rem 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-warm);
+      max-width: 1340px;
+      margin: 2rem auto 0;
+      padding: 2rem 1.75rem;
+      display: flex;
+      justify-content: space-between;
+      color: var(--ink-muted);
+      font-size: 0.8rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    @media (max-width: 1040px) {
+      .hero-sanctuary,
+      .estimator-grid,
+      .booking-grid {
+        grid-template-columns: 1fr;
+      }
+      .doctors-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav-menu {
+        display: none;
+      }
+      .treatment-cards,
+      .patient-inputs,
+      .sanctuary-metrics {
+        grid-template-columns: 1fr;
+      }
+      .slot-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="calm-nav">
+    <div class="nav-container">
+      <a href="#" class="brand-link">
+        <div class="brand-crest">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3c-3.8 0-7 2.6-7 6.5 0 3.2 1.8 5.4 2.6 8.5.4 1.6 1.2 3 2.4 3 1.1 0 1.4-2.2 2-2.2s.9 2.2 2 2.2c1.2 0 2-1.4 2.4-3 .8-3.1 2.6-5.3 2.6-8.5C19 5.6 15.8 3 12 3z" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="brand-word">SmileCraft Concierge</span>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="#estimator">Investment Estimator</a>
+        <a href="#specialists">Clinical Specialists</a>
+        <a href="#appointments">Book Sanctuary Visit</a>
+      </nav>
+
+      <a href="#appointments" class="btn-emerald-pill">
+        <span>Reserve Visit</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero-sanctuary">
+      <div>
+        <span class="sage-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+            <circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/>
+          </svg>
+          ZERO WAIT ROOMS · SOHO · UPPER EAST SIDE · TRIBECA
+        </span>
+        <h1 class="hero-h1">
+          Precision dentistry, <em>designed</em> around calm.
+        </h1>
+        <p class="hero-sub">
+          Private acoustic suites, 3D optical CBCT scanning with 85% lower radiation, and upfront transparent pricing before you ever sit in the chair.
+        </p>
+        <div class="hero-actions">
+          <a href="#appointments" class="btn-emerald-pill">Book Private Consultation</a>
+          <a href="#estimator" class="btn-ivory-outline">Calculate Smile Investment</a>
+        </div>
+      </div>
+
+      <div class="sanctuary-showcase">
+        <div class="sanctuary-art">
+          <div style="font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.08em; color:#a7f3d0;">BIOMIMETIC DIGITAL ATELIER</div>
+          <div style="font-family:var(--font-serif); font-size:2rem; margin-top:0.4rem; line-height:1.12;">
+            Same-day ceramic artistry &amp; noiseless ultrasonic care.
+          </div>
+          <p style="font-size:0.84rem; color:#d1fae5; margin-top:0.65rem; line-height:1.6;">
+            Warm botanical aromatherapy, noise-canceling spatial headphones, and direct messaging with your prosthodontist.
+          </p>
+        </div>
+
+        <div class="sanctuary-metrics tabular">
+          <div class="s-metric">
+            <div class="s-metric-val">4.98 / 5</div>
+            <div class="s-metric-lbl">2,400+ Patient Reviews</div>
+          </div>
+          <div class="s-metric">
+            <div class="s-metric-val">0 min</div>
+            <div class="s-metric-lbl">Average Suite Wait</div>
+          </div>
+          <div class="s-metric">
+            <div class="s-metric-val">100%</div>
+            <div class="s-metric-lbl">Upfront Fee Clarity</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Treatment & Smile Investment Estimator -->
+    <section class="section-wrap" id="estimator">
+      <div class="sec-header">
+        <div>
+          <span class="sage-badge">TRANSPARENT CLINICAL LEDGER</span>
+          <h2 class="sec-h2">Smile Investment Estimator</h2>
+        </div>
+        <p style="color:var(--ink-secondary); font-size:0.9rem; max-width:440px;">
+          Select one or more treatments to preview real-time clinical fees, PPO insurance benefits, and 0% APR monthly plans.
+        </p>
+      </div>
+
+      <div class="estimator-grid">
+        <div>
+          <div class="treatment-cards">
+            <button type="button" class="tx-card selected" data-id="veneers" data-name="Porcelain Minimal-Prep Veneers (4 Units)" data-fee="5600" data-ppo="0.25">
+              <div>
+                <div class="tx-top">
+                  <span class="tx-title">Porcelain Veneers</span>
+                  <span class="tx-check">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                </div>
+                <p class="tx-desc">Hand-layered Swiss lithium disilicate veneers (4-tooth smile zone suite).</p>
+              </div>
+              <span class="tx-price-tag tabular">$5,600 Clinical Fee</span>
+            </button>
+
+            <button type="button" class="tx-card" data-id="invisalign" data-name="Invisalign 3D Digital Orthodontics" data-fee="4800" data-ppo="0.45">
+              <div>
+                <div class="tx-top">
+                  <span class="tx-title">Invisalign 3D</span>
+                  <span class="tx-check">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                </div>
+                <p class="tx-desc">iTero 5D optical scan, custom aligner series, and Vivera retainers included.</p>
+              </div>
+              <span class="tx-price-tag tabular">$4,800 Clinical Fee</span>
+            </button>
+
+            <button type="button" class="tx-card selected" data-id="whitening" data-name="Botanical Laser Enamel Whitening" data-fee="680" data-ppo="0.10">
+              <div>
+                <div class="tx-top">
+                  <span class="tx-title">Laser Whitening</span>
+                  <span class="tx-check">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                </div>
+                <p class="tx-desc">Zero-sensitivity hydroxyapatite desensitizing serum + 60-min LED lift.</p>
+              </div>
+              <span class="tx-price-tag tabular">$680 Clinical Fee</span>
+            </button>
+
+            <button type="button" class="tx-card" data-id="implant" data-name="3D-Guided Titanium &amp; Zirconia Implant" data-fee="3950" data-ppo="0.50">
+              <div>
+                <div class="tx-top">
+                  <span class="tx-title">Guided Implant</span>
+                  <span class="tx-check">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
+                </div>
+                <p class="tx-desc">CBCT surgical guide, Straumann titanium fixture, and custom zirconia crown.</p>
+              </div>
+              <span class="tx-price-tag tabular">$3,950 Clinical Fee</span>
+            </button>
+          </div>
+
+          <div class="coverage-bar">
+            <div style="font-size:0.8rem; font-weight:600; color:var(--ink-primary);">Coverage &amp; Membership Tier</div>
+            <div class="plan-pills">
+              <button type="button" class="plan-pill active" data-plan="ppo">PPO Dental Insurance</button>
+              <button type="button" class="plan-pill" data-plan="member">SmileCraft Member (-20%)</button>
+              <button type="button" class="plan-pill" data-plan="self">Self-Pay Direct</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="ledger-card tabular">
+          <div style="font-family:var(--font-mono); font-size:0.7rem; color:var(--emerald-mid); letter-spacing:0.08em; text-transform:uppercase;">
+            LIVE TRANSPARENT BREAKDOWN
+          </div>
+          <h3 style="font-family:var(--font-display); font-size:1.22rem; margin:0.35rem 0 0.9rem;">Estimated Care Summary</h3>
+
+          <div id="selectedTxSummary" style="margin-bottom:0.5rem;"></div>
+
+          <div class="ledger-row">
+            <span>Gross Clinical Studio Fee</span>
+            <strong id="grossFeeVal">$6,280</strong>
+          </div>
+          <div class="ledger-row" style="color:var(--emerald-mid);">
+            <span id="benefitLabel">Estimated PPO Plan Coverage</span>
+            <strong id="benefitVal">-$1,468</strong>
+          </div>
+
+          <div class="ledger-total-box">
+            <div>
+              <div style="font-size:0.76rem; font-weight:600; color:var(--emerald-deep);">Estimated Out-of-Pocket</div>
+              <div style="font-size:0.75rem; color:var(--ink-secondary); margin-top:0.15rem;" id="monthlyAprVal">Or $401 / mo for 12 mos at 0% APR</div>
+            </div>
+            <div class="net-price" id="netTotalVal">$4,812</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Specialist Doctor Cards -->
+    <section class="section-wrap" id="specialists">
+      <div class="sec-header">
+        <div>
+          <span class="sage-badge">BOARD-CERTIFIED CLINICIANS</span>
+          <h2 class="sec-h2">Meet your sanctuary specialists.</h2>
+        </div>
+      </div>
+
+      <div class="doctors-grid">
+        <article class="doc-card active-doc" data-doc="Dr. Clara Vance, DDS, MS">
+          <div>
+            <div class="doc-avatar">CV</div>
+            <h3 class="doc-name">Dr. Clara Vance, DDS, MS</h3>
+            <div class="doc-role">Prosthodontics &amp; Aesthetic Ceramics</div>
+            <p class="doc-bio"> Columbia-trained prosthodontist specializing in ultra-thin 0.2mm enamel-preserving veneers and natural micro-texture esthetics.</p>
+          </div>
+          <button type="button" class="btn-doc-select">Selected Specialist</button>
+        </article>
+
+        <article class="doc-card" data-doc="Dr. Marcus Chen, DMD">
+          <div>
+            <div class="doc-avatar">MC</div>
+            <h3 class="doc-name">Dr. Marcus Chen, DMD</h3>
+            <div class="doc-role">3D Digital Orthodontics &amp; Airway</div>
+            <p class="doc-bio">Penn Dental Diamond+ Invisalign fellow blending facial-harmony 3D simulation with accelerated low-force aligner therapy.</p>
+          </div>
+          <button type="button" class="btn-doc-select">Select Dr. Chen</button>
+        </article>
+
+        <article class="doc-card" data-doc="Dr. Sofia Alverez, DDS">
+          <div>
+            <div class="doc-avatar">SA</div>
+            <h3 class="doc-name">Dr. Sofia Alverez, DDS</h3>
+            <div class="doc-role">Micro-Implantology &amp; Periodontics</div>
+            <p class="doc-bio">Pioneers computer-guided keyhole implant placement and holistic biocompatible tissue regeneration with gentle twilight comfort.</p>
+          </div>
+          <button type="button" class="btn-doc-select">Select Dr. Alverez</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- Appointment Day & Time Slot Picker + Instant Digital Patient Pass -->
+    <section class="section-wrap" id="appointments">
+      <div class="sec-header">
+        <div>
+          <span class="sage-badge">INSTANT DIGITAL CHECK-IN</span>
+          <h2 class="sec-h2">Reserve your sanctuary window.</h2>
+        </div>
+      </div>
+
+      <div class="booking-grid">
+        <div class="scheduler-box">
+          <div>
+            <div style="font-size:0.78rem; font-weight:600; margin-bottom:0.55rem;">1. Select Upcoming Date</div>
+            <div class="day-strip tabular">
+              <button type="button" class="day-btn active" data-day="Thu, Dec 04"><span class="day-wk">THU</span><span class="day-num">04</span></button>
+              <button type="button" class="day-btn" data-day="Fri, Dec 05"><span class="day-wk">FRI</span><span class="day-num">05</span></button>
+              <button type="button" class="day-btn" data-day="Mon, Dec 08"><span class="day-wk">MON</span><span class="day-num">08</span></button>
+              <button type="button" class="day-btn" data-day="Tue, Dec 09"><span class="day-wk">TUE</span><span class="day-num">09</span></button>
+              <button type="button" class="day-btn" data-day="Wed, Dec 10"><span class="day-wk">WED</span><span class="day-num">10</span></button>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:0.78rem; font-weight:600; margin-bottom:0.55rem;">2. Select Quiet Suite Time Slot</div>
+            <div class="slot-grid tabular">
+              <button type="button" class="slot-btn" data-slot="09:30 AM">09:30 AM</button>
+              <button type="button" class="slot-btn active" data-slot="11:00 AM">11:00 AM</button>
+              <button type="button" class="slot-btn" data-slot="02:15 PM">02:15 PM</button>
+              <button type="button" class="slot-btn" data-slot="04:30 PM">04:30 PM</button>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size:0.78rem; font-weight:600; margin-bottom:0.55rem;">3. Patient Concierge Details</div>
+            <div class="patient-inputs">
+              <input type="text" class="calm-input" id="ptNameInput" value="Camille Laurent" placeholder="Full Name" />
+              <select class="calm-input" id="studioSelect">
+                <option value="SoHo Flagship · Suite 4B">SoHo Flagship · Suite 4B</option>
+                <option value="Upper East Side · Madison">Upper East Side · Madison</option>
+                <option value="Tribeca 3D Imaging Loft">Tribeca 3D Imaging Loft</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="button" class="btn-emerald-pill" id="issuePassBtn" style="justify-content:center; padding:0.9rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span>Confirm &amp; Issue Digital Patient Pass</span>
+          </button>
+        </div>
+
+        <!-- Instant Digital Patient Pass -->
+        <div class="patient-pass tabular" id="patientPassCard">
+          <div class="pass-header">
+            <div>
+              <div style="font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.1em; color:#a7f3d0;">SMILECRAFT DIGITAL PASS</div>
+              <div style="font-family:var(--font-serif); font-size:1.55rem; margin-top:0.1rem;" id="passHolderName">Camille Laurent</div>
+            </div>
+            <span class="pass-status" id="passStatusBadge">PREVIEW READY</span>
+          </div>
+
+          <div class="pass-grid">
+            <div>
+              <div class="pass-lbl">Attending Clinician</div>
+              <div class="pass-val" id="passDoc">Dr. Clara Vance, DDS, MS</div>
+            </div>
+            <div>
+              <div class="pass-lbl">Sanctuary Location</div>
+              <div class="pass-val" id="passStudio">SoHo Flagship · Suite 4B</div>
+            </div>
+            <div>
+              <div class="pass-lbl">Date &amp; Arrival Window</div>
+              <div class="pass-val" id="passDateTime">Thu, Dec 04 · 11:00 AM</div>
+            </div>
+            <div>
+              <div class="pass-lbl">Estimated Plan Total</div>
+              <div class="pass-val" id="passEstTotal">$4,812 Net Est.</div>
+            </div>
+          </div>
+
+          <div class="pass-qr-row">
+            <div>
+              <div class="pass-lbl">EXPRESS CHECK-IN CODE</div>
+              <div style="font-family:var(--font-mono); font-size:0.92rem; font-weight:600; margin-top:0.2rem;" id="passCode">#SC-4920-NY</div>
+              <div style="font-size:0.72rem; color:#d1fae5; margin-top:0.2rem;">Present at lounge tablet · Matcha &amp; warm towel ready</div>
+            </div>
+            <!-- Crisp Vector Geometric Pass Matrix -->
+            <svg width="54" height="54" viewBox="0 0 36 36" fill="none">
+              <rect width="36" height="36" rx="6" fill="#ecfdf5"/>
+              <rect x="4" y="4" width="10" height="10" rx="1.5" stroke="#064e3b" stroke-width="2.5"/>
+              <rect x="7.5" y="7.5" width="3" height="3" fill="#064e3b"/>
+              <rect x="22" y="4" width="10" height="10" rx="1.5" stroke="#064e3b" stroke-width="2.5"/>
+              <rect x="25.5" y="7.5" width="3" height="3" fill="#064e3b"/>
+              <rect x="4" y="22" width="10" height="10" rx="1.5" stroke="#064e3b" stroke-width="2.5"/>
+              <rect x="7.5" y="25.5" width="3" height="3" fill="#064e3b"/>
+              <rect x="17" y="17" width="4" height="4" fill="#064e3b"/>
+              <rect x="23" y="18" width="9" height="4" fill="#064e3b"/>
+              <rect x="18" y="24" width="5" height="8" fill="#064e3b"/>
+              <rect x="26" y="25" width="6" height="7" fill="#064e3b"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="tabular">
+    <div>SMILECRAFT DENTAL CONCIERGE PLLC · NEW YORK SANCTUARY NETWORK</div>
+    <div>HIPAA ENCRYPTED · EVIDENCE-BASED BIOMIMETIC CARE</div>
+  </footer>
+
+  <script>
+    let activePlan = 'ppo';
+    let selectedDoctor = 'Dr. Clara Vance, DDS, MS';
+    let selectedDay = 'Thu, Dec 04';
+    let selectedSlot = '11:00 AM';
+    let latestNetFormatted = '$4,812';
+
+    const fmtUSD = (n) => '$' + Math.round(n).toLocaleString('en-US');
+
+    function recalculateEstimator() {
+      const activeCards = [...document.querySelectorAll('.tx-card.selected')];
+      const summaryContainer = document.getElementById('selectedTxSummary');
+      summaryContainer.innerHTML = '';
+
+      let gross = 0;
+      let ppoSavings = 0;
+
+      activeCards.forEach(c => {
+        const fee = Number(c.dataset.fee);
+        const ppoRate = Number(c.dataset.ppo);
+        gross += fee;
+        ppoSavings += Math.min(2000, fee * ppoRate);
+
+        const row = document.createElement('div');
+        row.className = 'ledger-row';
+        row.style.fontSize = '0.8rem';
+        row.innerHTML = `<span>${c.dataset.name}</span><span>${fmtUSD(fee)}</span>`;
+        summaryContainer.appendChild(row);
+      });
+
+      let discount = 0;
+      let label = 'Estimated PPO Plan Coverage';
+      if (activePlan === 'ppo') {
+        discount = Math.min(2500, ppoSavings);
+        label = 'Estimated PPO Plan Coverage (Up to Cap)';
+      } else if (activePlan === 'member') {
+        discount = gross * 0.20;
+        label = 'SmileCraft Concierge Member (-20%)';
+      } else {
+        discount = 0;
+        label = 'Self-Pay Direct (No Plan Applied)';
+      }
+
+      const net = Math.max(0, gross - discount);
+      const monthly = net / 12;
+
+      document.getElementById('grossFeeVal').textContent = fmtUSD(gross);
+      document.getElementById('benefitLabel').textContent = label;
+      document.getElementById('benefitVal').textContent = discount > 0 ? `-${fmtUSD(discount)}` : '$0';
+      latestNetFormatted = fmtUSD(net);
+      document.getElementById('netTotalVal').textContent = latestNetFormatted;
+      document.getElementById('monthlyAprVal').textContent = `Or ${fmtUSD(monthly)} / mo for 12 mos at 0% APR`;
+      document.getElementById('passEstTotal').textContent = `${latestNetFormatted} Net Est.`;
+    }
+
+    document.querySelectorAll('.tx-card').forEach(card => {
+      card.addEventListener('click', () => {
+        card.classList.toggle('selected');
+        if (document.querySelectorAll('.tx-card.selected').length === 0) {
+          card.classList.add('selected');
+        }
+        recalculateEstimator();
+      });
+    });
+
+    document.querySelectorAll('.plan-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.plan-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        activePlan = pill.dataset.plan;
+        recalculateEstimator();
+      });
+    });
+
+    // Specialist Selection
+    document.querySelectorAll('.doc-card').forEach(card => {
+      card.querySelector('.btn-doc-select').addEventListener('click', () => {
+        document.querySelectorAll('.doc-card').forEach(c => {
+          c.classList.remove('active-doc');
+          const shortName = c.dataset.doc.split(',')[0].split(' ').slice(0, 3).join(' ');
+          c.querySelector('.btn-doc-select').textContent = `Select ${shortName}`;
+        });
+        card.classList.add('active-doc');
+        card.querySelector('.btn-doc-select').textContent = 'Selected Specialist';
+        selectedDoctor = card.dataset.doc;
+        syncPassPreview(false);
+        document.getElementById('appointments').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Day & Slot Picker
+    document.querySelectorAll('.day-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedDay = btn.dataset.day;
+        syncPassPreview(false);
+      });
+    });
+
+    document.querySelectorAll('.slot-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedSlot = btn.dataset.slot;
+        syncPassPreview(false);
+      });
+    });
+
+    const ptNameInput = document.getElementById('ptNameInput');
+    const studioSelect = document.getElementById('studioSelect');
+    ptNameInput.addEventListener('input', () => syncPassPreview(false));
+    studioSelect.addEventListener('change', () => syncPassPreview(false));
+
+    function syncPassPreview(confirmed) {
+      document.getElementById('passHolderName').textContent = ptNameInput.value.trim() || 'Guest Patient';
+      document.getElementById('passDoc').textContent = selectedDoctor;
+      document.getElementById('passStudio').textContent = studioSelect.value;
+      document.getElementById('passDateTime').textContent = `${selectedDay} · ${selectedSlot}`;
+      if (confirmed) {
+        const rnd = Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('passCode').textContent = `#SC-${rnd}-CONFIRMED`;
+        const badge = document.getElementById('passStatusBadge');
+        badge.textContent = 'CONFIRMED PASS';
+        badge.style.background = '#10b981';
+        badge.style.color = '#022c22';
+      }
+    }
+
+    document.getElementById('issuePassBtn').addEventListener('click', () => {
+      syncPassPreview(true);
+    });
+
+    recalculateEstimator();
+  </script>
+</body>
+</html>

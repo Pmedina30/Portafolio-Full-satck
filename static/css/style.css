@@ -800,10 +800,10 @@ img, svg {
 
 /* Visual App Mockup Window inside EVERY Card */
 .app-card-preview {
-  height: 176px;
+  height: 196px;
   background: var(--bg-preview);
   border-bottom: 1px solid var(--border-subtle);
-  padding: 14px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

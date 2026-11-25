@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulseOps — Unified Production Infrastructure Signals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #070709;
+      --surface-1: #0c0c10;
+      --surface-2: #121218;
+      --surface-3: #181820;
+      --grid-line: rgba(255, 255, 255, 0.045);
+      --border: rgba(255, 255, 255, 0.085);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --indigo: #6366f1;
+      --cyan: #06b6d4;
+      --emerald: #10b981;
+      --coral: #fb7185;
+      --violet: #a855f7;
+      --amber: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-variant-numeric: tabular-nums;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 64px 64px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: -240px;
+      right: 5%;
+      width: 680px;
+      height: 540px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.11) 0%, rgba(6, 182, 212, 0.05) 45%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navbar */
+    .navbar-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(7, 7, 9, 0.82);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .navbar {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.025em;
+    }
+
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #ffffff 0%, #d4d4d8 100%);
+      display: grid;
+      place-items: center;
+      color: #070709;
+      box-shadow: 0 0 24px rgba(255, 255, 255, 0.18);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.18s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-ghost-link {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 12px;
+      transition: color 0.18s ease;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-ghost-link:hover {
+      color: var(--text-primary);
+    }
+
+    .btn-white-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #ffffff;
+      color: #070709;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      font-size: 13.5px;
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: 1px solid #ffffff;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    .btn-white-pill:hover {
+      background: #f4f4f5;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
+    }
+
+    /* Hero Section - Dovetail 12-Col Split */
+    .hero-section {
+      padding: 76px 0 44px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero-left {
+      grid-column: span 7;
+    }
+
+    .hero-right {
+      grid-column: span 5;
+    }
+
+    .telemetry-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 6px 13px;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.28);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #93c5fd;
+      margin-bottom: 26px;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #3b82f6;
+      box-shadow: 0 0 10px #3b82f6, 0 0 20px rgba(59, 130, 246, 0.8);
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.65; }
+    }
+
+    .hero-headline {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(38px, 4.5vw, 56px);
+      line-height: 1.06;
+      letter-spacing: -0.035em;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 22px;
+      max-width: 650px;
+    }
+
+    .hero-headline em {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-style: italic;
+      color: #e4e4e7;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-copy {
+      font-size: 17px;
+      line-height: 1.62;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin-bottom: 34px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #ffffff;
+      color: #070709;
+      padding: 13px 24px;
+      border-radius: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 14.5px;
+      text-decoration: none;
+      border: 1px solid #ffffff;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .cta-primary:hover {
+      background: #e4e4e7;
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(255, 255, 255, 0.14);
+    }
+
+    .cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-primary);
+      padding: 13px 22px;
+      border-radius: 10px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      font-size: 14.5px;
+      border: 1px solid var(--border-strong);
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .cta-secondary:hover {
+      background: rgba(255, 255, 255, 0.075);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Dovetail Signature 2x2 Dark Bento Matrix */
+    .bento-matrix {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      padding: 12px;
+      border-radius: 20px;
+      background: rgba(12, 12, 16, 0.9);
+      border: 1px solid var(--border-strong);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    }
+
+    .bento-quadrant {
+      background: #0b0b0f;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .bento-quadrant:hover {
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .quadrant-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .quadrant-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+    }
+
+    .quadrant-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .mini-tile-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .mini-tile {
+      aspect-ratio: 1 / 0.92;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .mini-tile:hover {
+      transform: translateY(-2px) scale(1.03);
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+
+    .mini-tile svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .mini-tile span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.5px;
+      color: rgba(255, 255, 255, 0.78);
+      letter-spacing: -0.02em;
+    }
+
+    .tile-indigo { background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.28), rgba(18, 18, 26, 0.95)); color: #818cf8; }
+    .tile-cyan   { background: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.28), rgba(18, 18, 26, 0.95)); color: #22d3ee; }
+    .tile-emerald{ background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.28), rgba(18, 18, 26, 0.95)); color: #34d399; }
+    .tile-coral  { background: radial-gradient(circle at 50% 0%, rgba(251, 113, 133, 0.28), rgba(18, 18, 26, 0.95)); color: #fb7185; }
+    .tile-violet { background: radial-gradient(circle at 50% 0%, rgba(168, 85, 247, 0.28), rgba(18, 18, 26, 0.95)); color: #c084fc; }
+    .tile-amber  { background: radial-gradient(circle at 50% 0%, rgba(245, 158, 11, 0.28), rgba(18, 18, 26, 0.95)); color: #fbbf24; }
+
+    /* Enterprise Trust Bar */
+    .trust-strip {
+      margin-top: 54px;
+      padding-top: 26px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 26px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 12.5px;
+      letter-spacing: 0.16em;
+      color: #71717a;
+    }
+
+    .logo-dot {
+      color: #3f3f46;
+    }
+
+    .sla-rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #e4e4e7;
+    }
+
+    .stars-svg {
+      display: inline-flex;
+      gap: 2px;
+      color: #fbbf24;
+    }
+
+    /* Interactive Live Console */
+    .console-section {
+      padding: 56px 0 88px;
+    }
+
+    .console-topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .console-title-group h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .console-title-group p {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+    }
+
+    .console-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-spike {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 9px;
+      border: 1px solid rgba(251, 113, 133, 0.4);
+      background: rgba(251, 113, 133, 0.12);
+      color: #fda4af;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .btn-spike:hover {
+      background: rgba(251, 113, 133, 0.22);
+      border-color: rgba(251, 113, 133, 0.7);
+    }
+
+    .btn-heal {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 9px;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.12);
+      color: #6ee7b7;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+
+    .btn-heal:hover {
+      background: rgba(16, 185, 129, 0.22);
+      border-color: rgba(16, 185, 129, 0.7);
+    }
+
+    /* KPI Strip */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .kpi-card {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .kpi-value {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    .kpi-delta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--emerald);
+    }
+
+    .kpi-delta.warn {
+      color: var(--coral);
+    }
+
+    /* Console Main Layout */
+    .console-shell {
+      display: grid;
+      grid-template-columns: 7fr 5fr;
+      gap: 16px;
+    }
+
+    .panel {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .panel-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .sparkline-box {
+      height: 170px;
+      width: 100%;
+      background: #09090d;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    /* Service Health Table */
+    .service-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .service-table th {
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .service-table td {
+      padding: 12px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.045);
+      vertical-align: middle;
+    }
+
+    .service-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .svc-name {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      color: #f4f4f5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .status-healthy {
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .status-degraded {
+      background: rgba(251, 113, 133, 0.14);
+      color: #fb7185;
+      border: 1px solid rgba(251, 113, 133, 0.35);
+    }
+
+    .status-scaling {
+      background: rgba(245, 158, 11, 0.14);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    /* Incident Stream */
+    .log-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      max-height: 390px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .log-entry {
+      background: #09090d;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--indigo);
+      border-radius: 9px;
+      padding: 11px 13px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      line-height: 1.5;
+    }
+
+    .log-entry.crit { border-left-color: var(--coral); }
+    .log-entry.ok   { border-left-color: var(--emerald); }
+    .log-entry.warn { border-left-color: var(--amber); }
+
+    .log-meta {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 10px;
+      margin-bottom: 4px;
+    }
+
+    .log-msg {
+      color: #e4e4e7;
+    }
+
+    /* Modal Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #12121a;
+      border: 1px solid var(--border-strong);
+      border-radius: 12px;
+      padding: 13px 18px;
+      font-size: 13px;
+      color: #fafafa;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      z-index: 100;
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: all 0.22s ease;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1040px) {
+      .hero-left, .hero-right { grid-column: span 12; }
+      .console-shell { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+      .bento-matrix { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Minimal Dark Navbar -->
+  <header class="navbar-wrap">
+    <div class="container navbar">
+      <a href="#" class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon>
+            <line x1="12" y1="22" x2="12" y2="15.5"></line>
+            <polyline points="22 8.5 12 15.5 2 8.5"></polyline>
+          </svg>
+        </span>
+        <span>PulseOps</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#console">Platform</a></li>
+        <li><a href="#console">Telemetry</a></li>
+        <li><a href="#incidents">Incidents</a></li>
+        <li><a href="#console">Enterprise</a></li>
+        <li><a href="#console">Pricing</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="btn-ghost-link" onclick="showToast('SSO session verified · workspace us-east-prod')">Log in</button>
+        <a href="#console" class="btn-white-pill">Request demo</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero 12-Col Split (Exact Dovetail Model) -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-left">
+          <div class="telemetry-pill">
+            <span class="pulse-dot"></span>
+            <span>LIVE PRODUCTION CLUSTER TELEMETRY 2026</span>
+          </div>
+
+          <h1 class="hero-headline">
+            Finally, all of your infrastructure signals in <em>one place</em>
+          </h1>
+
+          <p class="hero-copy">
+            Correlate high-cardinality eBPF metrics, distributed OpenTelemetry traces, canary deploys, and automated Pager incident workflows in sub-millisecond query windows.
+          </p>
+
+          <div class="hero-ctas">
+            <a href="#console" class="cta-primary">
+              <span>Open Live Console</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+            <button class="cta-secondary" onclick="triggerSpike(true)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <span>Run Chaos Drill</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right 5 Cols: Dovetail Signature 2x2 Dark Bento Matrix -->
+        <div class="hero-right">
+          <div class="bento-matrix">
+            <!-- Quadrant 1: METRICS -->
+            <div class="bento-quadrant">
+              <div class="quadrant-header">
+                <span class="quadrant-label">METRICS</span>
+                <span class="quadrant-count">1.4M/s</span>
+              </div>
+              <div class="mini-tile-grid">
+                <div class="mini-tile tile-indigo" onclick="inspectTile('METRICS · CPU eBPF Profiler (99.4% nominal)')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>
+                  <span>eBPF</span>
+                </div>
+                <div class="mini-tile tile-cyan" onclick="inspectTile('METRICS · Edge RPS Ingress 48.2k req/s')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  <span>RPS</span>
+                </div>
+                <div class="mini-tile tile-emerald" onclick="inspectTile('METRICS · Heap Memory Allocator 41.2 GB')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                  <span>MEM</span>
+                </div>
+                <div class="mini-tile tile-violet" onclick="inspectTile('METRICS · NVMe IOPS Queue Depth 0.4ms')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                  <span>IOPS</span>
+                </div>
+                <div class="mini-tile tile-amber" onclick="inspectTile('METRICS · GPU Tensor Utilization 78%')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <span>P99</span>
+                </div>
+                <div class="mini-tile tile-coral" onclick="inspectTile('METRICS · TLS Handshake Edge 6.2ms')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <span>TLS</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quadrant 2: TRACES -->
+            <div class="bento-quadrant">
+              <div class="quadrant-header">
+                <span class="quadrant-label">TRACES</span>
+                <span class="quadrant-count">OTel v1.28</span>
+              </div>
+              <div class="mini-tile-grid">
+                <div class="mini-tile tile-cyan" onclick="inspectTile('TRACES · gRPC Mesh Span Waterfall')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="15" y2="6"/><line x1="7" y1="12" x2="21" y2="12"/><line x1="5" y1="18" x2="18" y2="18"/></svg>
+                  <span>gRPC</span>
+                </div>
+                <div class="mini-tile tile-indigo" onclick="inspectTile('TRACES · PostgreSQL Read Replica Span')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h10M4 17h13"/></svg>
+                  <span>SQL</span>
+                </div>
+                <div class="mini-tile tile-violet" onclick="inspectTile('TRACES · Kafka Partition Consumer Lag')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M8.59 8.59L15.42 15.42"/></svg>
+                  <span>KAFKA</span>
+                </div>
+                <div class="mini-tile tile-emerald" onclick="inspectTile('TRACES · Redis Edge Pipeline Hit 99.8%')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg>
+                  <span>CACHE</span>
+                </div>
+                <div class="mini-tile tile-coral" onclick="inspectTile('TRACES · Auth PBKDF2 Token Signer')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  <span>AUTH</span>
+                </div>
+                <div class="mini-tile tile-amber" onclick="inspectTile('TRACES · GraphQL Federation Resolver')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83"/></svg>
+                  <span>GQL</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quadrant 3: INCIDENTS -->
+            <div class="bento-quadrant">
+              <div class="quadrant-header">
+                <span class="quadrant-label">INCIDENTS</span>
+                <span class="quadrant-count">MTTR 42s</span>
+              </div>
+              <div class="mini-tile-grid">
+                <div class="mini-tile tile-coral" onclick="inspectTile('INCIDENTS · Pager Escalation Policy Tier-1')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  <span>SEV1</span>
+                </div>
+                <div class="mini-tile tile-amber" onclick="inspectTile('INCIDENTS · Anomaly Burn Rate Detector')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+                  <span>BURN</span>
+                </div>
+                <div class="mini-tile tile-emerald" onclick="inspectTile('INCIDENTS · Auto-Heal Pod Drainage Active')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  <span>HEAL</span>
+                </div>
+                <div class="mini-tile tile-indigo" onclick="inspectTile('INCIDENTS · Root-Cause AI Correlation Graph')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                  <span>RCA</span>
+                </div>
+                <div class="mini-tile tile-violet" onclick="inspectTile('INCIDENTS · Slack Ops War-Room Sync')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <span>SYNC</span>
+                </div>
+                <div class="mini-tile tile-cyan" onclick="inspectTile('INCIDENTS · SLO Error Budget 99.98%')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+                  <span>SLO</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quadrant 4: DEPLOYS -->
+            <div class="bento-quadrant">
+              <div class="quadrant-header">
+                <span class="quadrant-label">DEPLOYS</span>
+                <span class="quadrant-count">GitOps</span>
+              </div>
+              <div class="mini-tile-grid">
+                <div class="mini-tile tile-emerald" onclick="inspectTile('DEPLOYS · Canary Traffic Split 10% -> 100%')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/></svg>
+                  <span>CANARY</span>
+                </div>
+                <div class="mini-tile tile-indigo" onclick="inspectTile('DEPLOYS · Kubernetes HPA Fleet v1.31')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                  <span>K8S</span>
+                </div>
+                <div class="mini-tile tile-violet" onclick="inspectTile('DEPLOYS · Instant SHA Rollback Guard')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                  <span>REVERT</span>
+                </div>
+                <div class="mini-tile tile-cyan" onclick="inspectTile('DEPLOYS · Multi-Region Edge Workers')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                  <span>EDGE</span>
+                </div>
+                <div class="mini-tile tile-amber" onclick="inspectTile('DEPLOYS · Feature Flag Progressive Ring')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                  <span>FLAGS</span>
+                </div>
+                <div class="mini-tile tile-coral" onclick="inspectTile('DEPLOYS · Zero-Downtime Schema Migration')">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                  <span>MIGR</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Monochrome Enterprise Logos + 4.9 SLA -->
+      <div class="trust-strip">
+        <div class="logo-row">
+          <span>DATADOG</span>
+          <span class="logo-dot">&middot;</span>
+          <span>CLOUDFLARE</span>
+          <span class="logo-dot">&middot;</span>
+          <span>VERCEL</span>
+          <span class="logo-dot">&middot;</span>
+          <span>STRIPE</span>
+          <span class="logo-dot">&middot;</span>
+          <span>LINEAR</span>
+        </div>
+
+        <div class="sla-rating">
+          <span class="stars-svg" aria-label="5 out of 5 stars">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </span>
+          <span>4.9 SLA</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Live Telemetry Console -->
+  <section id="console" class="console-section">
+    <div class="container">
+      <div class="console-topbar">
+        <div class="console-title-group">
+          <h2>Production Cluster Command Deck</h2>
+          <p>Region: <code style="color:#e4e4e7;font-family:'JetBrains Mono',monospace;">us-east-1a / eu-central-1</code> &middot; Live 1s streaming telemetry</p>
+        </div>
+
+        <div class="console-controls">
+          <button class="btn-spike" onclick="triggerSpike(false)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+            </svg>
+            <span>Simulate Traffic Spike</span>
+          </button>
+          <button class="btn-heal" onclick="autoHealNodes()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span>Auto-Heal Nodes</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">
+            <span>P99 EDGE LATENCY</span>
+            <span id="kpi-state-badge" style="color:#34d399;">NOMINAL</span>
+          </div>
+          <div class="kpi-value" id="kpi-p99">18.4 ms</div>
+          <div class="kpi-delta" id="kpi-p99-delta">-2.1 ms vs 1h baseline</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label"><span>GLOBAL THROUGHPUT</span><span>HTTP/3</span></div>
+          <div class="kpi-value" id="kpi-rps">48,920 rps</div>
+          <div class="kpi-delta" id="kpi-rps-delta">+6.4% steady ingress</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label"><span>ACTIVE K8S PODS</span><span>HPA v2</span></div>
+          <div class="kpi-value" id="kpi-pods">142 / 160</div>
+          <div class="kpi-delta" id="kpi-pods-delta">99.994% availability</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-label"><span>ERROR BUDGET</span><span>30D WINDOW</span></div>
+          <div class="kpi-value" id="kpi-err">0.012%</div>
+          <div class="kpi-delta" id="kpi-err-delta">SLO target &lt; 0.050%</div>
+        </div>
+      </div>
+
+      <!-- Main Split: Streaming Sparkline + Health Table | Live Incident Feed -->
+      <div class="console-shell">
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2.2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+              <span>Streaming Latency Distribution (P99 vs P50)</span>
+            </div>
+            <span class="badge-mono" id="stream-hz">STREAMING &middot; 1000ms</span>
+          </div>
+
+          <div class="sparkline-box">
+            <svg id="latency-svg" width="100%" height="100%" viewBox="0 0 680 144" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="p99Grad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#6366f1" stop-opacity="0.42" />
+                  <stop offset="100%" stop-color="#6366f1" stop-opacity="0.0" />
+                </linearGradient>
+                <linearGradient id="spikeGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#fb7185" stop-opacity="0.46" />
+                  <stop offset="100%" stop-color="#fb7185" stop-opacity="0.0" />
+                </linearGradient>
+              </defs>
+              <line x1="0" y1="36" x2="680" y2="36" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4 4" />
+              <line x1="0" y1="72" x2="680" y2="72" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4 4" />
+              <line x1="0" y1="108" x2="680" y2="108" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4 4" />
+              <path id="p99-area" d="" fill="url(#p99Grad)" />
+              <path id="p99-line" d="" fill="none" stroke="#818cf8" stroke-width="2.4" stroke-linecap="round" />
+              <path id="p50-line" d="" fill="none" stroke="#22d3ee" stroke-width="1.7" stroke-dasharray="3 3" />
+            </svg>
+          </div>
+
+          <div class="panel-head" style="margin-bottom: 10px;">
+            <div class="panel-title">Core Production Services</div>
+            <span class="badge-mono">4 MESH NODES</span>
+          </div>
+
+          <table class="service-table">
+            <thead>
+              <tr>
+                <th>Service</th>
+                <th>Status</th>
+                <th>P99 Latency</th>
+                <th>Throughput</th>
+                <th>Saturation</th>
+              </tr>
+            </thead>
+            <tbody id="service-tbody"></tbody>
+          </table>
+        </div>
+
+        <!-- Incident & Auto-Remediation Stream -->
+        <div class="panel" id="incidents">
+          <div class="panel-head">
+            <div class="panel-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2.2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              <span>Live Telemetry &amp; Incident Stream</span>
+            </div>
+            <span class="badge-mono" id="log-counter">LIVE TAIL</span>
+          </div>
+
+          <div class="log-feed" id="log-feed"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    let spikeMode = false;
+    let p99Series = Array.from({ length: 34 }, (_, i) => 17 + Math.sin(i * 0.45) * 3.2 + Math.random() * 2.4);
+    let p50Series = Array.from({ length: 34 }, (_, i) => 8.5 + Math.cos(i * 0.4) * 1.4 + Math.random() * 1.2);
+
+    const services = [
+      { name: 'api-gateway', status: 'HEALTHY', p99: 14.2, rps: '24,810/s', cpu: '41%' },
+      { name: 'auth-pbkdf2', status: 'HEALTHY', p99: 22.8, rps: '9,420/s', cpu: '54%' },
+      { name: 'postgres-primary', status: 'HEALTHY', p99: 6.4, rps: '6,190/s', cpu: '38%' },
+      { name: 'redis-edge', status: 'HEALTHY', p99: 1.9, rps: '38,500/s', cpu: '29%' }
+    ];
+
+    const initialLogs = [
+      { level: 'ok', svc: 'redis-edge', msg: 'Edge keyspace hit ratio steady at 99.84% across 14 PoPs' },
+      { level: 'info', svc: 'api-gateway', msg: 'Canary ring v2.41.9 promoted to 100% production traffic' },
+      { level: 'ok', svc: 'postgres-primary', msg: 'WAL checkpoint synced to standby replica in 1.8ms' },
+      { level: 'info', svc: 'auth-pbkdf2', msg: 'Rotated JWT Ed25519 signing keypair without dropped spans' }
+    ];
+
+    function formatTime() {
+      const d = new Date();
+      return d.toTimeString().split(' ')[0] + '.' + String(d.getMilliseconds()).padStart(3, '0');
+    }
+
+    function addLog(level, svc, msg) {
+      const feed = document.getElementById('log-feed');
+      const item = document.createElement('div');
+      item.className = 'log-entry ' + level;
+      item.innerHTML = `
+        <div class="log-meta">
+          <span>[${formatTime()}] &middot; ${svc}</span>
+          <span>${level.toUpperCase()}</span>
+        </div>
+        <div class="log-msg">${msg}</div>
+      `;
+      feed.prepend(item);
+      while (feed.children.length > 14) {
+        feed.removeChild(feed.lastChild);
+      }
+    }
+
+    function renderServices() {
+      const tbody = document.getElementById('service-tbody');
+      tbody.innerHTML = services.map(s => {
+        const cls = s.status === 'HEALTHY' ? 'status-healthy' : (s.status === 'DEGRADED' ? 'status-degraded' : 'status-scaling');
+        return `
+          <tr>
+            <td>
+              <span class="svc-name">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2.2"><rect x="2" y="3" width="20" height="18" rx="3"/><line x1="8" y1="9" x2="16" y2="9"/></svg>
+                ${s.name}
+              </span>
+            </td>
+            <td><span class="status-pill ${cls}">${s.status}</span></td>
+            <td style="font-family:'JetBrains Mono',monospace;">${s.p99.toFixed(1)} ms</td>
+            <td style="font-family:'JetBrains Mono',monospace;color:#a1a1aa;">${s.rps}</td>
+            <td style="font-family:'JetBrains Mono',monospace;">${s.cpu}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderSparklines() {
+      const w = 680;
+      const h = 144;
+      const maxVal = spikeMode ? 240 : 60;
+
+      const toCoords = (arr) => arr.map((v, idx) => {
+        const x = (idx / (arr.length - 1)) * w;
+        const clamped = Math.min(maxVal, Math.max(2, v));
+        const y = h - 12 - (clamped / maxVal) * (h - 28);
+        return [x, y];
+      });
+
+      const pts99 = toCoords(p99Series);
+      const pts50 = toCoords(p50Series);
+
+      const path99 = pts99.map((p, i) => (i === 0 ? `M ${p[0].toFixed(1)} ${p[1].toFixed(1)}` : `L ${p[0].toFixed(1)} ${p[1].toFixed(1)}`)).join(' ');
+      const area99 = `${path99} L ${w} ${h} L 0 ${h} Z`;
+      const path50 = pts50.map((p, i) => (i === 0 ? `M ${p[0].toFixed(1)} ${p[1].toFixed(1)}` : `L ${p[0].toFixed(1)} ${p[1].toFixed(1)}`)).join(' ');
+
+      const lineEl = document.getElementById('p99-line');
+      const areaEl = document.getElementById('p99-area');
+      lineEl.setAttribute('d', path99);
+      areaEl.setAttribute('d', area99);
+      lineEl.setAttribute('stroke', spikeMode ? '#fb7185' : '#818cf8');
+      areaEl.setAttribute('fill', spikeMode ? 'url(#spikeGrad)' : 'url(#p99Grad)');
+      document.getElementById('p50-line').setAttribute('d', path50);
+    }
+
+    function updateTelemetryTick() {
+      const nextP99 = spikeMode
+        ? 168 + Math.random() * 48
+        : 16.5 + Math.random() * 4.6;
+      const nextP50 = spikeMode
+        ? 64 + Math.random() * 19
+        : 8.1 + Math.random() * 2.2;
+
+      p99Series.push(nextP99);
+      p99Series.shift();
+      p50Series.push(nextP50);
+      p50Series.shift();
+
+      const rpsVal = spikeMode
+        ? Math.floor(142000 + Math.random() * 16500)
+        : Math.floor(47800 + Math.random() * 2600);
+
+      document.getElementById('kpi-p99').textContent = nextP99.toFixed(1) + ' ms';
+      document.getElementById('kpi-rps').textContent = rpsVal.toLocaleString() + ' rps';
+
+      if (spikeMode) {
+        services[0].p99 = 142.4 + Math.random() * 25;
+        services[1].p99 = 196.8 + Math.random() * 30;
+        services[1].status = 'DEGRADED';
+        services[0].status = 'SCALING';
+        services[0].rps = '88,410/s';
+        services[1].rps = '39,120/s';
+        services[0].cpu = '91%';
+        services[1].cpu = '96%';
+      } else {
+        services[0].p99 = 13.8 + Math.random() * 1.8;
+        services[1].p99 = 21.4 + Math.random() * 2.3;
+        services[2].p99 = 6.1 + Math.random() * 0.9;
+        services[3].p99 = 1.7 + Math.random() * 0.5;
+      }
+
+      renderSparklines();
+      renderServices();
+    }
+
+    function triggerSpike(scrollConsole) {
+      if (scrollConsole) {
+        document.getElementById('console').scrollIntoView({ behavior: 'smooth' });
+      }
+      spikeMode = true;
+      document.getElementById('kpi-state-badge').textContent = 'SEV-2 SPIKE';
+      document.getElementById('kpi-state-badge').style.color = '#fb7185';
+      document.getElementById('kpi-p99-delta').textContent = '+164.2 ms anomaly surge detected';
+      document.getElementById('kpi-p99-delta').className = 'kpi-delta warn';
+      document.getElementById('kpi-rps-delta').textContent = '+211% DDoS / flashburst load';
+      document.getElementById('kpi-rps-delta').className = 'kpi-delta warn';
+      document.getElementById('kpi-pods').textContent = '158 / 160';
+      document.getElementById('kpi-err').textContent = '0.480%';
+      document.getElementById('kpi-err-delta').textContent = 'Burn rate 9.6x above threshold';
+      document.getElementById('kpi-err-delta').className = 'kpi-delta warn';
+
+      addLog('crit', 'auth-pbkdf2', 'P99 latency breached 190ms SLO · worker pool saturation at 96%');
+      addLog('warn', 'api-gateway', 'Ingress surge +211% (148k rps) · rate-limiter token bucket engaged');
+      showToast('Chaos Drill Active · Traffic Spike Injected');
+      updateTelemetryTick();
+    }
+
+    function autoHealNodes() {
+      spikeMode = false;
+      services.forEach((s, idx) => {
+        s.status = 'HEALTHY';
+        s.cpu = ['39%', '48%', '35%', '27%'][idx];
+        s.rps = ['24,910/s', '9,380/s', '6,140/s', '38,820/s'][idx];
+      });
+      p99Series = p99Series.map(v => Math.min(v, 24));
+      document.getElementById('kpi-state-badge').textContent = 'NOMINAL';
+      document.getElementById('kpi-state-badge').style.color = '#34d399';
+      document.getElementById('kpi-p99-delta').textContent = 'Auto-healed · -158ms recovery in 3.2s';
+      document.getElementById('kpi-p99-delta').className = 'kpi-delta';
+      document.getElementById('kpi-rps-delta').textContent = 'Balanced across 184 HPA replicas';
+      document.getElementById('kpi-rps-delta').className = 'kpi-delta';
+      document.getElementById('kpi-pods').textContent = '184 / 220';
+      document.getElementById('kpi-err').textContent = '0.011%';
+      document.getElementById('kpi-err-delta').textContent = 'SLO target < 0.050% restored';
+      document.getElementById('kpi-err-delta').className = 'kpi-delta';
+
+      addLog('ok', 'k8s-hpa-controller', 'Cordoned degraded pods & scaled +42 warm Firecracker microVMs');
+      addLog('ok', 'auth-pbkdf2', 'P99 latency stabilized to 21.8ms · circuit breaker closed');
+      showToast('Auto-Heal Complete · All Mesh Nodes Healthy');
+      updateTelemetryTick();
+    }
+
+    let toastTimer = null;
+    function showToast(text) {
+      const el = document.getElementById('toast');
+      el.textContent = text;
+      el.classList.add('visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('visible'), 2900);
+    }
+
+    function inspectTile(label) {
+      addLog('info', 'signal-inspector', 'Inspected ' + label);
+      showToast(label);
+    }
+
+    initialLogs.forEach(l => addLog(l.level, l.svc, l.msg));
+    renderServices();
+    renderSparklines();
+    setInterval(updateTelemetryTick, 1300);
+  </script>
+</body>
+</html>

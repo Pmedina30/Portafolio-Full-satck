@@ -1,0 +1,1661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXUS-01 — Cybernetic Reference Acoustic System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-obsidian: #060608;
+      --bg-surface: #0c0d12;
+      --bg-elevated: #12141c;
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-cyan: #38bdf8;
+      --accent-indigo: #818cf8;
+      --accent-vermilion: #f43f5e;
+      --accent-emerald: #2dd4bf;
+      --active-accent: #38bdf8;
+      --font-display: 'Plus Jakarta Sans', sans-serif;
+      --font-serif: 'Instrument Serif', serif;
+      --font-sans: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-obsidian);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-obsidian);
+      overflow-x: hidden;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(circle at 18% 12%, rgba(56, 189, 248, 0.08), transparent 40%),
+        radial-gradient(circle at 82% 18%, rgba(129, 140, 248, 0.09), transparent 42%),
+        radial-gradient(circle at 60% 80%, rgba(244, 63, 94, 0.05), transparent 45%);
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Top Prisma Iridescent Hairline */
+    .spectral-bar {
+      height: 2px;
+      width: 100%;
+      background: linear-gradient(90deg, #060608 0%, #38bdf8 22%, #818cf8 48%, #f43f5e 74%, #2dd4bf 92%, #060608 100%);
+      opacity: 0.85;
+    }
+
+    /* Navigation */
+    header.nav-shell {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(6, 6, 8, 0.78);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0.9rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(129, 140, 248, 0.15));
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.18);
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand-tag {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 500;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.86rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      padding: 0.55rem 0.95rem;
+      border-radius: 999px;
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--border-strong);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f8fafc 0%, #cbd5e1 100%);
+      color: #060608;
+      border: none;
+      padding: 0.58rem 1.15rem;
+      border-radius: 999px;
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 0 25px rgba(248, 250, 252, 0.18);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(56, 189, 248, 0.3);
+    }
+
+    /* Hero + 3D WebGL Studio Split */
+    .studio-section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 1.75rem 3.5rem;
+      display: grid;
+      grid-template-columns: 440px 1fr;
+      gap: 2rem;
+      align-items: stretch;
+    }
+
+    .studio-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.32rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    .hero-heading {
+      font-family: var(--font-display);
+      font-size: clamp(2.25rem, 3.4vw, 3.25rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.035em;
+      margin-top: 0.85rem;
+    }
+
+    .hero-heading em {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-style: italic;
+      background: linear-gradient(90deg, #f8fafc, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      padding-right: 0.12em;
+    }
+
+    .hero-lead {
+      margin-top: 0.95rem;
+      font-size: 0.96rem;
+      line-height: 1.65;
+      color: var(--text-secondary);
+    }
+
+    /* Prisma Iridescent Control Card */
+    .prisma-card {
+      position: relative;
+      background: linear-gradient(180deg, rgba(18, 20, 28, 0.92) 0%, rgba(10, 11, 16, 0.96) 100%);
+      border-radius: 20px;
+      padding: 1.35rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow:
+        0 24px 48px rgba(0, 0, 0, 0.65),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+    }
+
+    .prisma-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.45), rgba(129, 140, 248, 0.15) 40%, rgba(244, 63, 94, 0.35) 85%, rgba(45, 212, 191, 0.3));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .control-group + .control-group {
+      margin-top: 1.35rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .control-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .control-label {
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .control-readout {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.06);
+      padding: 0.18rem 0.55rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Exploded Slider */
+    .range-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent-cyan) 0%, var(--accent-indigo) 55%, var(--accent-vermilion) 100%);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #f8fafc;
+      border: 2px solid #060608;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.8);
+      cursor: grab;
+      transition: transform 0.15s ease;
+    }
+
+    .range-slider::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(1.12);
+    }
+
+    .explode-presets {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-top: 0.65rem;
+    }
+
+    .preset-chip {
+      flex: 1;
+      padding: 0.38rem 0.5rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      text-align: center;
+    }
+
+    .preset-chip:hover,
+    .preset-chip.active {
+      color: var(--text-primary);
+      border-color: rgba(56, 189, 248, 0.5);
+      background: rgba(56, 189, 248, 0.12);
+    }
+
+    /* Finish Swatches */
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+    }
+
+    .swatch-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.62rem 0.75rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+
+    .swatch-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-primary);
+    }
+
+    .swatch-btn.active {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.35);
+      color: var(--text-primary);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.14);
+    }
+
+    .swatch-orb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.35);
+    }
+
+    .swatch-meta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .swatch-name {
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    .swatch-code {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    /* Web Audio API Ambient Acoustic Test */
+    .audio-test-btn {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border-radius: 14px;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.14), rgba(129, 140, 248, 0.12));
+      color: var(--text-primary);
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.86rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      transition: all 0.22s ease;
+    }
+
+    .audio-test-btn:hover {
+      border-color: rgba(56, 189, 248, 0.7);
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(129, 140, 248, 0.2));
+      box-shadow: 0 0 28px rgba(56, 189, 248, 0.2);
+    }
+
+    .audio-test-btn.playing {
+      border-color: var(--accent-emerald);
+      background: linear-gradient(135deg, rgba(45, 212, 191, 0.2), rgba(56, 189, 248, 0.18));
+    }
+
+    .audio-btn-left {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .eq-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      height: 16px;
+    }
+
+    .eq-bar {
+      width: 3px;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--accent-cyan);
+      transition: height 0.12s ease;
+    }
+
+    .audio-test-btn.playing .eq-bar {
+      background: var(--accent-emerald);
+    }
+
+    /* 3D Viewport Stage */
+    .webgl-stage-wrap {
+      position: relative;
+      min-height: 620px;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(56, 189, 248, 0.11), rgba(12, 13, 18, 0.88) 58%, #060608 100%);
+      border: 1px solid rgba(255, 255, 255, 0.11);
+      overflow: hidden;
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.75),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .webgl-stage-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(circle at 50% 50%, black 30%, transparent 85%);
+      pointer-events: none;
+    }
+
+    #nexus-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+      z-index: 2;
+    }
+
+    #nexus-canvas:active {
+      cursor: grabbing;
+    }
+
+    .stage-hud-top,
+    .stage-hud-bottom {
+      position: relative;
+      z-index: 5;
+      padding: 1.25rem 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      pointer-events: none;
+    }
+
+    .hud-pill {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.42rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(6, 6, 8, 0.72);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+    }
+
+    .hud-actions {
+      display: flex;
+      gap: 0.5rem;
+      pointer-events: auto;
+    }
+
+    .hud-icon-btn {
+      background: rgba(6, 6, 8, 0.74);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      padding: 0.42rem 0.75rem;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.18s ease;
+    }
+
+    .hud-icon-btn:hover,
+    .hud-icon-btn.active {
+      color: var(--text-primary);
+      border-color: var(--border-strong);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Layer Callout Chips inside HUD bottom */
+    .layer-Inspector {
+      pointer-events: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .layer-badge {
+      padding: 0.35rem 0.68rem;
+      border-radius: 8px;
+      background: rgba(6, 6, 8, 0.78);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-subtle);
+      font-family: var(--font-mono);
+      font-size: 0.69rem;
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.25s ease;
+    }
+
+    .layer-badge.highlighted {
+      border-color: rgba(56, 189, 248, 0.55);
+      color: var(--text-primary);
+      background: rgba(14, 24, 38, 0.85);
+    }
+
+    .layer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    /* Prisma Spectral Bento Architecture Section */
+    .bento-section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2.5rem 1.75rem 5rem;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.7rem, 2.6vw, 2.35rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .section-sub {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      max-width: 480px;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.25rem;
+    }
+
+    .bento-card {
+      position: relative;
+      background: linear-gradient(165deg, rgba(18, 20, 28, 0.9) 0%, rgba(8, 9, 13, 0.96) 100%);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 1.6rem;
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .bento-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(129, 140, 248, 0.35);
+    }
+
+    .span-4 { grid-column: span 4; }
+    .span-5 { grid-column: span 5; }
+    .span-7 { grid-column: span 7; }
+    .span-8 { grid-column: span 8; }
+
+    .metric-big {
+      font-family: var(--font-display);
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin: 0.65rem 0 0.35rem;
+      background: linear-gradient(90deg, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .card-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .card-desc {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    /* Interactive Acoustic Curve Box */
+    .dsp-tabs {
+      display: inline-flex;
+      gap: 0.4rem;
+      padding: 0.25rem;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .dsp-tab {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 0.38rem 0.7rem;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .dsp-tab.active {
+      background: rgba(56, 189, 248, 0.16);
+      color: var(--text-primary);
+    }
+
+    .curve-svg-wrap {
+      margin-top: 1.1rem;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      padding: 1rem;
+    }
+
+    .spec-table {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    .spec-row {
+      padding: 0.7rem 0.85rem;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .spec-row span:first-child {
+      color: var(--text-muted);
+    }
+
+    .spec-row span:last-child {
+      font-family: var(--font-mono);
+      color: var(--text-primary);
+    }
+
+    /* Order Modal Toast */
+    .reserve-banner {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 90;
+      padding: 1rem 1.25rem;
+      border-radius: 16px;
+      background: rgba(12, 14, 22, 0.95);
+      border: 1px solid rgba(56, 189, 248, 0.45);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+      display: none;
+      align-items: center;
+      gap: 0.85rem;
+      max-width: 380px;
+      backdrop-filter: blur(16px);
+    }
+
+    .reserve-banner.visible {
+      display: flex;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 2rem 1.75rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    @media (max-width: 1080px) {
+      .studio-section {
+        grid-template-columns: 1fr;
+      }
+      .webgl-stage-wrap {
+        min-height: 500px;
+        order: -1;
+      }
+      .span-4, .span-5, .span-7, .span-8 {
+        grid-column: span 12;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav-links {
+        display: none;
+      }
+      .studio-section {
+        padding: 1.25rem 1rem 2.5rem;
+      }
+      .webgl-stage-wrap {
+        min-height: 400px;
+      }
+      .spec-table {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="spectral-bar"></div>
+
+  <header class="nav-shell">
+    <div class="nav-inner">
+      <a href="#" class="brand">
+        <div class="brand-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon>
+            <circle cx="12" cy="12" r="3.5" stroke="#f8fafc"></circle>
+          </svg>
+        </div>
+        <div class="brand-title">
+          NEXUS-01
+          <span class="brand-tag tabular">REV 4.2</span>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#studio">3D Hardware Studio</a>
+        <a href="#architecture">Spectral Architecture</a>
+        <a href="#telemetry">DSP Response</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn-ghost" id="navAudioBtn" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 10v3M6 6v11M10 3v18M14 8v7M18 5v13M22 10v3" stroke-linecap="round"/>
+          </svg>
+          <span>Test Tone</span>
+        </button>
+        <button class="btn-primary tabular" id="reserveBtn" type="button">
+          <span>Reserve Studio Unit · $1,290</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+            <path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="studio-section" id="studio">
+      <!-- Left Interactive Hardware Control Deck -->
+      <div class="studio-panel">
+        <div>
+          <div class="eyebrow">
+            <span class="pulse-dot"></span>
+            <span>CYBERNETIC REFERENCE TRANSDUCER</span>
+          </div>
+          <h1 class="hero-heading">
+            Machined silence. <em>Spectral</em> precision.
+          </h1>
+          <p class="hero-lead">
+            Inspect the four-stage NEXUS-01 planar-dynamic driver assembly in real time. CNC-milled aerospace housing, 50mm titanium dome, high-flux vermilion voice coil, and neural acoustic core.
+          </p>
+        </div>
+
+        <div class="prisma-card">
+          <!-- Exploded View Control -->
+          <div class="control-group">
+            <div class="control-header">
+              <span class="control-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Exploded Assembly Axis
+              </span>
+              <span class="control-readout tabular" id="explodeReadout">28% Cutaway</span>
+            </div>
+            <input type="range" min="0" max="100" value="28" class="range-slider" id="explodeSlider" aria-label="Exploded View Slider" />
+            <div class="explode-presets">
+              <button type="button" class="preset-chip tabular" data-explode="0">0% Assembled</button>
+              <button type="button" class="preset-chip tabular active" data-explode="28">28% Cutaway</button>
+              <button type="button" class="preset-chip tabular" data-explode="65">65% Array</button>
+              <button type="button" class="preset-chip tabular" data-explode="100">100% Exploded</button>
+            </div>
+          </div>
+
+          <!-- PBR Material Finish Swatches -->
+          <div class="control-group">
+            <div class="control-header">
+              <span class="control-label">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/>
+                </svg>
+                PBR Anodized Finish
+              </span>
+              <span class="control-readout" id="finishReadout">Obsidian Matte</span>
+            </div>
+            <div class="swatch-grid">
+              <button type="button" class="swatch-btn active" data-finish="obsidian">
+                <span class="swatch-orb" style="background: radial-gradient(circle at 30% 30%, #334155, #090b10);"></span>
+                <span class="swatch-meta">
+                  <span class="swatch-name">Obsidian Matte</span>
+                  <span class="swatch-code tabular">RA 0.38 · DLC</span>
+                </span>
+              </button>
+              <button type="button" class="swatch-btn" data-finish="titanium">
+                <span class="swatch-orb" style="background: radial-gradient(circle at 30% 30%, #f1f5f9, #64748b);"></span>
+                <span class="swatch-meta">
+                  <span class="swatch-name">Brushed Titanium</span>
+                  <span class="swatch-code tabular">GRADE 5 · TI-6AL</span>
+                </span>
+              </button>
+              <button type="button" class="swatch-btn" data-finish="cobalt">
+                <span class="swatch-orb" style="background: radial-gradient(circle at 30% 30%, #60a5fa, #1e3a8a);"></span>
+                <span class="swatch-meta">
+                  <span class="swatch-name">Cyber Cobalt</span>
+                  <span class="swatch-code tabular">PVD 450NM</span>
+                </span>
+              </button>
+              <button type="button" class="swatch-btn" data-finish="vermilion">
+                <span class="swatch-orb" style="background: radial-gradient(circle at 30% 30%, #fb7185, #881337);"></span>
+                <span class="swatch-meta">
+                  <span class="swatch-name">Signal Vermilion</span>
+                  <span class="swatch-code tabular">ANODIZED #F43F</span>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Web Audio API Ambient Acoustic Test -->
+          <div class="control-group">
+            <button type="button" class="audio-test-btn" id="acousticTestBtn">
+              <span class="audio-btn-left">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" stroke-linejoin="round"/>
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07M19.07 4.93a10 10 0 0 1 0 14.14" stroke-linecap="round"/>
+                </svg>
+                <span id="audioBtnLabel">Web Audio Ambient Harmonic Test</span>
+              </span>
+              <span class="eq-bars" id="eqBars">
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+                <span class="eq-bar"></span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Interactive 3D WebGL Stage -->
+      <div class="webgl-stage-wrap">
+        <div class="stage-hud-top">
+          <div class="hud-pill tabular">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
+              <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/>
+            </svg>
+            <span id="orbitHudCoords">DRAG 360° ORBIT · AZIMUTH 24° · ELEV 16°</span>
+          </div>
+          <div class="hud-actions">
+            <button type="button" class="hud-icon-btn active" id="autoRotateBtn">
+              <span>AUTO-SPIN</span>
+            </button>
+            <button type="button" class="hud-icon-btn" id="resetCamBtn">
+              <span>RESET VIEW</span>
+            </button>
+          </div>
+        </div>
+
+        <canvas id="nexus-canvas"></canvas>
+
+        <div class="stage-hud-bottom">
+          <div class="layer-Inspector" id="layerBadges">
+            <span class="layer-badge" data-layer="0">
+              <span class="layer-dot" style="background:#94a3b8"></span>01 · CNC Earcup Ring
+            </span>
+            <span class="layer-badge" data-layer="1">
+              <span class="layer-dot" style="background:#38bdf8"></span>02 · 50mm Titanium Cone
+            </span>
+            <span class="layer-badge" data-layer="2">
+              <span class="layer-dot" style="background:#f43f5e"></span>03 · Vermilion Voice Coil
+            </span>
+            <span class="layer-badge" data-layer="3">
+              <span class="layer-dot" style="background:#2dd4bf"></span>04 · Neural Core Polyhedron
+            </span>
+          </div>
+          <div class="hud-pill tabular">
+            <span>WEBGL PBR · 60 FPS</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Spectral Architecture Bento Grid -->
+    <section class="bento-section" id="architecture">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow" style="margin-bottom:0.65rem;">
+            <span>ACOUSTIC TELEMETRY &amp; DSP</span>
+          </div>
+          <h2 class="section-title">Engineered down to the sub-micron.</h2>
+        </div>
+        <p class="section-sub">
+          Every NEXUS-01 assembly pairs a custom-wound OFC copper-vermilion coil with an octa-core neural cancellation lattice sampling ambient pressure 96,000 times per second.
+        </p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="bento-card span-4">
+          <div class="card-kicker">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            PHASE-LOCKED ANC
+          </div>
+          <div class="metric-big tabular">-52.4 dB</div>
+          <p class="card-desc">
+            8-microphone beamforming array eliminates turbine, subway, and studio HVAC floor noise with zero cabin-pressure artifacts.
+          </p>
+        </div>
+
+        <div class="bento-card span-4">
+          <div class="card-kicker" style="color: var(--accent-indigo);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            SPECTRAL BANDWIDTH
+          </div>
+          <div class="metric-big tabular">4 Hz – 48 kHz</div>
+          <p class="card-desc">
+            Vapor-deposited titanium diaphragm maintains pistonic linearity well beyond human auditory thresholds with &lt;0.02% THD at 100 dB SPL.
+          </p>
+        </div>
+
+        <div class="bento-card span-4">
+          <div class="card-kicker" style="color: var(--accent-vermilion);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            ULTRA-WIDEBAND LINK
+          </div>
+          <div class="metric-big tabular">0.84 ms</div>
+          <p class="card-desc">
+            Lossless 32-bit / 192 kHz UWB optical-grade wireless transceiver engineered for live DAW mastering and spatial synthesis.
+          </p>
+        </div>
+
+        <!-- Interactive Frequency Response Card -->
+        <div class="bento-card span-7" id="telemetry">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+            <div>
+              <div class="card-kicker">HARMAN / STUDIO TARGET CURVE</div>
+              <h3 style="font-family:var(--font-display); font-size:1.2rem; margin-top:0.25rem;">Real-Time Neural EQ Voicing</h3>
+            </div>
+            <div class="dsp-tabs">
+              <button type="button" class="dsp-tab active" data-curve="reference">Reference Flat</button>
+              <button type="button" class="dsp-tab" data-curve="warm">Analog Warm</button>
+              <button type="button" class="dsp-tab" data-curve="spatial">Spatial Cinema</button>
+            </div>
+          </div>
+
+          <div class="curve-svg-wrap">
+            <svg viewBox="0 0 560 150" width="100%" height="150" fill="none">
+              <defs>
+                <linearGradient id="curveGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#38bdf8"/>
+                  <stop offset="55%" stop-color="#818cf8"/>
+                  <stop offset="100%" stop-color="#f43f5e"/>
+                </linearGradient>
+                <linearGradient id="curveFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="rgba(56,189,248,0.25)"/>
+                  <stop offset="100%" stop-color="rgba(56,189,248,0.0)"/>
+                </linearGradient>
+              </defs>
+              <line x1="0" y1="35" x2="560" y2="35" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3 3"/>
+              <line x1="0" y1="75" x2="560" y2="75" stroke="rgba(255,255,255,0.12)"/>
+              <line x1="0" y1="115" x2="560" y2="115" stroke="rgba(255,255,255,0.06)" stroke-dasharray="3 3"/>
+              <path id="eqAreaPath" d="M0,78 C90,74 170,74 260,75 C350,76 430,62 560,72 L560,150 L0,150 Z" fill="url(#curveFill)"/>
+              <path id="eqStrokePath" d="M0,78 C90,74 170,74 260,75 C350,76 430,62 560,72" stroke="url(#curveGrad)" stroke-width="3" stroke-linecap="round"/>
+              <g font-family="JetBrains Mono, monospace" font-size="10" fill="#64748b">
+                <text x="8" y="142">20 Hz</text>
+                <text x="140" y="142">120 Hz</text>
+                <text x="275" y="142">1 kHz</text>
+                <text x="415" y="142">8 kHz</text>
+                <text x="512" y="142">40 kHz</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <div class="bento-card span-5">
+          <div class="card-kicker" style="color: var(--accent-emerald);">HARDWARE BILL OF MATERIALS</div>
+          <h3 style="font-family:var(--font-display); font-size:1.2rem; margin-top:0.25rem;">Transducer Specifications</h3>
+          <div class="spec-table tabular">
+            <div class="spec-row"><span>Magnet Flux</span><span>1.65 Tesla N55</span></div>
+            <div class="spec-row"><span>Voice Coil</span><span>CCAW Vermilion</span></div>
+            <div class="spec-row"><span>Core SoC</span><span>NX-Neural DSP</span></div>
+            <div class="spec-row"><span>Battery Cell</span><span>62 Hours ANC</span></div>
+            <div class="spec-row"><span>Acoustic Mass</span><span>294 Grams</span></div>
+            <div class="spec-row"><span>DAC SNR</span><span>131 dB Dual-Mono</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="reserve-banner" id="reserveToast">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke-linecap="round"/>
+      <polyline points="22 4 12 14.01 9 11.01" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div>
+      <div style="font-family:var(--font-display); font-weight:700; font-size:0.86rem;">Allocation Slot Locked</div>
+      <div style="font-size:0.76rem; color:var(--text-secondary);" id="reserveDetail">NEXUS-01 (Obsidian Matte) serialized build reserved.</div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="tabular">NEXUS ACOUSTIC LABS INC. · PALO ALTO / ZURICH · SERIAL #NX01-0849</div>
+    <div>INTERACTIVE 3D WEBGL STUDIO · ZERO-LATENCY DIGITAL TWIN</div>
+  </footer>
+
+  <script type="module">
+    import * as THREE from '/vendor/three.module.min.js';
+
+    const canvas = document.getElementById('nexus-canvas');
+    const stageWrap = canvas.parentElement;
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: 'high-performance'
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.22;
+
+    const scene = new THREE.Scene();
+
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+    camera.position.set(0, 0.4, 8.2);
+
+    // Dramatic Prisma Studio Rim Lighting
+    const ambientLight = new THREE.AmbientLight(0xdbeafe, 0.55);
+    scene.add(ambientLight);
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
+    keyLight.position.set(5, 6, 6);
+    scene.add(keyLight);
+
+    const cyanRim = new THREE.PointLight(0x38bdf8, 4.2, 18);
+    cyanRim.position.set(-5.5, 3.2, -2.5);
+    scene.add(cyanRim);
+
+    const vermilionRim = new THREE.PointLight(0xf43f5e, 3.1, 16);
+    vermilionRim.position.set(5.2, -3.4, -2.0);
+    scene.add(vermilionRim);
+
+    const indigoFill = new THREE.PointLight(0x818cf8, 2.4, 15);
+    indigoFill.position.set(0, -4.5, 4.5);
+    scene.add(indigoFill);
+
+    // Master Assembly Group
+    const rootAssembly = new THREE.Group();
+    rootAssembly.rotation.y = 0.42;
+    rootAssembly.rotation.x = 0.22;
+    scene.add(rootAssembly);
+
+    // Shared Dynamic Finish Material (Updated by Swatches)
+    const housingMat = new THREE.MeshStandardMaterial({
+      color: 0x161922,
+      metalness: 0.78,
+      roughness: 0.26
+    });
+
+    const accentBezelMat = new THREE.MeshStandardMaterial({
+      color: 0x334155,
+      metalness: 0.92,
+      roughness: 0.18
+    });
+
+    const titaniumConeMat = new THREE.MeshStandardMaterial({
+      color: 0xdbeafe,
+      metalness: 0.95,
+      roughness: 0.14,
+      side: THREE.DoubleSide
+    });
+
+    const coilMat = new THREE.MeshStandardMaterial({
+      color: 0xf43f5e,
+      emissive: 0x4c0519,
+      emissiveIntensity: 0.45,
+      metalness: 0.86,
+      roughness: 0.22
+    });
+
+    const neuralCoreMat = new THREE.MeshStandardMaterial({
+      color: 0x38bdf8,
+      emissive: 0x0ea5e9,
+      emissiveIntensity: 0.55,
+      metalness: 0.5,
+      roughness: 0.15,
+      flatShading: true
+    });
+
+    const darkCarbonMat = new THREE.MeshStandardMaterial({
+      color: 0x0b0d13,
+      metalness: 0.55,
+      roughness: 0.45
+    });
+
+    // LAYER 1: Outer Machined Earcup Housing & Acoustic Grille Rings (Front-most when exploded)
+    const layerEarcup = new THREE.Group();
+    const outerCupGeo = new THREE.CylinderGeometry(1.92, 1.72, 0.58, 64, 1, true);
+    outerCupGeo.rotateX(Math.PI / 2);
+    const outerCupMesh = new THREE.Mesh(outerCupGeo, housingMat);
+    layerEarcup.add(outerCupMesh);
+
+    const chamferFront = new THREE.Mesh(new THREE.TorusGeometry(1.92, 0.09, 28, 72), accentBezelMat);
+    chamferFront.position.z = 0.29;
+    layerEarcup.add(chamferFront);
+
+    const chamferRear = new THREE.Mesh(new THREE.TorusGeometry(1.72, 0.08, 24, 72), housingMat);
+    chamferRear.position.z = -0.29;
+    layerEarcup.add(chamferRear);
+
+    // Concentric precision acoustic louver rings
+    for (let i = 0; i < 4; i++) {
+      const r = 0.55 + i * 0.34;
+      const louver = new THREE.Mesh(new THREE.TorusGeometry(r, 0.022, 16, 64), accentBezelMat);
+      louver.position.z = 0.28;
+      layerEarcup.add(louver);
+    }
+
+    // 6 CNC radial spider struts
+    for (let i = 0; i < 6; i++) {
+      const strut = new THREE.Mesh(new THREE.BoxGeometry(0.05, 1.82, 0.045), housingMat);
+      strut.position.z = 0.27;
+      strut.rotation.z = (i * Math.PI) / 3;
+      layerEarcup.add(strut);
+    }
+    rootAssembly.add(layerEarcup);
+
+    // LAYER 2: Inner 50mm Titanium Driver Cone & Elastomer Surround
+    const layerDriver = new THREE.Group();
+    const surroundTorus = new THREE.Mesh(new THREE.TorusGeometry(1.48, 0.12, 28, 72), darkCarbonMat);
+    layerDriver.add(surroundTorus);
+
+    // Profiled Titanium Cone using LatheGeometry
+    const conePoints = [
+      new THREE.Vector2(0.0, 0.32),
+      new THREE.Vector2(0.32, 0.28),
+      new THREE.Vector2(0.48, 0.14),
+      new THREE.Vector2(1.42, -0.12),
+      new THREE.Vector2(1.48, -0.02)
+    ];
+    const coneGeo = new THREE.LatheGeometry(conePoints, 64);
+    coneGeo.rotateX(Math.PI / 2);
+    const coneMesh = new THREE.Mesh(coneGeo, titaniumConeMat);
+    layerDriver.add(coneMesh);
+
+    const basketRing = new THREE.Mesh(new THREE.TorusGeometry(1.58, 0.05, 20, 64), accentBezelMat);
+    layerDriver.add(basketRing);
+    rootAssembly.add(layerDriver);
+
+    // LAYER 3: Copper / Signal Vermilion Voice Coil Torus & Radial Neodymium Magnet Array
+    const layerCoil = new THREE.Group();
+    const voiceCoilTorus = new THREE.Mesh(new THREE.TorusGeometry(0.88, 0.14, 32, 72), coilMat);
+    layerCoil.add(voiceCoilTorus);
+
+    const secondaryWinding = new THREE.Mesh(new THREE.TorusGeometry(0.88, 0.165, 16, 48), new THREE.MeshStandardMaterial({
+      color: 0xfb923c,
+      metalness: 0.9,
+      roughness: 0.2,
+      wireframe: true
+    }));
+    layerCoil.add(secondaryWinding);
+
+    // 12 Precision Neodymium Stator Magnets arranged radially
+    for (let i = 0; i < 12; i++) {
+      const angle = (i / 12) * Math.PI * 2;
+      const mag = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.36, 0.24), accentBezelMat);
+      mag.position.set(Math.cos(angle) * 1.28, Math.sin(angle) * 1.28, -0.05);
+      mag.rotation.z = angle;
+      layerCoil.add(mag);
+    }
+    rootAssembly.add(layerCoil);
+
+    // LAYER 4: Neural DSP Core Polyhedron & Acoustic Rear Chamber
+    const layerNeural = new THREE.Group();
+    const corePoly = new THREE.Mesh(new THREE.IcosahedronGeometry(0.56, 1), neuralCoreMat);
+    layerNeural.add(corePoly);
+
+    const coreWire = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(0.68, 1),
+      new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true, transparent: true, opacity: 0.4 })
+    );
+    layerNeural.add(coreWire);
+
+    const pcbHalo = new THREE.Mesh(new THREE.TorusGeometry(1.18, 0.035, 20, 64), neuralCoreMat);
+    pcbHalo.position.z = -0.22;
+    layerNeural.add(pcbHalo);
+
+    const rearBackplateGeo = new THREE.CylinderGeometry(1.52, 1.28, 0.38, 64);
+    rearBackplateGeo.rotateX(Math.PI / 2);
+    const rearBackplate = new THREE.Mesh(rearBackplateGeo, housingMat);
+    rearBackplate.position.z = -0.58;
+    layerNeural.add(rearBackplate);
+    rootAssembly.add(layerNeural);
+
+    // Subtle floating studio dust particles
+    const dustCount = 120;
+    const dustPos = new Float32Array(dustCount * 3);
+    for (let i = 0; i < dustCount; i++) {
+      dustPos[i * 3] = (Math.random() - 0.5) * 12;
+      dustPos[i * 3 + 1] = (Math.random() - 0.5) * 8;
+      dustPos[i * 3 + 2] = (Math.random() - 0.5) * 8;
+    }
+    const dustGeo = new THREE.BufferGeometry();
+    dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+    const dustMat = new THREE.PointsMaterial({ color: 0x818cf8, size: 0.035, transparent: true, opacity: 0.45 });
+    scene.add(new THREE.Points(dustGeo, dustMat));
+
+    // Resize Handling
+    function resizeStage() {
+      const w = stageWrap.clientWidth;
+      const h = stageWrap.clientHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize', resizeStage);
+    resizeStage();
+
+    // State & Controls
+    let targetExplode = 0.28;
+    let currentExplode = 0.28;
+    let autoSpin = true;
+    let isDragging = false;
+    let prevPointer = { x: 0, y: 0 };
+    let rotVel = { x: 0, y: 0 };
+    let targetZoom = 8.2;
+    let audioPlaying = false;
+
+    const explodeSlider = document.getElementById('explodeSlider');
+    const explodeReadout = document.getElementById('explodeReadout');
+    const presetChips = document.querySelectorAll('.preset-chip');
+    const layerBadges = document.querySelectorAll('.layer-badge');
+
+    function updateExplodeUI(valInt) {
+      targetExplode = valInt / 100;
+      explodeSlider.value = valInt;
+      let label = 'Assembled';
+      if (valInt > 85) label = 'Exploded';
+      else if (valInt > 45) label = 'Array Split';
+      else if (valInt > 5) label = 'Cutaway';
+      explodeReadout.textContent = `${valInt}% ${label}`;
+
+      presetChips.forEach(chip => {
+        chip.classList.toggle('active', Number(chip.dataset.explode) === valInt);
+      });
+
+      layerBadges.forEach(badge => {
+        badge.classList.toggle('highlighted', valInt >= 25);
+      });
+    }
+
+    explodeSlider.addEventListener('input', (e) => {
+      updateExplodeUI(Number(e.target.value));
+    });
+
+    presetChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        updateExplodeUI(Number(chip.dataset.explode));
+      });
+    });
+    updateExplodeUI(28);
+
+    // 4 PBR Finish Swatches
+    const FINISH_PRESETS = {
+      obsidian: {
+        name: 'Obsidian Matte',
+        housing: 0x151821,
+        metalness: 0.72,
+        roughness: 0.32,
+        bezel: 0x334155,
+        rim: 0x38bdf8
+      },
+      titanium: {
+        name: 'Brushed Titanium',
+        housing: 0xcbd5e1,
+        metalness: 0.94,
+        roughness: 0.19,
+        bezel: 0xf8fafc,
+        rim: 0x93c5fd
+      },
+      cobalt: {
+        name: 'Cyber Cobalt',
+        housing: 0x1d4ed8,
+        metalness: 0.86,
+        roughness: 0.22,
+        bezel: 0x60a5fa,
+        rim: 0x818cf8
+      },
+      vermilion: {
+        name: 'Signal Vermilion',
+        housing: 0xbe123c,
+        metalness: 0.82,
+        roughness: 0.24,
+        bezel: 0xfda4af,
+        rim: 0xf43f5e
+      }
+    };
+
+    let activeFinishName = 'Obsidian Matte';
+    const swatchBtns = document.querySelectorAll('.swatch-btn');
+    const finishReadout = document.getElementById('finishReadout');
+
+    swatchBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.finish;
+        const p = FINISH_PRESETS[key];
+        if (!p) return;
+        swatchBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFinishName = p.name;
+        finishReadout.textContent = p.name;
+
+        housingMat.color.setHex(p.housing);
+        housingMat.metalness = p.metalness;
+        housingMat.roughness = p.roughness;
+        accentBezelMat.color.setHex(p.bezel);
+        cyanRim.color.setHex(p.rim);
+      });
+    });
+
+    // Pointer Drag-to-Orbit 360°
+    const orbitHudCoords = document.getElementById('orbitHudCoords');
+    canvas.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      prevPointer = { x: e.clientX, y: e.clientY };
+      canvas.setPointerCapture(e.pointerId);
+    });
+
+    canvas.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - prevPointer.x;
+      const dy = e.clientY - prevPointer.y;
+      prevPointer = { x: e.clientX, y: e.clientY };
+      rotVel.y = dx * 0.0075;
+      rotVel.x = dy * 0.0065;
+      rootAssembly.rotation.y += rotVel.y;
+      rootAssembly.rotation.x = Math.max(-1.25, Math.min(1.25, rootAssembly.rotation.x + rotVel.x));
+    });
+
+    const endDrag = () => { isDragging = false; };
+    canvas.addEventListener('pointerup', endDrag);
+    canvas.addEventListener('pointercancel', endDrag);
+
+    canvas.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      targetZoom = Math.max(5.5, Math.min(11.5, targetZoom + e.deltaY * 0.004));
+    }, { passive: false });
+
+    const autoRotateBtn = document.getElementById('autoRotateBtn');
+    autoRotateBtn.addEventListener('click', () => {
+      autoSpin = !autoSpin;
+      autoRotateBtn.classList.toggle('active', autoSpin);
+    });
+
+    document.getElementById('resetCamBtn').addEventListener('click', () => {
+      rootAssembly.rotation.set(0.22, 0.42, 0);
+      targetZoom = 8.2;
+      rotVel = { x: 0, y: 0 };
+    });
+
+    // Web Audio API Ambient Acoustic Harmonic Test
+    let audioCtx = null;
+    let activeNodes = [];
+    let audioTimer = null;
+    const acousticTestBtn = document.getElementById('acousticTestBtn');
+    const navAudioBtn = document.getElementById('navAudioBtn');
+    const audioBtnLabel = document.getElementById('audioBtnLabel');
+    const eqBars = document.querySelectorAll('.eq-bar');
+
+    function stopAmbientTest() {
+      audioPlaying = false;
+      acousticTestBtn.classList.remove('playing');
+      audioBtnLabel.textContent = 'Web Audio Ambient Harmonic Test';
+      eqBars.forEach(b => { b.style.height = '4px'; });
+      if (audioTimer) clearTimeout(audioTimer);
+      activeNodes.forEach(n => {
+        try { n.stop && n.stop(); } catch (_) {}
+      });
+      activeNodes = [];
+    }
+
+    function triggerAmbientTest() {
+      if (audioPlaying) {
+        stopAmbientTest();
+        return;
+      }
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+      if (!audioCtx) audioCtx = new AudioContextClass();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      audioPlaying = true;
+      acousticTestBtn.classList.add('playing');
+      audioBtnLabel.textContent = 'Playing Spatial Fmaj9 Reference Chord...';
+
+      const now = audioCtx.currentTime;
+      const masterGain = audioCtx.createGain();
+      masterGain.gain.setValueAtTime(0.0001, now);
+      masterGain.gain.exponentialRampToValueAtTime(0.18, now + 0.45);
+      masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 4.4);
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(650, now);
+      filter.frequency.exponentialRampToValueAtTime(2400, now + 1.8);
+      filter.frequency.exponentialRampToValueAtTime(780, now + 4.2);
+
+      filter.connect(masterGain);
+      masterGain.connect(audioCtx.destination);
+
+      // Warm Fmaj9 spatial chord frequencies
+      const freqs = [174.61, 220.00, 261.63, 329.63, 392.00];
+      freqs.forEach((f, idx) => {
+        const osc = audioCtx.createOscillator();
+        osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+        osc.frequency.setValueAtTime(f, now);
+        osc.detune.setValueAtTime((idx - 2) * 4.5, now);
+        osc.connect(filter);
+        osc.start(now);
+        osc.stop(now + 4.5);
+        activeNodes.push(osc);
+      });
+
+      audioTimer = setTimeout(() => {
+        stopAmbientTest();
+      }, 4500);
+    }
+
+    acousticTestBtn.addEventListener('click', triggerAmbientTest);
+    navAudioBtn.addEventListener('click', triggerAmbientTest);
+
+    // Interactive DSP Frequency Curve Tabs
+    const CURVES = {
+      reference: {
+        stroke: 'M0,78 C90,74 170,74 260,75 C350,76 430,62 560,72',
+        area: 'M0,78 C90,74 170,74 260,75 C350,76 430,62 560,72 L560,150 L0,150 Z'
+      },
+      warm: {
+        stroke: 'M0,54 C110,48 190,72 280,78 C370,84 450,82 560,92',
+        area: 'M0,54 C110,48 190,72 280,78 C370,84 450,82 560,92 L560,150 L0,150 Z'
+      },
+      spatial: {
+        stroke: 'M0,62 C95,56 185,84 275,80 C365,74 445,44 560,56',
+        area: 'M0,62 C95,56 185,84 275,80 C365,74 445,44 560,56 L560,150 L0,150 Z'
+      }
+    };
+
+    document.querySelectorAll('.dsp-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.dsp-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const c = CURVES[tab.dataset.curve];
+        document.getElementById('eqStrokePath').setAttribute('d', c.stroke);
+        document.getElementById('eqAreaPath').setAttribute('d', c.area);
+      });
+    });
+
+    // Reserve Toast
+    const reserveToast = document.getElementById('reserveToast');
+    document.getElementById('reserveBtn').addEventListener('click', () => {
+      document.getElementById('reserveDetail').textContent = `NEXUS-01 (${activeFinishName}) studio allocation locked.`;
+      reserveToast.classList.add('visible');
+      setTimeout(() => reserveToast.classList.remove('visible'), 4200);
+    });
+
+    // Animation Loop
+    const clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      const t = clock.getElapsedTime();
+
+      currentExplode += (targetExplode - currentExplode) * 0.09;
+      camera.position.z += (targetZoom - camera.position.z) * 0.1;
+
+      // Separate the 4 hardware layers smoothly along Z
+      const span = currentExplode * 2.15;
+      const acousticVibration = audioPlaying ? Math.sin(t * 46) * 0.045 : 0;
+
+      layerEarcup.position.z = 0.55 + span * 1.15;
+      layerDriver.position.z = 0.15 + span * 0.38 + acousticVibration;
+      layerCoil.position.z = -0.25 - span * 0.42;
+      layerNeural.position.z = -0.68 - span * 1.18;
+
+      // Subtle neural core & coil rotation
+      corePoly.rotation.y = t * 0.8;
+      corePoly.rotation.x = t * 0.45;
+      coreWire.rotation.y = -t * 0.55;
+      secondaryWinding.rotation.z = t * 0.25;
+
+      if (audioPlaying) {
+        eqBars.forEach((bar, i) => {
+          const h = 4 + Math.abs(Math.sin(t * 10 + i * 1.3)) * 12;
+          bar.style.height = `${h.toFixed(1)}px`;
+        });
+        neuralCoreMat.emissiveIntensity = 0.8 + Math.sin(t * 12) * 0.35;
+      } else {
+        neuralCoreMat.emissiveIntensity = 0.55;
+      }
+
+      if (!isDragging) {
+        rotVel.x *= 0.92;
+        rotVel.y *= 0.92;
+        rootAssembly.rotation.y += rotVel.y + (autoSpin ? 0.0042 : 0);
+        rootAssembly.rotation.x += rotVel.x;
+      }
+
+      const az = Math.round(((rootAssembly.rotation.y * 180) / Math.PI) % 360);
+      const el = Math.round((rootAssembly.rotation.x * 180) / Math.PI);
+      orbitHudCoords.textContent = `DRAG 360° ORBIT · AZIMUTH ${az}° · ELEV ${el}°`;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>

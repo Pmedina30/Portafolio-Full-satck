@@ -1,45 +1,45 @@
 {% extends "base.html" %}
 
-{% block title %}Pedro Medina — Full-Stack, FinTech & 3D WebGL Portfolio Studio{% endblock %}
+{% block title %}Pedro Medina — Flagship Product, FinTech & 3D Engineering Studio{% endblock %}
 
 {% block content %}
-<!-- HERO SECTION (Dovetail / Revolut / Wise / Lightspark Composition) -->
-<section class="hero-section">
+<!-- LUMINOUS HERO STAGE (Lightspark + Revolut + Dovetail Synthesis) -->
+<section class="hero-section" style="position:relative; overflow:hidden;">
+  <!-- Subtle Ambient Mesh Aura -->
+  <div aria-hidden="true" style="position:absolute; top:-120px; right:5%; width:540px; height:540px; border-radius:50%; background:radial-gradient(circle, rgba(59,130,246,0.18) 0%, rgba(139,92,246,0.10) 45%, transparent 72%); filter:blur(40px); pointer-events:none;"></div>
+
   <div class="container">
     <div class="hero-top-pill">
       <span class="status-dot"></span>
-      <span>PRODUCTION PYTHON WORKBENCH · 13 INTERACTIVE APPS READY</span>
+      <span>PRODUCTION PYTHON WORKBENCH · 13 LIVE FLAGSHIP APPS ONLINE</span>
     </div>
 
     <div class="hero-grid">
       <!-- Left 7 Columns -->
       <div class="hero-copy">
         <h1 class="hero-title">
-          Financial, analytical &amp; spatial software built for <span class="serif-italic">real</span> scale.
+          Products engineered to look &amp; perform like <span class="serif-italic">unicorn</span> software.
         </h1>
         <p class="hero-subtitle">
-          Explore 13 production-grade applications across FinTech, Cross-Border E-Commerce, Executive BI, Point-of-Sale, and 3D WebGL—complete with live interactive previews right in your browser.
+          13 bespoke full-stack applications—crafted with the visual precision of Revolut, Wise, Mixpanel, Dovetail, and Lightspark. Click any card below to interact with the live running app inside an instant studio frame or open it full-screen.
         </p>
 
         <div class="hero-cta-group">
           <a href="#apps" class="btn btn-primary btn-lg">
-            <span>Explore 13 App Previews</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <span>Inspect All 13 Live Apps</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
             </svg>
           </a>
-          {% if current_user %}
-            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-lg">Open Executive Console</a>
-          {% else %}
-            <a href="{{ url_for('login') }}" class="btn btn-secondary btn-lg">Authenticate Session</a>
-          {% endif %}
+          <a href="http://127.0.0.1:5179" target="_blank" rel="noopener" class="btn btn-secondary btn-lg">Open FinPulse (Revolut) ↗</a>
+          <a href="http://127.0.0.1:3000" target="_blank" rel="noopener" class="btn btn-secondary btn-lg">Open TiendaRD (Wise) ↗</a>
         </div>
 
         <!-- 4 Tabular KPI Cards -->
         <div class="hero-kpi-grid">
           <div class="kpi-card">
             <div class="kpi-value tabular-nums">13</div>
-            <div class="kpi-label">Production Apps</div>
+            <div class="kpi-label">Live Running Ports</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-value tabular-nums">99.2%</div>
@@ -51,32 +51,32 @@
           </div>
           <div class="kpi-card">
             <div class="kpi-value tabular-nums">60 FPS</div>
-            <div class="kpi-label">WebGL 3D Engine</div>
+            <div class="kpi-label">Three.js WebGL PBR</div>
           </div>
         </div>
       </div>
 
-      <!-- Right 5 Columns: 3D Spatial SaaS Stage -->
-      <div class="hero-stage-col">
+      <!-- Right 5 Columns: 3D Spatial SaaS Stage + Floating Frosted Pills -->
+      <div class="hero-stage-col" style="position:relative;">
         <div class="stage-card">
           <div class="stage-header">
             <div class="window-dots" aria-hidden="true">
-              <span class="window-dot"></span>
-              <span class="window-dot"></span>
-              <span class="window-dot"></span>
+              <span class="window-dot" style="background:#EF4444;"></span>
+              <span class="window-dot" style="background:#F59E0B;"></span>
+              <span class="window-dot" style="background:#10B981;"></span>
             </div>
-            <span class="mono-label">SPATIAL ENGINE · THREE.JS</span>
-            <span class="preview-pill-ok">INTERACTIVE</span>
+            <span class="mono-label">THREE.JS R170 · SPATIAL CORE</span>
+            <span class="preview-pill-ok">60 FPS</span>
           </div>
 
           <div class="viewport-3d-wrap">
             <div id="arch-3d-canvas" class="viewport-3d" role="img" aria-label="Interactive 3D architectural sculpture"></div>
             <div class="floating-telemetry-card">
               <div>
-                <div style="font-size:0.75rem; font-weight:600;">360° Orbital Inspection</div>
-                <div class="mono-label" style="font-size:0.6875rem;">Drag to rotate · ACES Filmic</div>
+                <div style="font-size:0.75rem; font-weight:700;">Interactive 3D Sculpture</div>
+                <div class="mono-label" style="font-size:0.6875rem;">Drag 360° · Switch geometry below</div>
               </div>
-              <span class="mono-label tabular-nums">18°29'N 69°53'W</span>
+              <span class="preview-pill-brand tabular-nums">WEBGL 2.0</span>
             </div>
           </div>
 
@@ -91,27 +91,27 @@
   </div>
 </section>
 
-<!-- PORTFOLIO APPS SHOWCASE WITH EMBEDDED LIVE PREVIEWS -->
+<!-- 13 BESPOKE APPLICATION GALLERY -->
 <section class="section-block" id="apps">
   <div class="container">
     <div class="section-header-row">
       <div>
-        <span class="mono-label">PORTFOLIO ECOSYSTEM · CLICK ANY CARD FOR LIVE WORKSPACE</span>
-        <h2 class="section-title">Interactive application previews</h2>
+        <span class="mono-label" style="color:var(--accent-brand); font-weight:700;">LIVE MULTI-SERVER ECOSYSTEM · PORTS 3000–5184</span>
+        <h2 class="section-title">13 Bespoke Flagship Applications</h2>
       </div>
       <p class="section-desc">
-        Every card below displays a real-time visual UI summary and opens an interactive product sandbox when selected.
+        Each application has its own custom art direction—click any card to test the live running server inside an interactive Desktop/Mobile preview window.
       </p>
     </div>
 
     <!-- Filter Pills & Search Input -->
     <div class="portfolio-toolbar">
       <div class="filter-pills" role="tablist" aria-label="Filter applications by category">
-        <button type="button" class="filter-pill active" data-cat-filter="all">All Apps (13)</button>
-        <button type="button" class="filter-pill" data-cat-filter="fintech">FinTech &amp; Commerce</button>
-        <button type="button" class="filter-pill" data-cat-filter="analytics">Analytics &amp; Ops</button>
-        <button type="button" class="filter-pill" data-cat-filter="studio3d">3D &amp; Publishing</button>
-        <button type="button" class="filter-pill" data-cat-filter="infra">Healthcare &amp; Infra</button>
+        <button type="button" class="filter-pill active" data-cat-filter="all">All Flagships (13)</button>
+        <button type="button" class="filter-pill" data-cat-filter="fintech">FinTech, POS &amp; Commerce</button>
+        <button type="button" class="filter-pill" data-cat-filter="analytics">Analytics, BI &amp; Fleet</button>
+        <button type="button" class="filter-pill" data-cat-filter="studio3d">3D WebGL &amp; Publishing</button>
+        <button type="button" class="filter-pill" data-cat-filter="infra">Concierge Healthcare</button>
       </div>
 
       <div class="search-box">
@@ -119,11 +119,11 @@
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.3-4.3"></path>
         </svg>
-        <input type="search" id="appSearchInput" class="search-input" placeholder="Search apps, stack, or domain..." aria-label="Search portfolio applications" />
+        <input type="search" id="appSearchInput" class="search-input" placeholder="Search Revolut, Wise, Mixpanel, 3D, POS..." aria-label="Search portfolio applications" />
       </div>
     </div>
 
-    <!-- 13-App Bento Grid (Populated & Interactive via portfolioDemos.js) -->
+    <!-- 13-App Gallery Grid -->
     <div id="appsShowcaseGrid" class="apps-showcase-grid"></div>
 
     <!-- Accessible Empty State -->
@@ -134,7 +134,7 @@
       </svg>
       <h3 style="font-family:var(--font-display); font-size:1.125rem;">No matching applications</h3>
       <p style="font-size:0.875rem; color:var(--text-muted); max-width:40ch;">
-        No portfolio systems matched your current filter or search query. Reset filters to view all 13 applications.
+        No portfolio systems matched your current filter or search query.
       </p>
       <button type="button" id="resetFiltersBtn" class="btn btn-secondary btn-sm">Reset Filters</button>
     </div>
@@ -150,7 +150,7 @@
         <h2 class="section-title">Production-first architecture</h2>
       </div>
       <p class="section-desc">
-        Built with strict separation of concerns, cryptographic security, accessible contrast, and sub-12ms responsiveness.
+        Built with strict separation of concerns, cryptographic security, WCAG AAA/AA contrast, and sub-12ms responsiveness.
       </p>
     </div>
 
@@ -202,45 +202,45 @@
   </div>
 </section>
 
-<!-- INTERACTIVE APP PREVIEW STUDIO MODAL -->
+<!-- FULL LIVE IFRAME STUDIO PREVIEW MODAL (1200px Desktop + 390px Mobile Switcher) -->
 <div id="system-demo-modal" class="demo-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="demo-modal-title">
-  <div class="demo-modal-window">
+  <div class="demo-modal-window" style="max-width: 1220px; height: 88vh;">
     <div class="demo-browser-bar">
-      <div class="window-dots" aria-hidden="true">
-        <span class="window-dot"></span>
-        <span class="window-dot"></span>
-        <span class="window-dot"></span>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="window-dots" aria-hidden="true">
+          <span class="window-dot" style="background:#EF4444;"></span>
+          <span class="window-dot" style="background:#F59E0B;"></span>
+          <span class="window-dot" style="background:#10B981;"></span>
+        </div>
+        <div>
+          <span id="demo-modal-title" style="font-family:var(--font-display); font-weight:700; font-size:0.9rem;">App</span>
+          <span id="demo-modal-badge" class="mono-label" style="margin-left:8px; font-size:0.68rem;">EDITION</span>
+        </div>
       </div>
+
       <div class="demo-url-pill">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-        </svg>
-        <span id="demo-url-text">https://preview.pedromedina.dev</span>
+        <span style="width:7px; height:7px; border-radius:50%; background:#10B981;"></span>
+        <span id="demo-url-text">http://127.0.0.1:3000</span>
       </div>
-      <button type="button" id="demo-modal-close" class="icon-btn" style="width:36px; height:36px;" aria-label="Close interactive preview">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-      </button>
+
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="display:flex; gap:4px; background:var(--bg-canvas); padding:3px; border-radius:999px; border:1px solid var(--border-subtle);">
+          <button type="button" class="stage-mode-btn active" data-vp-size="desktop" style="min-height:28px; padding:0 10px; border-radius:999px; border:none;">Desktop</button>
+          <button type="button" class="stage-mode-btn" data-vp-size="mobile" style="min-height:28px; padding:0 10px; border-radius:999px; border:none;">Mobile 390px</button>
+        </div>
+        <a id="demo-open-live-link" href="http://127.0.0.1:3000" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="min-height:34px;">Open Full Tab ↗</a>
+        <button type="button" id="demo-modal-close" class="icon-btn" style="width:34px; height:34px;" aria-label="Close preview">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
     </div>
 
-    <div class="demo-modal-scroll">
-      <div class="demo-head-split">
-        <div>
-          <span id="demo-modal-badge" class="mono-label">APP-01</span>
-          <h3 id="demo-modal-title" style="font-family:var(--font-display); font-size:1.5rem; font-weight:700; letter-spacing:-0.025em; margin-top:4px;">Application</h3>
-          <p id="demo-modal-desc" style="font-size:0.9375rem; color:var(--text-muted); margin-top:6px; max-width:60ch;"></p>
-        </div>
-        <div style="display:flex; flex-wrap:wrap; gap:8px;">
-          <a id="demo-open-live-link" href="http://127.0.0.1:5000" target="_blank" rel="noopener" class="btn btn-primary btn-sm">Open Full App ↗</a>
-          <button type="button" id="demo-copy-launcher" class="btn btn-secondary btn-sm">Copy Launcher</button>
-        </div>
+    <div style="flex:1; background:var(--bg-preview); display:flex; justify-content:center; overflow:hidden; padding:0;">
+      <div id="demo-iframe-container" style="width:100%; height:100%; transition:max-width 220ms var(--ease-out); background:#fff; box-shadow:0 0 40px rgba(0,0,0,0.35);">
+        <iframe id="demo-live-iframe" title="Live Application Preview" src="about:blank" style="width:100%; height:100%; border:none; display:block;"></iframe>
       </div>
-
-      <div id="demo-modal-stack" class="stack-tags"></div>
-
-      <!-- Interactive Live Sandbox Mount -->
-      <div id="demo-modal-workspace" class="demo-workspace-frame"></div>
     </div>
   </div>
 </div>

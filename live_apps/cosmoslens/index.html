@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CosmosLens — Deep-Space Orbital Observatory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-void: #050507;
+      --bg-panel: rgba(10, 10, 14, 0.78);
+      --gold-amber: #d4a359;
+      --gold-bright: #f59e0b;
+      --gold-line: rgba(212, 163, 89, 0.34);
+      --white-line: rgba(255, 255, 255, 0.11);
+      --white-faint: rgba(255, 255, 255, 0.06);
+      --text-white: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --font-serif: 'Instrument Serif', serif;
+      --font-display: 'Plus Jakarta Sans', sans-serif;
+      --font-sans: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg-void);
+      color: var(--text-white);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-void);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Arrakis Fine 1px Orbital Arc Diagram Overlay */
+    .orbital-svg-backdrop {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Navigation Bar */
+    header.arrakis-nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      border-bottom: 1px solid var(--white-line);
+      background: rgba(5, 5, 7, 0.8);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav-wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0.95rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .obs-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: var(--text-white);
+    }
+
+    .obs-reticle {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-amber);
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .obs-reticle::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1px dashed rgba(212, 163, 89, 0.35);
+    }
+
+    .obs-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.86rem;
+    }
+
+    .obs-sub {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--gold-amber);
+      letter-spacing: 0.1em;
+    }
+
+    .nav-telemetry {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .nav-telemetry span strong {
+      color: var(--gold-amber);
+      font-weight: 500;
+    }
+
+    .nav-cta {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--gold-line);
+      background: rgba(212, 163, 89, 0.08);
+      color: var(--gold-amber);
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .nav-cta:hover {
+      background: rgba(212, 163, 89, 0.2);
+      border-color: var(--gold-amber);
+      color: #fff;
+    }
+
+    /* Observatory Main Stage */
+    main {
+      position: relative;
+      z-index: 5;
+    }
+
+    .observatory-grid {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 1.75rem 2rem 3rem;
+      display: grid;
+      grid-template-columns: 390px 1fr 340px;
+      gap: 1.5rem;
+      align-items: stretch;
+      min-height: calc(100vh - 76px);
+    }
+
+    /* Left Column: Arrakis Editorial Manifesto + Target Presets */
+    .editorial-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.5rem;
+      border-right: 1px solid var(--white-faint);
+      padding-right: 1.5rem;
+    }
+
+    .sector-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-amber);
+    }
+
+    .kicker-line {
+      width: 26px;
+      height: 1px;
+      background: var(--gold-amber);
+    }
+
+    .editorial-h1 {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-size: clamp(2.6rem, 3.8vw, 3.85rem);
+      line-height: 0.98;
+      letter-spacing: -0.02em;
+      margin-top: 0.8rem;
+    }
+
+    .editorial-h1 em {
+      font-style: italic;
+      color: var(--gold-amber);
+    }
+
+    .editorial-copy {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+
+    /* Preset Selector Stack */
+    .preset-box {
+      background: var(--bg-panel);
+      border: 1px solid var(--white-line);
+      border-radius: 14px;
+      padding: 1.2rem;
+      backdrop-filter: blur(14px);
+    }
+
+    .box-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .target-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .target-btn {
+      width: 100%;
+      text-align: left;
+      padding: 0.8rem 0.95rem;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--white-faint);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.22s ease;
+    }
+
+    .target-btn:hover {
+      border-color: rgba(212, 163, 89, 0.4);
+      color: var(--text-white);
+    }
+
+    .target-btn.active {
+      background: linear-gradient(90deg, rgba(212, 163, 89, 0.15), rgba(212, 163, 89, 0.03));
+      border-color: var(--gold-amber);
+      color: var(--text-white);
+    }
+
+    .target-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.88rem;
+      display: block;
+    }
+
+    .target-class {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      margin-top: 0.15rem;
+      display: block;
+    }
+
+    .target-btn.active .target-class {
+      color: var(--gold-amber);
+    }
+
+    .target-dist {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--gold-amber);
+    }
+
+    /* Orbital Velocity Slider */
+    .velocity-wrap {
+      margin-top: 1.1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--white-faint);
+    }
+
+    .gold-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.18), var(--gold-amber));
+      border-radius: 999px;
+      outline: none;
+      margin-top: 0.55rem;
+      cursor: pointer;
+    }
+
+    .gold-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--gold-amber);
+      border: 2px solid #050507;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.75);
+      cursor: grab;
+    }
+
+    /* Center Column: 3D Exoplanet & Orbital Ring Stage */
+    .planet-viewport {
+      position: relative;
+      min-height: 580px;
+      border-radius: 20px;
+      border: 1px solid var(--white-line);
+      background: radial-gradient(circle at 50% 50%, rgba(212, 163, 89, 0.06) 0%, rgba(5, 5, 7, 0.94) 68%);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    #cosmos-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+      z-index: 2;
+    }
+
+    #cosmos-canvas:active {
+      cursor: grabbing;
+    }
+
+    /* Precision Corner Crosshairs & Arc Overlay inside Viewport */
+    .viewport-reticle-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    .vp-bar-top,
+    .vp-bar-bottom {
+      position: relative;
+      z-index: 5;
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .vp-chip {
+      pointer-events: auto;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--white-line);
+      background: rgba(5, 5, 7, 0.75);
+      backdrop-filter: blur(8px);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .vp-btn {
+      pointer-events: auto;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--gold-line);
+      background: rgba(5, 5, 7, 0.8);
+      color: var(--gold-amber);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      cursor: pointer;
+    }
+
+    .vp-btn:hover {
+      background: rgba(212, 163, 89, 0.16);
+    }
+
+    /* Right Column: Live Coordinate & Spectral Readout HUD */
+    .hud-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.25rem;
+      border-left: 1px solid var(--white-faint);
+      padding-left: 1.5rem;
+    }
+
+    .hud-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--white-line);
+      border-radius: 14px;
+      padding: 1.15rem;
+      backdrop-filter: blur(14px);
+    }
+
+    .coord-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .coord-cell {
+      padding: 0.65rem 0.75rem;
+      border: 1px solid var(--white-faint);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    .coord-key {
+      font-family: var(--font-mono);
+      font-size: 0.63rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .coord-val {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--text-white);
+      margin-top: 0.25rem;
+    }
+
+    /* Spectral Atmospheric Bars */
+    .spectra-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.68rem;
+      margin-top: 0.65rem;
+    }
+
+    .spectra-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.28rem;
+    }
+
+    .spectra-meta {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+    }
+
+    .spectra-track {
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .spectra-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-amber), #fef08a);
+      border-radius: 999px;
+      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .habitability-meter {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding-top: 0.8rem;
+      margin-top: 0.85rem;
+      border-top: 1px solid var(--white-faint);
+    }
+
+    .esi-score {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      color: var(--gold-amber);
+      line-height: 1;
+    }
+
+    /* Lower Arrakis Deep-Space Array Band */
+    .array-band {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem 4rem;
+      border-top: 1px solid var(--white-line);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .array-stat {
+      padding: 1.25rem;
+      border-left: 1px solid var(--gold-line);
+      background: linear-gradient(90deg, rgba(212, 163, 89, 0.04), transparent);
+    }
+
+    .array-num {
+      font-family: var(--font-serif);
+      font-size: 2.25rem;
+      color: var(--text-white);
+    }
+
+    .array-title {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold-amber);
+      margin-top: 0.25rem;
+    }
+
+    .array-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.45rem;
+      line-height: 1.55;
+    }
+
+    footer {
+      border-top: 1px solid var(--white-faint);
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    @media (max-width: 1180px) {
+      .observatory-grid {
+        grid-template-columns: 1fr;
+      }
+      .editorial-col,
+      .hud-col {
+        border: none;
+        padding: 0;
+      }
+      .planet-viewport {
+        min-height: 500px;
+        order: -1;
+      }
+      .array-band {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .nav-telemetry {
+        display: none;
+      }
+      .observatory-grid {
+        padding: 1.25rem 1rem 2rem;
+      }
+      .planet-viewport {
+        min-height: 400px;
+      }
+      .array-band {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Arrakis Precision 1px Golden-Amber / White Orbital Arc Diagram Backdrop -->
+  <svg class="orbital-svg-backdrop" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" fill="none">
+    <circle cx="800" cy="500" r="460" stroke="rgba(255,255,255,0.05)" stroke-width="1" />
+    <circle cx="800" cy="500" r="620" stroke="rgba(212,163,89,0.14)" stroke-width="1" stroke-dasharray="6 10" />
+    <ellipse cx="800" cy="500" rx="760" ry="290" transform="rotate(-18 800 500)" stroke="rgba(212,163,89,0.16)" stroke-width="1" />
+    <ellipse cx="800" cy="500" rx="690" ry="220" transform="rotate(24 800 500)" stroke="rgba(255,255,255,0.06)" stroke-width="1" />
+    <line x1="0" y1="500" x2="1600" y2="500" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+    <line x1="800" y1="0" x2="800" y2="1000" stroke="rgba(255,255,255,0.03)" stroke-width="1" />
+  </svg>
+
+  <header class="arrakis-nav">
+    <div class="nav-wrap">
+      <a href="#" class="obs-brand">
+        <div class="obs-reticle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d4a359" stroke-width="1.6">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+          </svg>
+        </div>
+        <div>
+          <div class="obs-title">CosmosLens</div>
+          <div class="obs-sub tabular">DEEP-SPACE INTERFEROMETRY</div>
+        </div>
+      </a>
+
+      <div class="nav-telemetry tabular">
+        <span>EPOCH <strong>J2026.84</strong></span>
+        <span>BASELINE <strong>1.48M KM L2</strong></span>
+        <span>SPECTROMETER <strong>NIRSPEC-IV LOCKED</strong></span>
+      </div>
+
+      <a href="#array-specs" class="nav-cta">Array Telemetry</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="observatory-grid">
+      <!-- Left Editorial + Preset Controls -->
+      <div class="editorial-col">
+        <div>
+          <div class="sector-kicker">
+            <span class="kicker-line"></span>
+            <span>ORBITAL OBSERVATORY ARCHIVE</span>
+          </div>
+          <h1 class="editorial-h1">
+            Cartography of <em>distant</em> atmospheres.
+          </h1>
+          <p class="editorial-copy">
+            Direct synthetic-aperture telemetry across extrasolar horizons. Inspect real-time orbital mechanics, magnetospheric shells, and transmission spectroscopy across three priority relays.
+          </p>
+        </div>
+
+        <div class="preset-box">
+          <div class="box-label tabular">
+            <span>PRIORITY TARGET RELAYS</span>
+            <span id="activeIndexLabel">01 / 03</span>
+          </div>
+
+          <div class="target-list">
+            <button type="button" class="target-btn active" data-planet="kepler">
+              <span>
+                <span class="target-name">Kepler-186f</span>
+                <span class="target-class">TEMPERATE SILICATE EXOPLANET</span>
+              </span>
+              <span class="target-dist tabular">579.2 ly</span>
+            </button>
+
+            <button type="button" class="target-btn" data-planet="trappist">
+              <span>
+                <span class="target-name">Trappist-1e</span>
+                <span class="target-class">OCEANIC RESONANT WORLD</span>
+              </span>
+              <span class="target-dist tabular">40.66 ly</span>
+            </button>
+
+            <button type="button" class="target-btn" data-planet="solar">
+              <span>
+                <span class="target-name">Solar Relay</span>
+                <span class="target-class">HELIOSPHERIC L2 BEACON CORE</span>
+              </span>
+              <span class="target-dist tabular">0.01 AU</span>
+            </button>
+          </div>
+
+          <div class="velocity-wrap">
+            <div class="box-label tabular" style="margin-bottom:0.2rem;">
+              <span>ORBITAL PROPAGATION SPEED</span>
+              <span id="speedReadout" style="color:var(--gold-amber);">1.2x REALTIME</span>
+            </div>
+            <input type="range" min="0" max="50" value="12" class="gold-slider" id="speedSlider" aria-label="Orbital Speed" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Center 3D Exoplanet & 3-Ring System -->
+      <div class="planet-viewport">
+        <svg class="viewport-reticle-svg" viewBox="0 0 800 640" preserveAspectRatio="none" fill="none">
+          <!-- Arrakis 1px Golden-Amber Telemetry Arcs -->
+          <path d="M 32 72 L 32 32 L 72 32" stroke="rgba(212,163,89,0.55)" stroke-width="1" />
+          <path d="M 768 72 L 768 32 L 728 32" stroke="rgba(212,163,89,0.55)" stroke-width="1" />
+          <path d="M 32 568 L 32 608 L 72 608" stroke="rgba(212,163,89,0.55)" stroke-width="1" />
+          <path d="M 768 568 L 768 608 L 728 608" stroke="rgba(212,163,89,0.55)" stroke-width="1" />
+          <path d="M 150 320 A 250 250 0 0 1 650 320" stroke="rgba(212,163,89,0.22)" stroke-width="1" stroke-dasharray="3 6" />
+          <path d="M 650 320 A 250 250 0 0 1 150 320" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+        </svg>
+
+        <div class="vp-bar-top tabular">
+          <span class="vp-chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d4a359" stroke-width="2">
+              <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/>
+            </svg>
+            <span id="hudTargetTitle">TARGET: KEPLER-186F · CYGNUS SECTOR</span>
+          </span>
+          <button type="button" class="vp-btn" id="recenterBtn">RE-LOCK ZENITH</button>
+        </div>
+
+        <canvas id="cosmos-canvas"></canvas>
+
+        <div class="vp-bar-bottom tabular">
+          <span class="vp-chip" id="dragAngleReadout">DRAG 360° · INC +22.4° · ASCENDING NODE 148.2°</span>
+          <span class="vp-chip" style="color:var(--gold-amber);">3 INCLINED ORBITAL RINGS ACTIVE</span>
+        </div>
+      </div>
+
+      <!-- Right Live Telemetry & Spectral Composition HUD -->
+      <div class="hud-col">
+        <div class="hud-card">
+          <div class="box-label tabular">
+            <span>ASTROMETRIC EPHEMERIS</span>
+            <span style="color:#2dd4bf;">LOCKED</span>
+          </div>
+          <div class="coord-grid tabular">
+            <div class="coord-cell">
+              <div class="coord-key">Right Ascension</div>
+              <div class="coord-val" id="raVal">19h 54m 36.6s</div>
+            </div>
+            <div class="coord-cell">
+              <div class="coord-key">Declination</div>
+              <div class="coord-val" id="decVal">+43° 57' 18"</div>
+            </div>
+            <div class="coord-cell">
+              <div class="coord-key">Orbital Period</div>
+              <div class="coord-val" id="periodVal">129.9 Days</div>
+            </div>
+            <div class="coord-cell">
+              <div class="coord-key">Equilibrium Temp</div>
+              <div class="coord-val" id="tempVal">248 K (-25°C)</div>
+            </div>
+            <div class="coord-cell">
+              <div class="coord-key">Planetary Radius</div>
+              <div class="coord-val" id="radiusVal">1.17 R⊕</div>
+            </div>
+            <div class="coord-cell">
+              <div class="coord-key">Radial Velocity</div>
+              <div class="coord-val" id="rvVal">-31.84 km/s</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hud-card">
+          <div class="box-label tabular">
+            <span>TRANSMISSION SPECTROSCOPY</span>
+            <span>BAND 0.6–5.3 μm</span>
+          </div>
+          <div class="spectra-list tabular" id="spectraList">
+            <div class="spectra-row">
+              <div class="spectra-meta"><span>N2 · Molecular Nitrogen</span><span id="spec1Val">68.4%</span></div>
+              <div class="spectra-track"><div class="spectra-fill" id="spec1Bar" style="width:68.4%"></div></div>
+            </div>
+            <div class="spectra-row">
+              <div class="spectra-meta"><span>O2 · Diatomic Oxygen</span><span id="spec2Val">18.2%</span></div>
+              <div class="spectra-track"><div class="spectra-fill" id="spec2Bar" style="width:45%"></div></div>
+            </div>
+            <div class="spectra-row">
+              <div class="spectra-meta"><span>H2O · Stratospheric Vapor</span><span id="spec3Val">8.9%</span></div>
+              <div class="spectra-track"><div class="spectra-fill" id="spec3Bar" style="width:32%"></div></div>
+            </div>
+            <div class="spectra-row">
+              <div class="spectra-meta"><span>CO2 · Thermal Greenhouse</span><span id="spec4Val">4.5%</span></div>
+              <div class="spectra-track"><div class="spectra-fill" id="spec4Bar" style="width:20%"></div></div>
+            </div>
+          </div>
+
+          <div class="habitability-meter tabular">
+            <div>
+              <div class="coord-key">EARTH SIMILARITY INDEX</div>
+              <div style="font-size:0.78rem; color:var(--text-muted); margin-top:0.2rem;" id="biosigStatus">High Biosignature Confidence</div>
+            </div>
+            <div class="esi-score" id="esiScore">0.89</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="array-band tabular" id="array-specs">
+      <div class="array-stat">
+        <div class="array-num">18.4 mas</div>
+        <div class="array-title">Angular Resolution</div>
+        <p class="array-desc">Nulling laser interferometry suppresses host-star glare by nine orders of magnitude.</p>
+      </div>
+      <div class="array-stat">
+        <div class="array-num">4,096 ch</div>
+        <div class="array-title">Cryogenic Bolometer</div>
+        <p class="array-desc">Sub-kelvin superconducting nanowire sensors resolve trace methane and ozone absorption lines.</p>
+      </div>
+      <div class="array-stat">
+        <div class="array-num">99.94%</div>
+        <div class="array-title">Optical Wavefront Lock</div>
+        <p class="array-desc">Picometer-class hexapod mirrors compensate solar radiation pressure across L2 halo orbits.</p>
+      </div>
+      <div class="array-stat">
+        <div class="array-num">12.6 Gbps</div>
+        <div class="array-title">Deep-Space Optical Downlink</div>
+        <p class="array-desc">Coherent 1550nm laser telemetry beamed directly to Atacama and Canary optical ground domes.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="tabular">
+    <div>COSMOSLENS ORBITAL CONSORTIUM · ATACAMA / LAGRANGE POINT L2</div>
+    <div>ARRAKIS PRECISION TELEMETRY INTERFACE · REV 9.04</div>
+  </footer>
+
+  <script type="module">
+    import * as THREE from '/vendor/three.module.min.js';
+
+    const canvas = document.getElementById('cosmos-canvas');
+    const viewport = canvas.parentElement;
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: 'high-performance'
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 200);
+    camera.position.set(0, 1.35, 7.6);
+    camera.lookAt(0, 0, 0);
+
+    // Deep-Space Solar Rim & Ambient Lighting
+    scene.add(new THREE.AmbientLight(0x94a3b8, 0.35));
+
+    const sunLight = new THREE.DirectionalLight(0xfffbeb, 3.0);
+    sunLight.position.set(6, 3.5, 5);
+    scene.add(sunLight);
+
+    const amberRim = new THREE.PointLight(0xd4a359, 3.2, 22);
+    amberRim.position.set(-6, -2.5, -4);
+    scene.add(amberRim);
+
+    // Procedural Banded Planet Texture Generator
+    function createPlanetTexture(palette) {
+      const c = document.createElement('canvas');
+      c.width = 1024;
+      c.height = 512;
+      const ctx = c.getContext('2d');
+
+      const grad = ctx.createLinearGradient(0, 0, 0, c.height);
+      palette.stops.forEach(([pos, col]) => grad.addColorStop(pos, col));
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, c.width, c.height);
+
+      // Atmospheric zonal bands & vortex eddies
+      for (let i = 0; i < 160; i++) {
+        const y = Math.random() * c.height;
+        const h = 1 + Math.random() * 8;
+        ctx.fillStyle = i % 2 === 0 ? palette.bandLight : palette.bandDark;
+        ctx.fillRect(0, y, c.width, h);
+      }
+
+      for (let s = 0; s < 28; s++) {
+        const sx = Math.random() * c.width;
+        const sy = 80 + Math.random() * (c.height - 160);
+        const rx = 18 + Math.random() * 52;
+        const ry = 6 + Math.random() * 16;
+        ctx.beginPath();
+        ctx.ellipse(sx, sy, rx, ry, 0, 0, Math.PI * 2);
+        ctx.fillStyle = palette.storm;
+        ctx.fill();
+      }
+
+      const tex = new THREE.CanvasTexture(c);
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    const PLANET_CONFIGS = {
+      kepler: {
+        index: '01 / 03',
+        hudTitle: 'TARGET: KEPLER-186F · CYGNUS SECTOR',
+        ra: '19h 54m 36.6s',
+        dec: '+43° 57\' 18"',
+        period: '129.9 Days',
+        temp: '248 K (-25°C)',
+        radius: '1.17 R⊕',
+        rv: '-31.84 km/s',
+        esi: '0.89',
+        biosig: 'High Biosignature Confidence',
+        spectra: [
+          ['N2 · Molecular Nitrogen', '68.4%', 68],
+          ['O2 · Diatomic Oxygen', '18.2%', 46],
+          ['H2O · Stratospheric Vapor', '8.9%', 34],
+          ['CO2 · Thermal Greenhouse', '4.5%', 22]
+        ],
+        shellColor: 0xd4a359,
+        sunColor: 0xffedd5,
+        camPos: [0, 1.35, 7.6],
+        palette: {
+          stops: [
+            [0.0, '#1e293b'],
+            [0.2, '#854d0e'],
+            [0.42, '#b45309'],
+            [0.52, '#0f766e'],
+            [0.72, '#92400e'],
+            [1.0, '#1e293b']
+          ],
+          bandLight: 'rgba(253, 230, 138, 0.08)',
+          bandDark: 'rgba(15, 23, 42, 0.14)',
+          storm: 'rgba(245, 158, 11, 0.16)'
+        }
+      },
+      trappist: {
+        index: '02 / 03',
+        hudTitle: 'TARGET: TRAPPIST-1E · AQUARIUS RESONANCE',
+        ra: '23h 06m 29.3s',
+        dec: '-05° 02\' 29"',
+        period: '6.10 Days',
+        temp: '251 K (-22°C)',
+        radius: '0.92 R⊕',
+        rv: '-56.12 km/s',
+        esi: '0.95',
+        biosig: 'Global Liquid Ocean Detected',
+        spectra: [
+          ['N2 · Buffer Atmosphere', '74.1%', 74],
+          ['H2O · Oceanic Cloud Deck', '15.8%', 52],
+          ['O2 · Photolytic Oxygen', '7.4%', 30],
+          ['CH4 · Trace Biogenic', '2.7%', 18]
+        ],
+        shellColor: 0x38bdf8,
+        sunColor: 0xfecdd3,
+        camPos: [0.8, 0.85, 7.1],
+        palette: {
+          stops: [
+            [0.0, '#e2e8f0'],
+            [0.18, '#0369a1'],
+            [0.45, '#0f766e'],
+            [0.58, '#1d4ed8'],
+            [0.82, '#0284c7'],
+            [1.0, '#cbd5e1']
+          ],
+          bandLight: 'rgba(224, 242, 254, 0.1)',
+          bandDark: 'rgba(12, 74, 110, 0.16)',
+          storm: 'rgba(125, 211, 252, 0.18)'
+        }
+      },
+      solar: {
+        index: '03 / 03',
+        hudTitle: 'TARGET: SOLAR RELAY · HELIOSPHERIC L2',
+        ra: '00h 00m 00.0s',
+        dec: '+00° 00\' 00"',
+        period: '365.25 Days',
+        temp: '288 K (+15°C)',
+        radius: '1.00 R⊕',
+        rv: '-0.02 km/s',
+        esi: '1.00',
+        biosig: 'Primary Calibration Reference',
+        spectra: [
+          ['N2 · Tropospheric Reference', '78.1%', 78],
+          ['O2 · Biosphere Reference', '20.9%', 58],
+          ['Ar · Noble Isotope', '0.93%', 16],
+          ['H2O · Hydrosphere Vapor', '0.40%', 12]
+        ],
+        shellColor: 0xf59e0b,
+        sunColor: 0xffffff,
+        camPos: [-0.9, 1.8, 8.1],
+        palette: {
+          stops: [
+            [0.0, '#78350f'],
+            [0.25, '#d97706'],
+            [0.5, '#f59e0b'],
+            [0.75, '#b45309'],
+            [1.0, '#451a03']
+          ],
+          bandLight: 'rgba(254, 243, 199, 0.14)',
+          bandDark: 'rgba(120, 53, 15, 0.18)',
+          storm: 'rgba(251, 191, 36, 0.22)'
+        }
+      }
+    };
+
+    // System Group (Draggable 360°)
+    const systemGroup = new THREE.Group();
+    systemGroup.rotation.z = -0.15;
+    systemGroup.rotation.x = 0.24;
+    scene.add(systemGroup);
+
+    // 1. Banded Exoplanet Sphere
+    const planetMat = new THREE.MeshStandardMaterial({
+      map: createPlanetTexture(PLANET_CONFIGS.kepler.palette),
+      roughness: 0.62,
+      metalness: 0.12
+    });
+    const planetMesh = new THREE.Mesh(new THREE.SphereGeometry(1.42, 64, 64), planetMat);
+    systemGroup.add(planetMesh);
+
+    // 2. Wireframe Atmospheric Geodesic Shell
+    const shellMat = new THREE.MeshBasicMaterial({
+      color: 0xd4a359,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.17
+    });
+    const atmoShell = new THREE.Mesh(new THREE.IcosahedronGeometry(1.62, 2), shellMat);
+    systemGroup.add(atmoShell);
+
+    // 3. Three Tilted Orbital Rings + Particle Belt + Relay Satellites
+    const orbitalPlanes = [];
+    const ringSpecs = [
+      { radius: 2.35, tube: 0.012, tiltX: 1.28, tiltY: 0.22, color: 0xd4a359, speed: 0.55 },
+      { radius: 2.95, tube: 0.009, tiltX: 1.02, tiltY: -0.48, color: 0xf8fafc, speed: -0.36 },
+      { radius: 3.55, tube: 0.011, tiltX: 1.44, tiltY: 0.65, color: 0xf59e0b, speed: 0.24 }
+    ];
+
+    ringSpecs.forEach((rs) => {
+      const plane = new THREE.Group();
+      plane.rotation.x = rs.tiltX;
+      plane.rotation.y = rs.tiltY;
+
+      const torus = new THREE.Mesh(
+        new THREE.TorusGeometry(rs.radius, rs.tube, 16, 140),
+        new THREE.MeshBasicMaterial({ color: rs.color, transparent: true, opacity: 0.55 })
+      );
+      plane.add(torus);
+
+      // Ring dust particles
+      const pCount = 160;
+      const pPos = new Float32Array(pCount * 3);
+      for (let i = 0; i < pCount; i++) {
+        const a = (i / pCount) * Math.PI * 2;
+        const jitter = (Math.random() - 0.5) * 0.14;
+        pPos[i * 3] = Math.cos(a) * (rs.radius + jitter);
+        pPos[i * 3 + 1] = Math.sin(a) * (rs.radius + jitter);
+        pPos[i * 3 + 2] = (Math.random() - 0.5) * 0.06;
+      }
+      const pGeo = new THREE.BufferGeometry();
+      pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+      const pMat = new THREE.PointsMaterial({ color: rs.color, size: 0.032, transparent: true, opacity: 0.75 });
+      plane.add(new THREE.Points(pGeo, pMat));
+
+      // Orbiting Telemetry Beacon Node
+      const satPivot = new THREE.Group();
+      const satMesh = new THREE.Mesh(
+        new THREE.OctahedronGeometry(0.075, 0),
+        new THREE.MeshBasicMaterial({ color: 0xfef08a })
+      );
+      satMesh.position.x = rs.radius;
+      satPivot.add(satMesh);
+      plane.add(satPivot);
+
+      systemGroup.add(plane);
+      orbitalPlanes.push({ plane, satPivot, speed: rs.speed });
+    });
+
+    // 4. Deep Starfield Points
+    const starCount = 1200;
+    const starPositions = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount; i++) {
+      const r = 18 + Math.random() * 55;
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos(2 * Math.random() - 1);
+      starPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      starPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      starPositions[i * 3 + 2] = r * Math.cos(phi);
+    }
+    const starGeo = new THREE.BufferGeometry();
+    starGeo.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+    const starField = new THREE.Points(
+      starGeo,
+      new THREE.PointsMaterial({ color: 0xf8fafc, size: 0.09, transparent: true, opacity: 0.72 })
+    );
+    scene.add(starField);
+
+    function resizeViewport() {
+      const w = viewport.clientWidth;
+      const h = viewport.clientHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize', resizeViewport);
+    resizeViewport();
+
+    // Preset Switching & Smooth Camera Target
+    let targetCamPos = new THREE.Vector3(0, 1.35, 7.6);
+    let orbitMultiplier = 1.2;
+
+    document.querySelectorAll('.target-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.planet;
+        const cfg = PLANET_CONFIGS[key];
+        if (!cfg) return;
+
+        document.querySelectorAll('.target-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        document.getElementById('activeIndexLabel').textContent = cfg.index;
+        document.getElementById('hudTargetTitle').textContent = cfg.hudTitle;
+        document.getElementById('raVal').textContent = cfg.ra;
+        document.getElementById('decVal').textContent = cfg.dec;
+        document.getElementById('periodVal').textContent = cfg.period;
+        document.getElementById('tempVal').textContent = cfg.temp;
+        document.getElementById('radiusVal').textContent = cfg.radius;
+        document.getElementById('rvVal').textContent = cfg.rv;
+        document.getElementById('esiScore').textContent = cfg.esi;
+        document.getElementById('biosigStatus').textContent = cfg.biosig;
+
+        const rows = document.querySelectorAll('#spectraList .spectra-row');
+        cfg.spectra.forEach((s, idx) => {
+          const spans = rows[idx].querySelectorAll('.spectra-meta span');
+          spans[0].textContent = s[0];
+          spans[1].textContent = s[1];
+          rows[idx].querySelector('.spectra-fill').style.width = `${s[2]}%`;
+        });
+
+        planetMat.map.dispose();
+        planetMat.map = createPlanetTexture(cfg.palette);
+        planetMat.needsUpdate = true;
+        shellMat.color.setHex(cfg.shellColor);
+        sunLight.color.setHex(cfg.sunColor);
+        targetCamPos.set(...cfg.camPos);
+      });
+    });
+
+    // Orbital Speed Slider
+    const speedSlider = document.getElementById('speedSlider');
+    const speedReadout = document.getElementById('speedReadout');
+    speedSlider.addEventListener('input', (e) => {
+      orbitMultiplier = Number(e.target.value) / 10;
+      speedReadout.textContent = orbitMultiplier === 0 ? '0.0x PAUSED' : `${orbitMultiplier.toFixed(1)}x REALTIME`;
+    });
+
+    // Drag-to-Rotate 360°
+    let dragging = false;
+    let lastPt = { x: 0, y: 0 };
+    let inertia = { x: 0, y: 0 };
+    const dragAngleReadout = document.getElementById('dragAngleReadout');
+
+    canvas.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      lastPt = { x: e.clientX, y: e.clientY };
+      canvas.setPointerCapture(e.pointerId);
+    });
+
+    canvas.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      const dx = e.clientX - lastPt.x;
+      const dy = e.clientY - lastPt.y;
+      lastPt = { x: e.clientX, y: e.clientY };
+      inertia.y = dx * 0.0065;
+      inertia.x = dy * 0.0055;
+      systemGroup.rotation.y += inertia.y;
+      systemGroup.rotation.x = Math.max(-1.3, Math.min(1.3, systemGroup.rotation.x + inertia.x));
+    });
+
+    const stopDrag = () => { dragging = false; };
+    canvas.addEventListener('pointerup', stopDrag);
+    canvas.addEventListener('pointercancel', stopDrag);
+
+    document.getElementById('recenterBtn').addEventListener('click', () => {
+      systemGroup.rotation.set(0.24, 0, -0.15);
+      inertia = { x: 0, y: 0 };
+    });
+
+    // Render Loop
+    const clock = new THREE.Clock();
+    function animate() {
+      requestAnimationFrame(animate);
+      const dt = clock.getDelta();
+
+      camera.position.lerp(targetCamPos, 0.06);
+      camera.lookAt(0, 0, 0);
+
+      planetMesh.rotation.y += dt * 0.18 * orbitMultiplier;
+      atmoShell.rotation.y -= dt * 0.09 * orbitMultiplier;
+      starField.rotation.y += dt * 0.008;
+
+      orbitalPlanes.forEach((op) => {
+        op.satPivot.rotation.z += dt * op.speed * orbitMultiplier;
+      });
+
+      if (!dragging) {
+        inertia.x *= 0.93;
+        inertia.y *= 0.93;
+        systemGroup.rotation.y += inertia.y;
+        systemGroup.rotation.x += inertia.x;
+      }
+
+      const incDeg = ((systemGroup.rotation.x * 180) / Math.PI).toFixed(1);
+      const nodeDeg = (((systemGroup.rotation.y * 180) / Math.PI % 360 + 360) % 360).toFixed(1);
+      dragAngleReadout.textContent = `DRAG 360° · INC ${incDeg >= 0 ? '+' : ''}${incDeg}° · ASCENDING NODE ${nodeDeg}°`;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>

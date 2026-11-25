@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>taxi. SDQ — Santo Domingo Real-Time Fleet &amp; Dispatch Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #09090b;
+      --surface: #111216;
+      --surface-2: #171920;
+      --border: rgba(255, 255, 255, 0.09);
+      --border-strong: rgba(255, 255, 255, 0.18);
+      --text: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --amber: #f59e0b;
+      --amber-glow: #fbbf24;
+      --emerald: #10b981;
+      --cyan: #38bdf8;
+      --coral: #fb7185;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-variant-numeric: tabular-nums;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--bg);
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    /* Full-Bleed Moody Amber-Dusk Atmospheric Urban Horizon Hero (Set Space Model) */
+    .cinematic-hero {
+      position: relative;
+      min-height: 590px;
+      background: linear-gradient(180deg, #0c1220 0%, #1e293b 45%, #451a03 85%, #09090b 100%);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Subtle Highway Light Streaks */
+    .horizon-streaks {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 26% at 50% 78%, rgba(245, 158, 11, 0.34), transparent 72%),
+        radial-gradient(ellipse 45% 18% at 25% 82%, rgba(251, 113, 133, 0.18), transparent 70%),
+        radial-gradient(ellipse 50% 20% at 78% 80%, rgba(56, 189, 248, 0.15), transparent 70%);
+    }
+
+    .highway-svg {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 230px;
+      pointer-events: none;
+      opacity: 0.72;
+    }
+
+    /* Minimal Translucent Top Nav */
+    .hero-nav {
+      position: relative;
+      z-index: 10;
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .taxi-wordmark {
+      text-decoration: none;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 800;
+      font-size: 24px;
+      letter-spacing: -0.04em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .taxi-dot {
+      color: var(--amber);
+    }
+
+    .sdq-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      letter-spacing: 0.08em;
+    }
+
+    .hero-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .hero-nav-links a {
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.16s ease;
+    }
+
+    .hero-nav-links a:hover {
+      color: #ffffff;
+    }
+
+    .btn-pill-amber {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      color: #09090b;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .btn-pill-amber:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(245, 158, 11, 0.28);
+    }
+
+    /* Centered Editorial Hero Copy */
+    .hero-center {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 58px 20px 96px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .dusk-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(9, 9, 11, 0.45);
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      color: #fde68a;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      margin-bottom: 24px;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-center h1 {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: clamp(46px, 6.2vw, 76px);
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      margin-bottom: 22px;
+    }
+
+    .hero-center h1 span.jakarta-bold {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.86em;
+      letter-spacing: -0.035em;
+    }
+
+    .hero-center p {
+      font-size: 17px;
+      line-height: 1.6;
+      color: rgba(250, 250, 250, 0.82);
+      max-width: 590px;
+      margin: 0 auto 32px;
+    }
+
+    .hero-pills {
+      display: inline-flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .btn-glass-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      text-decoration: none;
+      transition: background 0.16s ease;
+    }
+
+    .btn-glass-pill:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    /* Set Space Style Editorial Statement */
+    .editorial-band {
+      padding: 68px 0 54px;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .editorial-quote {
+      max-width: 900px;
+      margin: 0 auto;
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(30px, 3.8vw, 46px);
+      line-height: 1.18;
+      color: #f4f4f5;
+      letter-spacing: -0.01em;
+    }
+
+    .editorial-quote span {
+      color: var(--amber-glow);
+      font-style: italic;
+    }
+
+    /* Interactive Live Radar & Dispatch Deck */
+    .dispatch-section {
+      padding: 48px 0 88px;
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .kpi-tile {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 20px;
+    }
+
+    .kpi-tile-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .kpi-tile-val {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 27px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .kpi-tile-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--emerald);
+    }
+
+    /* Main Map + Dispatch Control Deck */
+    .radar-grid {
+      display: grid;
+      grid-template-columns: 7.5fr 4.5fr;
+      gap: 18px;
+    }
+
+    .map-card {
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .map-toolbar {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #13151b;
+    }
+
+    .map-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+    }
+
+    .radar-ping {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 12px var(--amber);
+    }
+
+    .map-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toggle-btn {
+      padding: 7px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: var(--bg);
+      color: var(--text-secondary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .toggle-btn.active {
+      background: rgba(245, 158, 11, 0.16);
+      border-color: var(--amber);
+      color: #fde68a;
+    }
+
+    .btn-dispatch-now {
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: none;
+      background: var(--amber);
+      color: #09090b;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-dispatch-now:hover {
+      background: var(--amber-glow);
+    }
+
+    .sdq-map-stage {
+      position: relative;
+      background: #0a0d14;
+      height: 450px;
+      width: 100%;
+    }
+
+    .map-legend {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      background: rgba(9, 9, 11, 0.86);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      padding: 8px 12px;
+      display: flex;
+      gap: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: #d4d4d8;
+    }
+
+    .leg-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+
+    /* Right Side Deck: Selected Unit + Hourly Demand Curve + Dispatch Log */
+    .side-deck {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .deck-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .deck-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .deck-head h3 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+    }
+
+    .unit-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.14);
+      color: #6ee7b7;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .unit-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .unit-stat {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .unit-stat span {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+    }
+
+    .unit-stat strong {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #fafafa;
+    }
+
+    .dispatch-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 155px;
+      overflow-y: auto;
+    }
+
+    .dispatch-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--amber);
+      border-radius: 9px;
+      padding: 9px 11px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: #e4e4e7;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .vehicle-node {
+      cursor: pointer;
+    }
+
+    @media (max-width: 1060px) {
+      .radar-grid { grid-template-columns: 1fr; }
+      .kpi-row { grid-template-columns: repeat(2, 1fr); }
+      .hero-nav-links { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .kpi-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Moody Amber-Dusk Atmospheric Horizon Hero -->
+  <section class="cinematic-hero">
+    <div class="horizon-streaks"></div>
+
+    <!-- Subtle Vector Highway Light Streaks -->
+    <svg class="highway-svg" viewBox="0 0 1440 230" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="amberStreak" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#f59e0b" stop-opacity="0" />
+          <stop offset="50%" stop-color="#fbbf24" stop-opacity="0.85" />
+          <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+        </linearGradient>
+        <linearGradient id="cyanStreak" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#38bdf8" stop-opacity="0" />
+          <stop offset="50%" stop-color="#e0f2fe" stop-opacity="0.65" />
+          <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+      <path d="M -80 210 Q 540 120 1520 185" fill="none" stroke="url(#amberStreak)" stroke-width="2.6" />
+      <path d="M -40 225 Q 680 145 1490 205" fill="none" stroke="url(#cyanStreak)" stroke-width="1.6" />
+      <path d="M 120 230 Q 740 160 1440 148" fill="none" stroke="url(#amberStreak)" stroke-width="1.8" />
+    </svg>
+
+    <div class="container">
+      <nav class="hero-nav">
+        <a href="#" class="taxi-wordmark">
+          <span>taxi<span class="taxi-dot">.</span></span>
+          <span class="sdq-tag">SDQ OPS</span>
+        </a>
+
+        <ul class="hero-nav-links">
+          <li><a href="#radar">Live Radar</a></li>
+          <li><a href="#radar">Polígono Central</a></li>
+          <li><a href="#radar">Commission Ledger</a></li>
+          <li><a href="#radar">Fleet SLA</a></li>
+        </ul>
+
+        <a href="#radar" class="btn-pill-amber">Open Dispatch Deck</a>
+      </nav>
+    </div>
+
+    <div class="hero-center">
+      <div class="dusk-kicker">
+        <span>SANTO DOMINGO DISTRITO NACIONAL &middot; 314 ACTIVE UNITS</span>
+      </div>
+
+      <h1>
+        All your Santo Domingo fleet, <em>together at last.</em>
+      </h1>
+
+      <p>
+        Real-time GPS telemetry, automated surge pricing across Piantini &amp; Naco, and transparent 20% platform commission settlement in Dominican Pesos.
+      </p>
+
+      <div class="hero-pills">
+        <button class="btn-pill-amber" onclick="dispatchLiveRide(true)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+          <span>1-Click Live Dispatch</span>
+        </button>
+        <a href="#radar" class="btn-glass-pill">Inspect Geospatial Radar</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Set Space Editorial Statement -->
+  <section class="editorial-band">
+    <div class="container">
+      <p class="editorial-quote">
+        &ldquo;taxi. SDQ is your real-time <span>geospatial command center</span> to dispatch, audit, and optimize 310+ active units across the Dominican capital.&rdquo;
+      </p>
+    </div>
+  </section>
+
+  <!-- Interactive Live Radar & Dispatch Deck -->
+  <section id="radar" class="dispatch-section">
+    <div class="container">
+      <!-- Financial & Fleet KPI Strip -->
+      <div class="kpi-row">
+        <div class="kpi-tile">
+          <div class="kpi-tile-label">GROSS FLEET BILLING (TODAY)</div>
+          <div class="kpi-tile-val" id="kpi-gross">RD$ 488,428</div>
+          <div class="kpi-tile-sub">+14.2% vs Tuesday Polígono avg</div>
+        </div>
+
+        <div class="kpi-tile">
+          <div class="kpi-tile-label">PLATFORM COMMISSION (20%)</div>
+          <div class="kpi-tile-val" id="kpi-comm" style="color:#fbbf24;">RD$ 97,686</div>
+          <div class="kpi-tile-sub">Auto-reconciled net platform take</div>
+        </div>
+
+        <div class="kpi-tile">
+          <div class="kpi-tile-label">ACTIVE SDQ UNITS</div>
+          <div class="kpi-tile-val" id="kpi-units">314 / 330</div>
+          <div class="kpi-tile-sub">95.1% fleet utilization online</div>
+        </div>
+
+        <div class="kpi-tile">
+          <div class="kpi-tile-label">MEAN PICKUP ETA</div>
+          <div class="kpi-tile-val" id="kpi-eta">3.4 min</div>
+          <div class="kpi-tile-sub">Piantini &middot; Naco &middot; Bella Vista</div>
+        </div>
+      </div>
+
+      <div class="radar-grid">
+        <!-- Interactive Dark-Vector Santo Domingo Map SVG -->
+        <div class="map-card">
+          <div class="map-toolbar">
+            <div class="map-title">
+              <span class="radar-ping"></span>
+              <span>Santo Domingo Vector Radar &middot; Polígono Central &amp; Zona Colonial</span>
+            </div>
+
+            <div class="map-actions">
+              <button class="toggle-btn active" id="traffic-btn" onclick="toggleTrafficLayer()">Traffic Layer: ON</button>
+              <button class="btn-dispatch-now" onclick="dispatchLiveRide(false)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>Dispatch Ride</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="sdq-map-stage">
+            <svg id="sdq-svg" width="100%" height="100%" viewBox="0 0 780 450" preserveAspectRatio="xMidYMid slice">
+              <!-- Caribbean Sea Coastline (Malecón South) -->
+              <path d="M 0 385 Q 240 368 480 392 T 780 365 L 780 450 L 0 450 Z" fill="#0c192c" />
+              <path d="M 0 385 Q 240 368 480 392 T 780 365" fill="none" stroke="#1e3a5f" stroke-width="2" />
+              <text x="615" y="424" fill="#38bdf8" opacity="0.55" font-family="JetBrains Mono" font-size="10">MAR CARIBE · MALECÓN SDQ</text>
+
+              <!-- Ozama River East -->
+              <path d="M 690 0 Q 672 140 688 255 T 665 376" fill="none" stroke="#162a45" stroke-width="18" />
+
+              <!-- Secondary Urban Blocks Grid -->
+              <g stroke="rgba(255,255,255,0.045)" stroke-width="1">
+                <line x1="110" y1="0" x2="110" y2="380" />
+                <line x1="210" y1="0" x2="210" y2="380" />
+                <line x1="390" y1="0" x2="390" y2="385" />
+                <line x1="510" y1="0" x2="510" y2="388" />
+                <line x1="610" y1="0" x2="610" y2="375" />
+                <line x1="0" y1="95" x2="685" y2="95" />
+                <line x1="0" y1="235" x2="685" y2="235" />
+                <line x1="0" y1="310" x2="675" y2="310" />
+              </g>
+
+              <!-- Major Arteries: Av. 27 de Febrero & Av. Winston Churchill & Av. Abraham Lincoln -->
+              <g stroke="#27272a" stroke-width="7" stroke-linecap="round">
+                <!-- Av. 27 de Febrero (East-West) -->
+                <path d="M 10 175 L 680 162" />
+                <!-- Av. Winston Churchill (North-South) -->
+                <path d="M 295 15 L 305 378" />
+                <!-- Av. Abraham Lincoln -->
+                <path d="M 435 15 L 442 384" />
+                <!-- Av. Sarasota / Bella Vista -->
+                <path d="M 40 272 L 440 262" />
+              </g>
+
+              <!-- Live Traffic Congestion Overlay -->
+              <g id="traffic-layer" opacity="0.9">
+                <path d="M 180 172 L 470 166" stroke="#ef4444" stroke-width="3.2" stroke-dasharray="10 6" />
+                <path d="M 298 95 L 303 268" stroke="#f59e0b" stroke-width="3.2" stroke-dasharray="8 5" />
+                <path d="M 437 110 L 441 255" stroke="#f59e0b" stroke-width="2.8" />
+              </g>
+
+              <!-- Sector & Avenue Labels -->
+              <g font-family="JetBrains Mono" font-size="10" fill="#a1a1aa">
+                <text x="312" y="64" fill="#e4e4e7" font-weight="600">AV. WINSTON CHURCHILL</text>
+                <text x="58" y="163" fill="#e4e4e7" font-weight="600">AV. 27 DE FEBRERO</text>
+                <text x="322" y="212" fill="#fbbf24" font-weight="700">PIANTINI</text>
+                <text x="458" y="142" fill="#fbbf24" font-weight="700">NACO</text>
+                <text x="155" y="295" fill="#d4d4d8" font-weight="600">BELLA VISTA</text>
+                <text x="565" y="335" fill="#38bdf8" font-weight="700">ZONA COLONIAL</text>
+              </g>
+
+              <!-- Dispatch Pulse Ring -->
+              <circle id="dispatch-pulse" cx="345" cy="195" r="0" fill="none" stroke="#fbbf24" stroke-width="2.5" opacity="0" />
+
+              <!-- Moving Vehicle Dots Layer -->
+              <g id="vehicles-layer"></g>
+            </svg>
+
+            <div class="map-legend">
+              <span><i class="leg-dot" style="background:#10b981;"></i>En Viaje (Ocupado)</span>
+              <span><i class="leg-dot" style="background:#fbbf24;"></i>Disponible</span>
+              <span><i class="leg-dot" style="background:#ef4444;"></i>Congestión Alta</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Selected Unit Telemetry + Hourly Demand Curve + Live Dispatch Log -->
+        <div class="side-deck">
+          <div class="deck-card">
+            <div class="deck-head">
+              <h3 id="sel-unit-id">Unidad #SDQ-204 · Toyota Corolla Cross</h3>
+              <span class="unit-badge" id="sel-unit-status">EN VIAJE</span>
+            </div>
+            <p style="font-size:12.5px;color:#a1a1aa;" id="sel-unit-route">
+              Conductor: R. Mateo (4.96 SLA) &middot; Ruta: BlueMall Piantini &rarr; Zona Colonial
+            </p>
+
+            <div class="unit-meta-grid">
+              <div class="unit-stat">
+                <span>TARIFA ESTIMADA</span>
+                <strong id="sel-unit-fare">RD$ 420.00</strong>
+              </div>
+              <div class="unit-stat">
+                <span>COMISIÓN 20%</span>
+                <strong id="sel-unit-comm" style="color:#fbbf24;">RD$ 84.00</strong>
+              </div>
+              <div class="unit-stat">
+                <span>VELOCIDAD GPS</span>
+                <strong id="sel-unit-speed">38 km/h</strong>
+              </div>
+              <div class="unit-stat">
+                <span>VIAJES HOY</span>
+                <strong id="sel-unit-trips">19 completados</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hourly Demand Curve -->
+          <div class="deck-card">
+            <div class="deck-head">
+              <h3>Curva Horaria de Demanda (SDQ)</h3>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#fbbf24;">1.35x SURGE</span>
+            </div>
+            <svg width="100%" height="108" viewBox="0 0 360 108" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="demandGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.4" />
+                  <stop offset="100%" stop-color="#f59e0b" stop-opacity="0.0" />
+                </linearGradient>
+              </defs>
+              <path d="M 0 88 Q 55 78 95 46 T 185 52 T 275 20 T 360 34 L 360 96 L 0 96 Z" fill="url(#demandGrad)" />
+              <path d="M 0 88 Q 55 78 95 46 T 185 52 T 275 20 T 360 34" fill="none" stroke="#fbbf24" stroke-width="2.4" />
+              <circle cx="275" cy="20" r="4.5" fill="#09090b" stroke="#fbbf24" stroke-width="2.4" />
+              <text x="8" y="105" fill="#71717a" font-family="JetBrains Mono" font-size="9.5">06:00</text>
+              <text x="155" y="105" fill="#71717a" font-family="JetBrains Mono" font-size="9.5">13:00</text>
+              <text x="252" y="105" fill="#fbbf24" font-family="JetBrains Mono" font-size="9.5">18:30 PICO</text>
+            </svg>
+          </div>
+
+          <!-- Live Dispatch Feed -->
+          <div class="deck-card">
+            <div class="deck-head">
+              <h3>Despachos en Tiempo Real</h3>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#71717a;">LIVE LEDGER</span>
+            </div>
+            <div class="dispatch-feed" id="dispatch-feed"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    let grossRD = 488428;
+    let activeUnits = 314;
+    let trafficVisible = true;
+
+    const units = [
+      { id: 'SDQ-204', model: 'Toyota Corolla Cross', driver: 'R. Mateo', status: 'EN VIAJE', route: 'BlueMall Piantini -> Zona Colonial', fare: 420, trips: 19, x: 300, y: 195, vx: 0.9, vy: 0.35, busy: true },
+      { id: 'SDQ-118', model: 'Hyundai Sonata N20', driver: 'C. Alcántara', status: 'DISPONIBLE', route: 'Av. Tiradentes · Naco', fare: 340, trips: 16, x: 465, y: 148, vx: -0.7, vy: 0.4, busy: false },
+      { id: 'SDQ-309', model: 'BYD Yuan Plus EV', driver: 'L. Peralta', status: 'EN VIAJE', route: 'Ágora Mall -> Bella Vista', fare: 385, trips: 22, x: 215, y: 268, vx: 0.85, vy: -0.3, busy: true },
+      { id: 'SDQ-077', model: 'Kia K5 GT-Line', driver: 'J. Rosario', status: 'EN VIAJE', route: 'Av. 27 de Febrero -> Malecón', fare: 310, trips: 14, x: 385, y: 168, vx: 1.0, vy: 0.05, busy: true },
+      { id: 'SDQ-412', model: 'Honda CR-V Hybrid', driver: 'M. Valdez', status: 'DISPONIBLE', route: 'Parque Colón · Zona Colonial', fare: 490, trips: 21, x: 590, y: 318, vx: -0.65, vy: -0.45, busy: false },
+      { id: 'SDQ-156', model: 'Toyota Camry Hybrid', driver: 'E. Guzmán', status: 'EN VIAJE', route: 'Av. Winston Churchill -> Naco', fare: 295, trips: 17, x: 298, y: 96, vx: 0.12, vy: 0.95, busy: true },
+      { id: 'SDQ-281', model: 'Nissan Kicks e-POWER', driver: 'D. Santos', status: 'DISPONIBLE', route: 'Downtown Center · Bella Vista', fare: 360, trips: 15, x: 145, y: 220, vx: 0.75, vy: 0.28, busy: false }
+    ];
+
+    let selectedUnitId = 'SDQ-204';
+
+    const sampleRoutes = [
+      { sector: 'Piantini (Acropolis)', dest: 'Zona Colonial', fare: 440 },
+      { sector: 'Naco (Plaza Central)', dest: 'Bella Vista Mall', fare: 360 },
+      { sector: 'Av. Winston Churchill', dest: 'Aerodom SDQ Express', fare: 1450 },
+      { sector: 'Bella Vista (Sarasota)', dest: 'Ágora Mall', fare: 390 },
+      { sector: 'Zona Colonial (Conde)', dest: 'Torre Caney', fare: 410 }
+    ];
+
+    function updateKPIBoard() {
+      const comm = Math.round(grossRD * 0.20);
+      document.getElementById('kpi-gross').textContent = 'RD$ ' + grossRD.toLocaleString('en-US');
+      document.getElementById('kpi-comm').textContent = 'RD$ ' + comm.toLocaleString('en-US');
+      document.getElementById('kpi-units').textContent = `${activeUnits} / 330`;
+    }
+
+    function selectUnit(id) {
+      selectedUnitId = id;
+      const u = units.find(x => x.id === id);
+      if (!u) return;
+      document.getElementById('sel-unit-id').textContent = `Unidad #${u.id} · ${u.model}`;
+      document.getElementById('sel-unit-status').textContent = u.status;
+      document.getElementById('sel-unit-route').textContent = `Conductor: ${u.driver} (4.96 SLA) · Ruta: ${u.route}`;
+      document.getElementById('sel-unit-fare').textContent = `RD$ ${u.fare.toFixed(2)}`;
+      document.getElementById('sel-unit-comm').textContent = `RD$ ${(u.fare * 0.20).toFixed(2)}`;
+      document.getElementById('sel-unit-speed').textContent = `${Math.floor(28 + Math.random() * 22)} km/h`;
+      document.getElementById('sel-unit-trips').textContent = `${u.trips} completados`;
+      renderVehicles();
+    }
+
+    function renderVehicles() {
+      const layer = document.getElementById('vehicles-layer');
+      layer.innerHTML = units.map(u => {
+        const color = u.busy ? '#10b981' : '#fbbf24';
+        const isSel = u.id === selectedUnitId;
+        return `
+          <g class="vehicle-node" onclick="selectUnit('${u.id}')">
+            ${isSel ? `<circle cx="${u.x.toFixed(1)}" cy="${u.y.toFixed(1)}" r="14" fill="none" stroke="${color}" stroke-width="1.6" stroke-dasharray="3 2" />` : ''}
+            <circle cx="${u.x.toFixed(1)}" cy="${u.y.toFixed(1)}" r="8" fill="${color}" fill-opacity="0.24" />
+            <circle cx="${u.x.toFixed(1)}" cy="${u.y.toFixed(1)}" r="4.5" fill="${color}" stroke="#09090b" stroke-width="1.5" />
+            <text x="${(u.x + 8).toFixed(1)}" y="${(u.y - 6).toFixed(1)}" fill="#fafafa" font-family="JetBrains Mono" font-size="9" font-weight="600">${u.id}</text>
+          </g>
+        `;
+      }).join('');
+    }
+
+    function animateFleet() {
+      units.forEach(u => {
+        u.x += u.vx;
+        u.y += u.vy;
+        if (u.x < 55 || u.x > 645) u.vx *= -1;
+        if (u.y < 35 || u.y > 350) u.vy *= -1;
+      });
+      renderVehicles();
+      requestAnimationFrame(animateFleet);
+    }
+
+    function toggleTrafficLayer() {
+      trafficVisible = !trafficVisible;
+      document.getElementById('traffic-layer').style.opacity = trafficVisible ? '0.9' : '0';
+      const btn = document.getElementById('traffic-btn');
+      btn.textContent = `Traffic Layer: ${trafficVisible ? 'ON' : 'OFF'}`;
+      btn.classList.toggle('active', trafficVisible);
+    }
+
+    function appendDispatchLog(unitCode, text, fare) {
+      const feed = document.getElementById('dispatch-feed');
+      const div = document.createElement('div');
+      div.className = 'dispatch-item';
+      div.innerHTML = `
+        <span><strong>${unitCode}</strong> &middot; ${text}</span>
+        <span style="color:#34d399;white-space:nowrap;">+RD$ ${fare}</span>
+      `;
+      feed.prepend(div);
+      while (feed.children.length > 8) {
+        feed.removeChild(feed.lastChild);
+      }
+    }
+
+    function dispatchLiveRide(scrollRadar) {
+      if (scrollRadar) {
+        document.getElementById('radar').scrollIntoView({ behavior: 'smooth' });
+      }
+      const pick = sampleRoutes[Math.floor(Math.random() * sampleRoutes.length)];
+      const targetUnit = units[Math.floor(Math.random() * units.length)];
+      targetUnit.busy = true;
+      targetUnit.status = 'EN VIAJE';
+      targetUnit.fare = pick.fare;
+      targetUnit.trips += 1;
+      targetUnit.route = `${pick.sector} -> ${pick.dest}`;
+
+      grossRD += pick.fare;
+      updateKPIBoard();
+      selectUnit(targetUnit.id);
+      appendDispatchLog(targetUnit.id, `${pick.sector} -> ${pick.dest}`, pick.fare);
+
+      // Visual Radar Pulse on Dispatched Unit
+      const pulse = document.getElementById('dispatch-pulse');
+      pulse.setAttribute('cx', targetUnit.x.toFixed(1));
+      pulse.setAttribute('cy', targetUnit.y.toFixed(1));
+      pulse.setAttribute('r', '6');
+      pulse.setAttribute('opacity', '1');
+
+      let radius = 6;
+      let op = 1;
+      const anim = setInterval(() => {
+        radius += 3.2;
+        op -= 0.08;
+        pulse.setAttribute('r', radius.toFixed(1));
+        pulse.setAttribute('opacity', Math.max(0, op).toFixed(2));
+        if (op <= 0) clearInterval(anim);
+      }, 30);
+    }
+
+    // Seed Dispatch Ledger
+    appendDispatchLog('SDQ-156', 'Winston Churchill -> Naco', 295);
+    appendDispatchLog('SDQ-309', 'Ágora Mall -> Bella Vista', 385);
+    appendDispatchLog('SDQ-204', 'BlueMall Piantini -> Zona Colonial', 420);
+
+    updateKPIBoard();
+    selectUnit('SDQ-204');
+    requestAnimationFrame(animateFleet);
+  </script>
+</body>
+</html>
