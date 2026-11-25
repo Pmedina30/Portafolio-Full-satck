@@ -58,12 +58,27 @@ Colección de 4 aplicaciones web profesionales, interactivas y listas para produ
 
 ---
 
+### 5. 🚖 taxi. — Panel de Operaciones & Monitoreo en Tiempo Real (Santo Domingo)
+> **Stack:** React 18, TypeScript, Tailwind CSS, Google Maps Platform (JavaScript API + Traffic Layer), Leaflet, PostGIS, Lucide Icons, Vite.
+
+- **Descripción:** Dashboard de control de flota, monitoreo geoespacial y despacho en tiempo real para plataforma de movilidad urbana en República Dominicana, replicando la estética sobria, moderna y minimalista de la app móvil.
+- **Aspectos Destacados:**
+  - 🗺️ **Cartografía Dual con Google Maps & Leaflet:** Integración nativa de Google Maps Platform con estilos vectoriales personalizados, telemetría de 310 conductores en Santo Domingo (Piantini, Naco, Bella Vista, Zona Colonial, Gazcue) y capa de tráfico en tiempo real (**Traffic Layer**) de las principales arterias viales (Av. 27 de Febrero, Av. Winston Churchill, Av. John F. Kennedy).
+  - 📊 **KPIs Financieros en Pesos Dominicanos (RD$):** Facturación total bruta (`RD$ 488,428`), Comisión de plataforma del 20% (`RD$ 97,686`), 310 conductores en línea y tiempo promedio de asignación (`2m 14s`).
+  - 📈 **Gráfico de Demanda Horaria:** Curva de despacho con picos matutino (8:00 AM), mediodía (1:00 PM) y hora punta nocturna (6:30 PM).
+  - ⚡ **Feed de Despacho & WebSockets:** Stream reactivo con eventos de conexión, asignación, tarifas y cobros.
+  - 🛡️ **Módulo de Aprobación de Conductores:** Validación de licencias emitidas por INTRANT, seguros vehiculares vigentes y antecedentes penales certificados por la Procuraduría General de la República (PGR).
+- **Lanzador 1-Click:** `run_taxi.bat` (Puerto: `http://localhost:5182`)
+
+---
+
 ## 🚀 Guía de Ejecución Rápida
 
 Cada proyecto cuenta con su propio lanzador `.bat` autónomo para Windows:
 
 | Proyecto | Comando / Archivo | Dirección Local |
 |---|---|---|
+| **taxi. Operations** | Doble clic en `run_taxi.bat` | `http://localhost:5182` |
 | **ColmadoPro** | Doble clic en `run_colmado.bat` | `http://localhost:5175` |
 | **NEXUS-01 3D** | Doble clic en `run_nexus.bat` | `http://localhost:5174` |
 | **SmileCraft Dental** | Doble clic en `run_dental.bat` | `http://localhost:5173` |
@@ -75,3 +90,4 @@ Cada proyecto cuenta con su propio lanzador `.bat` autónomo para Windows:
 
 **Pablo Medina**  
 Full-Stack Software Developer
+

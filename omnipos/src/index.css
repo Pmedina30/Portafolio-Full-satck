@@ -4,49 +4,53 @@
 
 :root {
   color-scheme: dark;
-  --apple-blur: 24px;
+  --arch-bg: #0A0A09;
+  --arch-surface: #111110;
+  --arch-elevated: #171715;
+  --arch-border: #242421;
+  --arch-signal: #FF4F18;
 }
 
-/* Apple macOS & iPadOS Frosted Glass Surfaces */
+body {
+  background-color: var(--arch-bg);
+  color: #F4F3EF;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Swiss Architectural Surfaces (compatible with existing POS classes) */
 .macos-frosted {
-  background: rgba(30, 30, 34, 0.75);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: rgba(17, 17, 16, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid #242421;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
 .macos-frosted-dark {
-  background: rgba(18, 18, 22, 0.85);
-  backdrop-filter: blur(32px) saturate(200%);
-  -webkit-backdrop-filter: blur(32px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 10, 9, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid #242421;
 }
 
 .apple-card {
-  background: rgba(38, 38, 44, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #111110;
+  border: 1px solid #242421;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .apple-card:hover {
-  background: rgba(48, 48, 56, 0.85);
-  border-color: rgba(0, 122, 255, 0.4);
+  background: #171715;
+  border-color: #FF4F18;
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 122, 255, 0.2);
+  box-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.55);
 }
 
 .dynamic-island-pill {
-  background: rgba(0, 0, 0, 0.92);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 
-    0 20px 45px rgba(0, 0, 0, 0.8),
-    0 0 0 1px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  background: #111110;
+  border: 1px solid #2A2A26;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
 }
 
 /* Custom Sleek Scrollbar */
@@ -55,14 +59,14 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.15);
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(140, 140, 132, 0.35);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 122, 255, 0.6);
+  background: #FF4F18;
 }
 
 /* Thermal Printer 80mm Print Rules */

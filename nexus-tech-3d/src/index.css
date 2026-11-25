@@ -4,41 +4,41 @@
 
 @layer base {
   body {
+    background-color: #0A0A09;
+    color: #F4F3EF;
     font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
   }
 }
 
-/* Custom Scrollbar for sleek cyber look */
+/* Swiss Architectural Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #030712;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: rgba(140, 140, 132, 0.35);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #06b6d4;
+  background: #FF4F18;
 }
 
-.glow-cyan {
-  box-shadow: 0 0 50px -10px rgba(6, 182, 212, 0.35);
+.glow-cyan,
+.glow-purple {
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6);
 }
 
 .glow-text-cyan {
-  text-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
-}
-
-.glow-purple {
-  box-shadow: 0 0 50px -10px rgba(139, 92, 246, 0.35);
+  text-shadow: none;
 }
 
 .glass-panel {
-  background: rgba(11, 15, 25, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(17, 17, 16, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid #242421;
 }
-

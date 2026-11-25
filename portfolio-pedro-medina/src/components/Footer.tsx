@@ -1,119 +1,126 @@
 import React from 'react';
-import { ArrowUp, Terminal, Sparkles } from 'lucide-react';
+import { ArrowUp, Command } from 'lucide-react';
 import { PERSONAL_INFO, SOCIAL_LINKS } from '../data/portfolioData';
+import { Language } from '../types/portfolio';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  lang: Language;
+  onOpenCommandPalette: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ lang, onOpenCommandPalette }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const navLinks = [
-    { name: 'Inicio', href: '#home' },
-    { name: 'Proyectos', href: '#projects' },
-    { name: 'Trayectoria', href: '#experience' },
-    { name: 'Habilidades', href: '#skills' },
-    { name: 'Contacto', href: '#contact' },
-  ];
-
   return (
-    <footer className="relative border-t border-neutral-800/80 bg-[#080808]/90 dark:bg-[#080808]/95 backdrop-blur-xl pt-16 pb-12 overflow-hidden">
-      {/* Ambient background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-violet-500/40 to-transparent" />
-      <div className="absolute -bottom-24 left-1/2 -translate-x-1/2 w-96 h-48 bg-violet-600/10 rounded-full blur-[100px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-          {/* Brand & Persona */}
-          <div className="md:col-span-2 space-y-4">
+    <footer className="border-t border-[#DFDDD4] dark:border-[#242421] bg-[#EEECE5]/60 dark:bg-[#0D0D0B] pt-16 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-[#DFDDD4] dark:border-[#242421]">
+          {/* Col 1: Brand & Statement (6 cols) */}
+          <div className="md:col-span-6 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-violet-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-violet-500/25 border border-white/20">
-                <Terminal className="w-5 h-5 text-white" />
+              <div className="w-8 h-8 rounded-lg bg-[#111110] dark:bg-[#F4F3EF] text-white dark:text-[#0A0A09] flex items-center justify-center font-display font-bold text-xs">
+                PM
               </div>
-              <span className="font-mono text-base font-bold tracking-tight text-white">
-                pm<span className="text-violet-400">.dev</span>
+              <span className="font-display font-bold text-base text-[#111110] dark:text-[#F4F3EF]">
+                Pedro Medina
               </span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono tracking-wider uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                Live Portfolio
+              <span className="font-mono text-[10px] uppercase px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                {PERSONAL_INFO.monogram}
               </span>
             </div>
-            <p className="text-sm text-neutral-400 max-w-md leading-relaxed">
-              {PERSONAL_INFO.bioHeadline} — Diseñando soluciones full-stack resilientes y motores analíticos de alto impacto para la toma de decisiones basada en datos.
+
+            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-md leading-relaxed">
+              {PERSONAL_INFO.heroSubtitle[lang]}
             </p>
-            <div className="flex items-center gap-2 text-xs text-neutral-500 font-mono">
-              <Sparkles className="w-3.5 h-3.5 text-violet-400" />
-              <span>Inspirado en Lightswind UI • Hecho con React, Tailwind & Vite</span>
+
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={onOpenCommandPalette}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white dark:bg-[#161614] border border-[#DFDDD4] dark:border-[#262623] font-mono text-xs text-[#111110] dark:text-neutral-300 hover:border-[#FF4F18]"
+              >
+                <Command className="w-3.5 h-3.5 text-[#FF4F18]" />
+                <span>
+                  {lang === 'en' ? 'Open Command Palette (⌘K)' : 'Abrir Paleta de Comandos (⌘K)'}
+                </span>
+              </button>
             </div>
           </div>
 
-          {/* Quick Navigation */}
-          <div>
-            <h4 className="text-xs font-mono uppercase tracking-widest text-neutral-300 font-semibold mb-4">
-              Navegación
+          {/* Col 2: Directory Links (3 cols) */}
+          <div className="md:col-span-3 space-y-3">
+            <h4 className="font-mono text-[11px] uppercase tracking-wider text-neutral-500 font-bold">
+              {lang === 'en' ? 'Navigation' : 'Navegación'}
             </h4>
-            <ul className="space-y-2.5">
-              {navLinks.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-xs text-neutral-400 hover:text-white transition-colors duration-150 flex items-center gap-1.5 group"
-                  >
-                    <span className="w-1 h-1 rounded-full bg-neutral-600 group-hover:bg-violet-400 transition-colors" />
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Social & Connect */}
-          <div>
-            <h4 className="text-xs font-mono uppercase tracking-widest text-neutral-300 font-semibold mb-4">
-              Conectar
-            </h4>
-            <ul className="space-y-2.5">
-              {SOCIAL_LINKS.map((social) => (
-                <li key={social.name}>
-                  <a
-                    href={social.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-xs text-neutral-400 hover:text-white transition-colors duration-150 flex items-center gap-2"
-                  >
-                    <span>{social.name}</span>
-                    <span className="text-[10px] font-mono text-neutral-600">↗</span>
-                  </a>
-                </li>
-              ))}
+            <ul className="space-y-2 text-xs font-medium text-neutral-600 dark:text-neutral-400">
               <li>
-                <a
-                  href={`mailto:${PERSONAL_INFO.email}`}
-                  className="text-xs text-violet-400 hover:text-violet-300 transition-colors duration-150"
-                >
-                  {PERSONAL_INFO.email}
+                <a href="#home" className="hover:text-[#FF4F18] transition-colors">
+                  00 // {lang === 'en' ? 'Overview' : 'Inicio'}
+                </a>
+              </li>
+              <li>
+                <a href="#projects" className="hover:text-[#FF4F18] transition-colors">
+                  01 // {lang === 'en' ? 'Selected Works (06)' : 'Proyectos Destacados (06)'}
+                </a>
+              </li>
+              <li>
+                <a href="#registry" className="hover:text-[#FF4F18] transition-colors">
+                  02 // {lang === 'en' ? '12-App Archive' : 'Archivo de 12 Sistemas'}
+                </a>
+              </li>
+              <li>
+                <a href="#skills" className="hover:text-[#FF4F18] transition-colors">
+                  03 // {lang === 'en' ? 'Capabilities' : 'Arquitectura'}
+                </a>
+              </li>
+              <li>
+                <a href="#experience" className="hover:text-[#FF4F18] transition-colors">
+                  04 // {lang === 'en' ? 'Trajectory' : 'Trayectoria'}
                 </a>
               </li>
             </ul>
           </div>
+
+          {/* Col 3: External Links (3 cols) */}
+          <div className="md:col-span-3 space-y-3">
+            <h4 className="font-mono text-[11px] uppercase tracking-wider text-neutral-500 font-bold">
+              {lang === 'en' ? 'External Nodes' : 'Enlaces Externos'}
+            </h4>
+            <ul className="space-y-2 text-xs font-mono text-neutral-600 dark:text-neutral-400">
+              {SOCIAL_LINKS.map((s) => (
+                <li key={s.name}>
+                  <a
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-[#FF4F18] transition-colors flex items-center justify-between"
+                  >
+                    <span>{s.name}</span>
+                    <span className="text-neutral-400">↗</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="pt-8 border-t border-neutral-800/60 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-neutral-500 flex items-center gap-1.5">
-            © {new Date().getFullYear()} {PERSONAL_INFO.name}. Construido con rigor analítico y pasión por el código.
-          </p>
+        {/* Bottom Colophon */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-neutral-500">
+          <div>
+            © {new Date().getFullYear()} {PERSONAL_INFO.name} — {PERSONAL_INFO.city}
+          </div>
 
           <div className="flex items-center gap-4">
-            <span className="text-xs text-neutral-500 font-mono">
-              Santo Domingo, DO
-            </span>
+            <span>{PERSONAL_INFO.coordinates}</span>
             <button
+              type="button"
               onClick={scrollToTop}
-              className="p-2 rounded-lg bg-neutral-900/80 border border-neutral-800 hover:border-neutral-700 text-neutral-400 hover:text-white transition-all duration-200 hover:-translate-y-0.5 group"
-              title="Volver arriba"
-              aria-label="Volver arriba"
+              className="p-2 rounded-lg bg-white dark:bg-[#161614] border border-[#DFDDD4] dark:border-[#262623] text-[#111110] dark:text-[#F4F3EF] hover:border-[#FF4F18] transition-colors"
+              aria-label="Scroll to top"
             >
-              <ArrowUp className="w-4 h-4 group-hover:text-violet-400 transition-colors" />
+              <ArrowUp className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>

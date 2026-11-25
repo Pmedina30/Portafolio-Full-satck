@@ -61,7 +61,7 @@ class PyStackTestCase(unittest.TestCase):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'PyStack', response.data)
-        self.assertIn(b'Modern Full-Stack Python Starter', response.data)
+        self.assertIn(b'PRODUCTION PYTHON WORKBENCH', response.data)
 
     def test_login_page_get(self):
         """Test GET /login renders login form."""
@@ -86,7 +86,7 @@ class PyStackTestCase(unittest.TestCase):
         
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Welcome back, Demo User!', response.data)
-        self.assertIn(b'Hello, Demo User', response.data)
+        self.assertIn(b'Account Identity', response.data)
 
         # Access dashboard directly while authenticated
         dash_response = self.client.get('/dashboard')

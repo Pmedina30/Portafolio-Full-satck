@@ -7,6 +7,8 @@ import { ExperienceTimeline } from './components/ExperienceTimeline';
 import { SkillsMatrix } from './components/SkillsMatrix';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
+import { CommandPalette } from './components/CommandPalette';
+import { Language } from './types/portfolio';
 
 export const App: React.FC = () => {
   const [theme, setTheme] = useState<'dark' | 'light'>(() => {
@@ -16,6 +18,16 @@ export const App: React.FC = () => {
     }
     return 'dark';
   });
+
+  const [lang, setLang] = useState<Language>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('pm_portfolio_lang');
+      if (stored === 'en' || stored === 'es') return stored;
+    }
+    return 'en';
+  });
+
+  const [isCommandOpen, setIsCommandOpen] = useState(false);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -27,60 +39,77 @@ export const App: React.FC = () => {
     localStorage.setItem('pm_portfolio_theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    localStorage.setItem('pm_portfolio_lang', lang);
+    document.documentElement.lang = lang;
+  }, [lang]);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsCommandOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
+
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };
 
+  const toggleLang = () => {
+    setLang((prev) => (prev === 'en' ? 'es' : 'en'));
+  };
+
   return (
-    <div className="min-h-screen bg-[#080808] text-neutral-100 selection:bg-violet-500/30 selection:text-violet-200 transition-colors duration-300 font-sans relative overflow-x-hidden">
-      {/* Dynamic Ambient Mesh Glows (Lightswind UI Atmosphere) */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        {/* Violet Nebula glow top center */}
-        <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[500px] bg-violet-700/15 rounded-full blur-[140px] mix-blend-screen" />
-        
-        {/* Deep Indigo/Blue glow right center */}
-        <div className="absolute top-[35%] -right-48 w-[600px] h-[600px] bg-blue-700/10 rounded-full blur-[160px] mix-blend-screen" />
+    <div className="min-h-screen bg-[#F6F5F0] dark:bg-[#0A0A09] text-[#111110] dark:text-[#F4F3EF] transition-colors duration-300 font-sans relative overflow-x-hidden">
+      {/* Subtle Swiss Architectural Grid */}
+      <div className="fixed inset-0 pointer-events-none z-0 bg-architectural-grid" />
 
-        {/* Emerald accent glow left center */}
-        <div className="absolute top-[65%] -left-48 w-[500px] h-[500px] bg-emerald-700/8 rounded-full blur-[150px] mix-blend-screen" />
-        
-        {/* Subtle grid pattern background */}
-        <div 
-          className="absolute inset-0 opacity-[0.025] dark:opacity-[0.04] pointer-events-none"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.4) 1px, transparent 0)`,
-            backgroundSize: '32px 32px'
-          }}
+      {/* Top Architectural Navigation */}
+      <Navbar
+        darkMode={theme === 'dark'}
+        onToggleDarkMode={toggleTheme}
+        lang={lang}
+        onToggleLang={toggleLang}
+        onOpenCommandPalette={() => setIsCommandOpen(true)}
+      />
+
+      {/* Main Content */}
+      <main className="relative z-10 flex flex-col">
+        <Hero
+          lang={lang}
+          onOpenCommandPalette={() => setIsCommandOpen(true)}
         />
-      </div>
 
-      {/* Floating Capsule Navigation */}
-      <Navbar darkMode={theme === 'dark'} onToggleDarkMode={toggleTheme} />
+        <InfiniteMarquee />
 
-      {/* Main Content Sections */}
-      <main className="relative z-10 flex flex-col gap-0">
-        <Hero />
-        
-        {/* Infinite Tech Marquee */}
-        <div className="relative z-20 py-4 -mt-6">
-          <InfiniteMarquee />
-        </div>
+        <ProjectsBentoGrid lang={lang} />
 
-        {/* Featured Projects Bento Grid */}
-        <ProjectsBentoGrid />
+        <SkillsMatrix lang={lang} />
 
-        {/* Experience & Education Timeline */}
-        <ExperienceTimeline />
+        <ExperienceTimeline lang={lang} />
 
-        {/* Core Competencies & Skills Matrix */}
-        <SkillsMatrix />
-
-        {/* Contact & Inquiry Section */}
-        <ContactSection />
+        <ContactSection lang={lang} />
       </main>
 
-      {/* Global Minimalist Footer */}
-      <Footer />
+      {/* Editorial Footer */}
+      <Footer
+        lang={lang}
+        onOpenCommandPalette={() => setIsCommandOpen(true)}
+      />
+
+      {/* Command Palette (⌘K / Ctrl+K) */}
+      <CommandPalette
+        isOpen={isCommandOpen}
+        onClose={() => setIsCommandOpen(false)}
+        lang={lang}
+        onToggleLang={toggleLang}
+        darkMode={theme === 'dark'}
+        onToggleDarkMode={toggleTheme}
+      />
     </div>
   );
 };

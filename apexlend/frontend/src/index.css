@@ -4,34 +4,35 @@
 
 @layer base {
   body {
-    background-color: #ffffff;
-    color: #1d1d1f;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "SF Pro", Inter, system-ui, sans-serif;
+    background-color: #F6F5F0;
+    color: #111110;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
 }
 
-/* Apple White Gallery strict rule: No dropped shadows */
+/* Swiss Architectural Gallery Cards: 1px Hairline, Zero Heavy Shadows */
 .apple-card {
-  background-color: #ffffff;
-  border: 1px solid #d6d6d6;
-  border-radius: 28px;
+  background-color: #FFFFFF;
+  border: 1px solid #DFDDD4;
+  border-radius: 20px;
   box-shadow: none !important;
 }
 
 .apple-mist-card {
-  background-color: #f5f5f7;
-  border: 1px solid #d6d6d6;
-  border-radius: 28px;
+  background-color: #EEECE5;
+  border: 1px solid #DFDDD4;
+  border-radius: 20px;
   box-shadow: none !important;
 }
 
-/* Custom Apple Range Slider */
+/* Precision Range Slider */
 input[type=range] {
   -webkit-appearance: none;
-  background: #d6d6d6;
+  background: #DFDDD4;
   height: 4px;
   border-radius: 9999px;
   outline: none;
@@ -40,33 +41,31 @@ input[type=range] {
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: #0071e3;
+  background: #FF4F18;
   cursor: pointer;
-  border: 2px solid #ffffff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-  transition: transform 0.1s ease;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 1px 3px rgba(17, 17, 16, 0.2);
+  transition: transform 0.12s ease;
 }
 
 input[type=range]::-webkit-slider-thumb:hover {
   transform: scale(1.15);
 }
 
-/* Custom scrollbars for clean Apple feel */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #f5f5f7;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #c7c7cc;
+  background: rgba(140, 140, 132, 0.35);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #8e8e93;
+  background: #FF4F18;
 }
-

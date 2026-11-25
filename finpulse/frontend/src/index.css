@@ -4,25 +4,25 @@
 
 @layer base {
   body {
-    @apply bg-[#080a10] text-slate-100;
+    @apply bg-[#0A0A09] text-[#F4F3EF] antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
 
-/* Custom scrollbar for fintech dark UI */
+/* Swiss Architectural FinTech Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0b0f19;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 3px;
+  background: rgba(140, 140, 132, 0.35);
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #FF4F18;
 }
 
 @keyframes pulse-subtle {
@@ -33,4 +33,3 @@
 .animate-pulse-subtle {
   animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
-

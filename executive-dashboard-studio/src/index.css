@@ -4,25 +4,25 @@
 
 @layer base {
   body {
-    @apply bg-[#F8FAFC] text-slate-800 antialiased;
+    @apply bg-[#F6F5F0] text-[#111110] antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 }
 
-/* Custom Executive Scrollbars */
+/* Swiss Architectural Executive Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F1F5F9;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
+  background: rgba(140, 140, 132, 0.35);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  background: #FF4F18;
 }
 
 /* Print / PDF Mode Optimization */
@@ -31,7 +31,7 @@
     size: A4 landscape;
     margin: 8mm;
   }
-  
+
   body {
     background: #FFFFFF !important;
     color: #000000 !important;
@@ -51,9 +51,8 @@
   }
 
   .print-card {
-    border: 1px solid #E2E8F0 !important;
+    border: 1px solid #DFDDD4 !important;
     box-shadow: none !important;
     break-inside: avoid;
   }
 }
-

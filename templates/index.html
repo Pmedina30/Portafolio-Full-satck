@@ -1,141 +1,253 @@
 {% extends "base.html" %}
 
-{% block title %}Welcome to PyStack - Modern Python Web Platform{% endblock %}
+{% block title %}Pedro Medina — Full-Stack, FinTech & 3D WebGL Portfolio Studio{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
+<!-- HERO SECTION (Dovetail / Revolut / Wise / Lightspark Composition) -->
 <section class="hero-section">
   <div class="container">
-    <div class="hero-badge">
-      <span>🚀</span>
-      <span>Modern Full-Stack Python Starter</span>
+    <div class="hero-top-pill">
+      <span class="status-dot"></span>
+      <span>PRODUCTION PYTHON WORKBENCH · 13 INTERACTIVE APPS READY</span>
     </div>
 
-    <h1 class="hero-title">
-      Build and Ship Faster with <span class="text-gradient">Python & Flask</span>
-    </h1>
+    <div class="hero-grid">
+      <!-- Left 7 Columns -->
+      <div class="hero-copy">
+        <h1 class="hero-title">
+          Financial, analytical &amp; spatial software built for <span class="serif-italic">real</span> scale.
+        </h1>
+        <p class="hero-subtitle">
+          Explore 13 production-grade applications across FinTech, Cross-Border E-Commerce, Executive BI, Point-of-Sale, and 3D WebGL—complete with live interactive previews right in your browser.
+        </p>
 
-    <p class="hero-subtitle">
-      A lightweight, modular, and responsive web application boilerplate featuring user authentication,
-      session security, SQLite persistence, and modern UI design.
-    </p>
+        <div class="hero-cta-group">
+          <a href="#apps" class="btn btn-primary btn-lg">
+            <span>Explore 13 App Previews</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path>
+            </svg>
+          </a>
+          {% if current_user %}
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary btn-lg">Open Executive Console</a>
+          {% else %}
+            <a href="{{ url_for('login') }}" class="btn btn-secondary btn-lg">Authenticate Session</a>
+          {% endif %}
+        </div>
 
-    <div class="hero-actions">
-      {% if current_user %}
-        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Go to Dashboard &rarr;</a>
-      {% else %}
-        <a href="{{ url_for('login') }}" class="btn btn-primary">Sign In to Account &rarr;</a>
-        <a href="{{ url_for('register') }}" class="btn btn-secondary">Create Free Account</a>
-      {% endif %}
-    </div>
-
-    <!-- Code Mockup Card -->
-    <div class="mockup-card">
-      <div class="mockup-header">
-        <span class="dot dot-red"></span>
-        <span class="dot dot-yellow"></span>
-        <span class="dot dot-green"></span>
-        <span style="margin-left: 0.5rem; font-size: 0.8rem; color: #64748b; font-family: monospace;">app.py</span>
+        <!-- 4 Tabular KPI Cards -->
+        <div class="hero-kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-value tabular-nums">13</div>
+            <div class="kpi-label">Production Apps</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value tabular-nums">99.2%</div>
+            <div class="kpi-label">QA Audit Precision</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value tabular-nums">&lt;12 ms</div>
+            <div class="kpi-label">DAX &amp; API Latency</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value tabular-nums">60 FPS</div>
+            <div class="kpi-label">WebGL 3D Engine</div>
+          </div>
+        </div>
       </div>
-      <div class="mockup-body">
-<pre><code><span class="mockup-comment"># Clean, simple Python routing</span>
-<span class="mockup-keyword">from</span> flask <span class="mockup-keyword">import</span> Flask, render_template
 
-app = Flask(__name__)
+      <!-- Right 5 Columns: 3D Spatial SaaS Stage -->
+      <div class="hero-stage-col">
+        <div class="stage-card">
+          <div class="stage-header">
+            <div class="window-dots" aria-hidden="true">
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+            </div>
+            <span class="mono-label">SPATIAL ENGINE · THREE.JS</span>
+            <span class="preview-pill-ok">INTERACTIVE</span>
+          </div>
 
-<span class="mockup-keyword">@app.route</span>(<span class="mockup-str">"/"</span>)
-<span class="mockup-keyword">def</span> <span class="mockup-func">home</span>():
-    <span class="mockup-keyword">return</span> render_template(<span class="mockup-str">"index.html"</span>)
+          <div class="viewport-3d-wrap">
+            <div id="arch-3d-canvas" class="viewport-3d" role="img" aria-label="Interactive 3D architectural sculpture"></div>
+            <div class="floating-telemetry-card">
+              <div>
+                <div style="font-size:0.75rem; font-weight:600;">360° Orbital Inspection</div>
+                <div class="mono-label" style="font-size:0.6875rem;">Drag to rotate · ACES Filmic</div>
+              </div>
+              <span class="mono-label tabular-nums">18°29'N 69°53'W</span>
+            </div>
+          </div>
 
-<span class="mockup-keyword">@app.route</span>(<span class="mockup-str">"/dashboard"</span>)
-<span class="mockup-keyword">@login_required</span>
-<span class="mockup-keyword">def</span> <span class="mockup-func">dashboard</span>():
-    <span class="mockup-keyword">return</span> render_template(<span class="mockup-str">"dashboard.html"</span>)</code></pre>
+          <div class="stage-controls" role="group" aria-label="3D Geometry Mode">
+            <button type="button" class="stage-mode-btn active" data-spatial-mode="monolith">MONOLITH</button>
+            <button type="button" class="stage-mode-btn" data-spatial-mode="lattice">LATTICE</button>
+            <button type="button" class="stage-mode-btn" data-spatial-mode="orbital">ORBITAL</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Stats Counter -->
-<section class="stats-section">
-  <div class="container stats-grid">
-    <div class="stat-item">
-      <h3>100%</h3>
-      <p>Python Standard</p>
-    </div>
-    <div class="stat-item">
-      <h3>&lt;50ms</h3>
-      <p>Response Latency</p>
-    </div>
-    <div class="stat-item">
-      <h3>SHA-256</h3>
-      <p>Password Hashing</p>
-    </div>
-    <div class="stat-item">
-      <h3>0</h3>
-      <p>Heavy JS Frameworks</p>
-    </div>
-  </div>
-</section>
-
-<!-- Features Grid -->
-<section class="features-section" id="features">
+<!-- PORTFOLIO APPS SHOWCASE WITH EMBEDDED LIVE PREVIEWS -->
+<section class="section-block" id="apps">
   <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Everything You Need to Get Started</h2>
-      <p class="section-subtitle">Engineered with clean architectural principles so you can extend, deploy, and scale effortlessly.</p>
+    <div class="section-header-row">
+      <div>
+        <span class="mono-label">PORTFOLIO ECOSYSTEM · CLICK ANY CARD FOR LIVE WORKSPACE</span>
+        <h2 class="section-title">Interactive application previews</h2>
+      </div>
+      <p class="section-desc">
+        Every card below displays a real-time visual UI summary and opens an interactive product sandbox when selected.
+      </p>
     </div>
 
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon">🔐</div>
-        <h3 class="feature-title">Secure Authentication</h3>
-        <p class="feature-desc">Integrated user login, password hashing with Werkzeug security, session cookies, and route guards.</p>
+    <!-- Filter Pills & Search Input -->
+    <div class="portfolio-toolbar">
+      <div class="filter-pills" role="tablist" aria-label="Filter applications by category">
+        <button type="button" class="filter-pill active" data-cat-filter="all">All Apps (13)</button>
+        <button type="button" class="filter-pill" data-cat-filter="fintech">FinTech &amp; Commerce</button>
+        <button type="button" class="filter-pill" data-cat-filter="analytics">Analytics &amp; Ops</button>
+        <button type="button" class="filter-pill" data-cat-filter="studio3d">3D &amp; Publishing</button>
+        <button type="button" class="filter-pill" data-cat-filter="infra">Healthcare &amp; Infra</button>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">🗄️</div>
-        <h3 class="feature-title">SQLite Database</h3>
-        <p class="feature-desc">Pre-configured database layer with automatic table creation, initial data seeding, and zero external DB hassle.</p>
+      <div class="search-box">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <input type="search" id="appSearchInput" class="search-input" placeholder="Search apps, stack, or domain..." aria-label="Search portfolio applications" />
+      </div>
+    </div>
+
+    <!-- 13-App Bento Grid (Populated & Interactive via portfolioDemos.js) -->
+    <div id="appsShowcaseGrid" class="apps-showcase-grid"></div>
+
+    <!-- Accessible Empty State -->
+    <div id="appsEmptyState" class="empty-state-box" role="status">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted);">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.3-4.3"></path>
+      </svg>
+      <h3 style="font-family:var(--font-display); font-size:1.125rem;">No matching applications</h3>
+      <p style="font-size:0.875rem; color:var(--text-muted); max-width:40ch;">
+        No portfolio systems matched your current filter or search query. Reset filters to view all 13 applications.
+      </p>
+      <button type="button" id="resetFiltersBtn" class="btn btn-secondary btn-sm">Reset Filters</button>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE & ENGINEERING STANDARDS -->
+<section class="section-block" id="architecture">
+  <div class="container">
+    <div class="section-header-row">
+      <div>
+        <span class="mono-label">ENGINEERING STANDARDS</span>
+        <h2 class="section-title">Production-first architecture</h2>
+      </div>
+      <p class="section-desc">
+        Built with strict separation of concerns, cryptographic security, accessible contrast, and sub-12ms responsiveness.
+      </p>
+    </div>
+
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+        <h3>Cryptographic Auth</h3>
+        <p>Salted PBKDF2-SHA256 password hashing, HttpOnly &amp; SameSite=Lax cookies, and JWT role isolation.</p>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">🎨</div>
-        <h3 class="feature-title">Responsive UI Design</h3>
-        <p class="feature-desc">Modern minimalist CSS design using flexbox, CSS grid, native variables, and fluid mobile breakpoints.</p>
+      <div class="pillar-card">
+        <div class="pillar-icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+            <path d="M3 5V19A9 3 0 0 0 21 19V5"></path>
+            <path d="M3 12A9 3 0 0 0 21 12"></path>
+          </svg>
+        </div>
+        <h3>Dual-Sync Persistence</h3>
+        <p>Parameterized SQLite, PostgreSQL/Prisma, Cloud Firestore, and offline-first IndexedDB queues.</p>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3 class="feature-title">Jinja2 Templating</h3>
-        <p class="feature-desc">Modular HTML templates with layout inheritance, flash messaging, and dynamic navigation state.</p>
+      <div class="pillar-card">
+        <div class="pillar-icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3v18h18"></path>
+            <path d="m19 9-5 5-4-4-3 3"></path>
+          </svg>
+        </div>
+        <h3>Real-Time Telemetry</h3>
+        <p>Tabular financial modeling, client-side DAX KPI computation, and live Santo Domingo PostGIS fleet tracking.</p>
       </div>
 
-      <div class="feature-card">
-        <div class="feature-icon">🛡️</div>
-        <h3 class="feature-title">Protected Routes</h3>
-        <p class="feature-desc">A custom <code>@login_required</code> decorator to secure sensitive endpoints like the user dashboard.</p>
-      </div>
-
-      <div class="feature-card">
-        <div class="feature-icon">📦</div>
-        <h3 class="feature-title">Ready for Production</h3>
-        <p class="feature-desc">Standard structure easily deployable to platforms like Render, Railway, Heroku, AWS, or Docker containers.</p>
+      <div class="pillar-card">
+        <div class="pillar-icon-wrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+          </svg>
+        </div>
+        <h3>Defensive HTTP Core</h3>
+        <p>Strict X-Frame-Options DENY, MIME nosniff enforcement, and automated route/security verification.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Call To Action -->
-<section class="container" id="about">
-  <div class="cta-banner">
-    <h2>Ready to Experience It?</h2>
-    <p>Sign in with our pre-configured demo account or create a brand new user profile in seconds.</p>
-    <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-      <a href="{{ url_for('login') }}" class="btn btn-primary" style="background: #ffffff; color: var(--primary);">Try Demo Login</a>
-      <a href="{{ url_for('register') }}" class="btn btn-secondary" style="background: transparent; color: #ffffff; border-color: rgba(255,255,255,0.4);">Register New User</a>
+<!-- INTERACTIVE APP PREVIEW STUDIO MODAL -->
+<div id="system-demo-modal" class="demo-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="demo-modal-title">
+  <div class="demo-modal-window">
+    <div class="demo-browser-bar">
+      <div class="window-dots" aria-hidden="true">
+        <span class="window-dot"></span>
+        <span class="window-dot"></span>
+        <span class="window-dot"></span>
+      </div>
+      <div class="demo-url-pill">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span id="demo-url-text">https://preview.pedromedina.dev</span>
+      </div>
+      <button type="button" id="demo-modal-close" class="icon-btn" style="width:36px; height:36px;" aria-label="Close interactive preview">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="demo-modal-scroll">
+      <div class="demo-head-split">
+        <div>
+          <span id="demo-modal-badge" class="mono-label">APP-01</span>
+          <h3 id="demo-modal-title" style="font-family:var(--font-display); font-size:1.5rem; font-weight:700; letter-spacing:-0.025em; margin-top:4px;">Application</h3>
+          <p id="demo-modal-desc" style="font-size:0.9375rem; color:var(--text-muted); margin-top:6px; max-width:60ch;"></p>
+        </div>
+        <button type="button" id="demo-copy-launcher" class="btn btn-secondary btn-sm">Copy Launcher</button>
+      </div>
+
+      <div id="demo-modal-stack" class="stack-tags"></div>
+
+      <!-- Interactive Live Sandbox Mount -->
+      <div id="demo-modal-workspace" class="demo-workspace-frame"></div>
     </div>
   </div>
-</section>
+</div>
 {% endblock %}
 
+{% block scripts %}
+<script type="module">
+  import { initArchitectural3D } from "{{ url_for('static', filename='js/architectural3d.js') }}";
+  import { initPortfolioDemos } from "{{ url_for('static', filename='js/portfolioDemos.js') }}";
+  initArchitectural3D('arch-3d-canvas');
+  initPortfolioDemos();
+</script>
+{% endblock %}
