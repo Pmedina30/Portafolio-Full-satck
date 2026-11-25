@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TiendaRD — Cross-Border Marketplace (USA → República Dominicana)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #FFFFFF; --surface: #F8FAFC; --elevated: #F1F5F9; --card: #FFFFFF;
+      --ink: #09090B; --muted: #52525B; --border: #E4E4E7;
+      --cta: #09090B; --cta-fg: #FFFFFF; --brand: #2563EB; --ok: #059669; --warn: #D97706;
+    }
+    html.dark {
+      --bg: #09090B; --surface: #111113; --elevated: #18181B; --card: #111113;
+      --ink: #FAFAFA; --muted: #A1A1AA; --border: rgba(255,255,255,0.08);
+      --cta: #FAFAFA; --cta-fg: #09090B; --brand: #3B82F6; --ok: #34D399; --warn: #FBBF24;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+    .tnum { font-variant-numeric: tabular-nums; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+    header { position: sticky; top: 0; z-index: 40; height: 64px; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .nav { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 1.05rem; letter-spacing: -0.03em; }
+    .badge-mark { width: 30px; height: 30px; border-radius: 8px; background: var(--cta); color: var(--cta-fg); display: grid; place-items: center; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; }
+    .tabs { display: flex; gap: 6px; }
+    .tab-btn { min-height: 38px; padding: 0 16px; border-radius: 999px; border: 1px solid transparent; background: transparent; color: var(--muted); font-weight: 500; font-size: 0.875rem; cursor: pointer; }
+    .tab-btn.active { background: var(--surface); color: var(--ink); border-color: var(--border); font-weight: 600; }
+    .btn { min-height: 42px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--ink); font-weight: 600; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary { background: var(--cta); color: var(--cta-fg); border-color: var(--cta); }
+    .hero { padding: 48px 0 36px; display: grid; grid-template-columns: 7fr 5fr; gap: 32px; align-items: center; }
+    .h1 { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800; letter-spacing: -0.035em; line-height: 1.06; margin: 14px 0; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--muted); }
+    .calc-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; }
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+    .input { width: 100%; min-height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--ink); font-size: 0.9rem; }
+    .products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 24px 0 64px; }
+    .p-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px; }
+    .p-visual { height: 140px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--muted); }
+    .timeline { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; margin: 24px 0 64px; display: none; }
+    .step { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    @media (max-width: 900px) { .hero, .products { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand"><span class="badge-mark">RD</span><span>TiendaRD</span></div>
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchView('store', this)">Catálogo USA</button>
+        <button class="tab-btn" onclick="switchView('track', this)">Rastreo DGA (#TRD-1002)</button>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn tnum" id="currBtn" onclick="toggleCurrency()">DOP (RD$)</button>
+        <button class="btn" onclick="document.documentElement.classList.toggle('dark')">Tema</button>
+        <button class="btn btn-primary tnum" id="cartCountBtn">Carrito (0)</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="storeView">
+      <section class="hero">
+        <div>
+          <span class="pill">EXENCIÓN ADUANAL DGA &lt; $200 USD · ENVÍO AÉREO 48–72H</span>
+          <h1 class="h1">Compra en EE. UU. y recibe directo en Santo Domingo sin cargos ocultos.</h1>
+          <p style="color:var(--muted); max-width:54ch; margin-bottom:24px;">Liquidación automática de flete por libra con EPS, BM Cargo y Domex, verificando en tiempo real el límite libre de impuestos de la Dirección General de Aduanas.</p>
+        </div>
+
+        <div class="calc-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong style="font-family:'Plus Jakarta Sans',sans-serif;">Calculadora DGA &amp; Flete</strong>
+            <span id="dgaStatus" class="pill" style="color:var(--ok);">EXENTO DGA</span>
+          </div>
+          <div class="field-grid">
+            <div>
+              <label style="font-size:0.75rem; color:var(--muted);">Valor FOB (USD)</label>
+              <input id="fobInput" class="input tnum" type="number" value="169" min="1" oninput="calcDga()" />
+            </div>
+            <div>
+              <label style="font-size:0.75rem; color:var(--muted);">Peso Estimado (lbs)</label>
+              <input id="lbsInput" class="input tnum" type="number" value="2.5" min="0.5" step="0.5" oninput="calcDga()" />
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px;">
+            <div style="padding:12px; border-radius:10px; background:var(--surface); border:1px solid var(--border);">
+              <div style="font-size:0.7rem; color:var(--muted);">Flete Aéreo</div>
+              <strong id="outFreight" class="tnum">RD$ 875</strong>
+            </div>
+            <div style="padding:12px; border-radius:10px; background:var(--surface); border:1px solid var(--border);">
+              <div style="font-size:0.7rem; color:var(--muted);">Arancel + ITBIS</div>
+              <strong id="outTax" class="tnum">RD$ 0</strong>
+            </div>
+            <div style="padding:12px; border-radius:10px; background:var(--surface); border:1px solid var(--border);">
+              <div style="font-size:0.7rem; color:var(--muted);">Total Puesto SDQ</div>
+              <strong id="outTotal" class="tnum">RD$ 11,015</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="products" id="catalogGrid"></section>
+    </div>
+
+    <section id="trackView" class="timeline">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <div>
+          <span class="pill">ORDEN #TRD-2026-1002 · COURIER EPS EXPRESS</span>
+          <h2 style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1.5rem; margin-top:8px;">En tránsito hacia Piantini, Santo Domingo</h2>
+        </div>
+        <span class="pill" style="color:var(--ok);">DGA LIBERADO ($184.00 USD)</span>
+      </div>
+      <div class="step"><span>01 · Recibido en almacén Miami (Doral, FL)</span><span class="tnum" style="color:var(--muted);">Completado · 08:14 AM</span></div>
+      <div class="step"><span>02 · Vuelo de carga MIA → SDQ (AILA Las Américas)</span><span class="tnum" style="color:var(--muted);">Completado · 02:40 PM</span></div>
+      <div class="step"><span>03 · Validación Exención Ley 4027 DGA (&lt; $200 USD)</span><span class="tnum" style="color:var(--ok);">Aprobado sin impuestos</span></div>
+      <div class="step" style="border:none;"><span>04 · Reparto última milla Santo Domingo</span><span class="tnum" style="color:var(--brand);">En ruta · Entrega Hoy</span></div>
+    </section>
+  </main>
+
+  <script>
+    const ITEMS = [
+      { sku: 'BS-65W', name: 'Baseus Blade HD 100W Power Bank', usd: 89, lbs: 1.4, tag: 'DGA EXEMPT · MIAMI STOCK' },
+      { sku: 'AP-PRO2', name: 'Apple AirPods Pro (2nd Gen USB-C)', usd: 189, lbs: 0.6, tag: 'DGA EXEMPT · FREE DUTY' },
+      { sku: 'KEY-Q1', name: 'Keychron K2 Pro Wireless Mechanical', usd: 119, lbs: 2.8, tag: 'DGA EXEMPT · EXPRESS' },
+      { sku: 'SNY-XM5', name: 'Sony WH-1000XM5 Studio Headphones', usd: 328, lbs: 1.8, tag: 'INCLUYE LIQUIDACIÓN DGA' },
+      { sku: 'ANK-737', name: 'Anker Prime 140W GaN Charger', usd: 94, lbs: 0.9, tag: 'DGA EXEMPT · MIAMI STOCK' },
+      { sku: 'LOG-MX3', name: 'Logitech MX Master 3S Performance', usd: 99, lbs: 0.8, tag: 'DGA EXEMPT · EXPRESS' }
+    ];
+    let inDop = true, cart = 0;
+    function fmt(usd) { return inDop ? `RD$ ${Math.round(usd * 60).toLocaleString()}` : `$${usd.toFixed(2)} USD`; }
+    function renderCatalog() {
+      document.getElementById('catalogGrid').innerHTML = ITEMS.map(p => `
+        <div class="p-card">
+          <div>
+            <div class="p-visual">${p.sku} · ${p.lbs} lb</div>
+            <div style="margin-top:12px; font-size:0.7rem; font-family:'JetBrains Mono',monospace; color:var(--ok);">${p.tag}</div>
+            <h3 style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1.05rem; margin-top:4px;">${p.name}</h3>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding-top:12px; border-top:1px solid var(--border);">
+            <strong class="tnum" style="font-size:1.15rem;">${fmt(p.usd)}</strong>
+            <button class="btn btn-primary" onclick="addCart()">Agregar</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    function toggleCurrency() {
+      inDop = !inDop;
+      document.getElementById('currBtn').textContent = inDop ? 'DOP (RD$)' : 'USD ($)';
+      renderCatalog();
+    }
+    function addCart() {
+      cart++;
+      document.getElementById('cartCountBtn').textContent = `Carrito (${cart})`;
+    }
+    function calcDga() {
+      const usd = Math.max(1, Number(document.getElementById('fobInput').value) || 0);
+      const lbs = Math.max(0.5, Number(document.getElementById('lbsInput').value) || 1);
+      const freight = Math.round(lbs * 350);
+      const exempt = usd <= 200;
+      const tax = exempt ? 0 : Math.round(usd * 60 * 0.18);
+      const total = Math.round(usd * 60) + freight + tax;
+      document.getElementById('outFreight').textContent = `RD$ ${freight.toLocaleString()}`;
+      document.getElementById('outTax').textContent = `RD$ ${tax.toLocaleString()}`;
+      document.getElementById('outTotal').textContent = `RD$ ${total.toLocaleString()}`;
+      const st = document.getElementById('dgaStatus');
+      st.textContent = exempt ? 'EXENTO DGA (<= $200)' : 'APLICA ARANCEL (> $200)';
+      st.style.color = exempt ? 'var(--ok)' : 'var(--warn)';
+    }
+    function switchView(v, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('storeView').style.display = v === 'store' ? 'block' : 'none';
+      document.getElementById('trackView').style.display = v === 'track' ? 'block' : 'none';
+    }
+    renderCatalog();
+    calcDga();
+  </script>
+</body>
+</html>

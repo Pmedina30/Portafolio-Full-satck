@@ -7,9 +7,9 @@ export const PORTFOLIO_APPS = [
     name: 'TiendaRD Marketplace',
     category: 'fintech',
     badge: 'E-COMMERCE & LOGISTICS',
-    url: 'https://tiendard.pedromedina.dev',
+    url: 'http://127.0.0.1:3000',
     launcher: 'run_tiendard.bat',
-    port: 'localhost:3000',
+    port: '127.0.0.1:3000',
     stack: ['Next.js 15', 'React 19', 'Prisma', 'Zustand'],
     desc: 'Cross-border USA to Dominican Republic marketplace with real-time air freight and DGA $200 USD customs exemption engine.',
     previewHtml: `
@@ -32,9 +32,9 @@ export const PORTFOLIO_APPS = [
     name: 'ApexLend FinTech',
     category: 'fintech',
     badge: 'INSTITUTIONAL LENDING',
-    url: 'https://apexlend.pedromedina.dev',
+    url: 'http://127.0.0.1:5181',
     launcher: 'run_apexlend.bat',
-    port: 'localhost:5181',
+    port: '127.0.0.1:5181',
     stack: ['React 18', 'TypeScript', 'Tailwind CSS'],
     desc: 'Precision credit underwriting and instant loan amortization studio inspired by Wise and Lightspark.',
     previewHtml: `
@@ -55,9 +55,9 @@ export const PORTFOLIO_APPS = [
     name: 'FinPulse & Mobile Wallet',
     category: 'fintech',
     badge: 'MULTI-CURRENCY FINTECH',
-    url: 'https://finpulse.pedromedina.dev',
+    url: 'http://127.0.0.1:5179',
     launcher: 'run_finpulse_frontend.bat',
-    port: 'localhost:5183',
+    port: '127.0.0.1:5179',
     stack: ['React 18', 'Flutter / Dart', 'FX Telemetry'],
     desc: 'Revolut & Wise-inspired multi-currency treasury dashboard and companion Flutter mobile wallet with instant FX conversion.',
     previewHtml: `
@@ -85,9 +85,9 @@ export const PORTFOLIO_APPS = [
     name: 'Executive BI Studio',
     category: 'analytics',
     badge: 'PRODUCT & OPS ANALYTICS',
-    url: 'https://bi-studio.pedromedina.dev',
+    url: 'http://127.0.0.1:5184',
     launcher: 'run_executive_studio.bat',
-    port: 'localhost:5180',
+    port: '127.0.0.1:5184',
     stack: ['React 18', 'TypeScript', 'DAX Kernel', 'SheetJS'],
     desc: 'Mixpanel-grade executive intelligence platform computing aviation OTP, healthcare SLA compliance, and CSV/XLSX models in <12ms.',
     previewHtml: `
@@ -112,9 +112,9 @@ export const PORTFOLIO_APPS = [
     name: 'OmniPOS Terminal',
     category: 'fintech',
     badge: 'OFFLINE-FIRST POS',
-    url: 'https://omnipos.pedromedina.dev',
+    url: 'http://127.0.0.1:3001',
     launcher: 'run_omnipos.bat',
-    port: 'localhost:5176',
+    port: '127.0.0.1:3001',
     stack: ['React 18', 'IndexedDB', '80mm Thermal'],
     desc: 'Zero-downtime retail point-of-sale terminal with IndexedDB offline queue, ITBIS 18% tax engine, and 80mm receipt generation.',
     previewHtml: `
@@ -135,9 +135,9 @@ export const PORTFOLIO_APPS = [
     name: 'ColmadoPro Suite',
     category: 'fintech',
     badge: 'RETAIL & INVENTORY',
-    url: 'https://colmadopro.pedromedina.dev',
+    url: 'http://127.0.0.1:5175',
     launcher: 'run_colmado.bat',
-    port: 'localhost:5175',
+    port: '127.0.0.1:5175',
     stack: ['React 18', 'Firestore', 'Recharts', 'Tailwind'],
     desc: 'Commercial inventory, margin analytics, and fast checkout suite for Dominican retail stores with dual cloud/local sync.',
     previewHtml: `
@@ -161,9 +161,9 @@ export const PORTFOLIO_APPS = [
     name: 'taxi. Operations SDQ',
     category: 'analytics',
     badge: 'GEOSPATIAL DISPATCH',
-    url: 'https://taxi-ops.pedromedina.dev',
+    url: 'http://127.0.0.1:5182',
     launcher: 'run_taxi.bat',
-    port: 'localhost:5182',
+    port: '127.0.0.1:5182',
     stack: ['React 18', 'TypeScript', 'Google Maps', 'PostGIS'],
     desc: 'Real-time urban mobility & dispatch command center tracking 310+ active drivers across Santo Domingo.',
     previewHtml: `
@@ -184,9 +184,9 @@ export const PORTFOLIO_APPS = [
     name: 'CVForge Studio',
     category: 'studio3d',
     badge: 'SAAS DOCUMENT ENGINE',
-    url: 'https://cvforge.pedromedina.dev',
+    url: 'http://127.0.0.1:5180',
     launcher: 'run_cvforge_studio.bat',
-    port: 'localhost:5178',
+    port: '127.0.0.1:5180',
     stack: ['React 18', 'Framer Motion', 'PayPal SDK', 'Supabase'],
     desc: 'Executive resume publishing platform with real-time split editor, Swiss/Cupertino templates, and 300 DPI vector A4 export.',
     previewHtml: `
@@ -208,9 +208,9 @@ export const PORTFOLIO_APPS = [
     name: 'NEXUS-01 3D Studio',
     category: 'studio3d',
     badge: 'WEBGL PBR SHOWCASE',
-    url: 'https://nexus3d.pedromedina.dev',
+    url: 'http://127.0.0.1:5174',
     launcher: 'run_nexus.bat',
-    port: 'localhost:5174',
+    port: '127.0.0.1:5174',
     stack: ['React 18', 'Three.js PBR', 'Web Audio API'],
     desc: 'Hardware product launch experience featuring scroll-driven exploded 3D views, studio lighting, and real-time PBR finishes.',
     previewHtml: `
@@ -235,9 +235,9 @@ export const PORTFOLIO_APPS = [
     name: 'CosmosLens 3D',
     category: 'studio3d',
     badge: 'SPATIAL TELEMETRY',
-    url: 'https://cosmoslens.pedromedina.dev',
+    url: 'http://127.0.0.1:5176',
     launcher: 'run_cosmoslens.bat',
-    port: 'localhost:5179',
+    port: '127.0.0.1:5176',
     stack: ['React 18', 'Three.js Shaders', 'Framer Motion'],
     desc: 'Interactive orbital mechanics and spatial shader visualizer with multi-ring coordinate tracking.',
     previewHtml: `
@@ -258,9 +258,9 @@ export const PORTFOLIO_APPS = [
     name: 'Portfolio Monograph SPA',
     category: 'studio3d',
     badge: 'REACT + THREE.JS',
-    url: 'https://pedromedina.dev',
+    url: 'http://127.0.0.1:5177',
     launcher: 'run_portfolio.bat',
-    port: 'localhost:5177',
+    port: '127.0.0.1:5177',
     stack: ['React 18', 'TypeScript', 'Three.js', 'Cmd+K'],
     desc: 'Standalone React/TypeScript architectural monograph with Cmd+K command palette, bilingual EN/ES switch, and 3D monolith.',
     previewHtml: `
@@ -281,9 +281,9 @@ export const PORTFOLIO_APPS = [
     name: 'SmileCraft Clinical',
     category: 'infra',
     badge: 'HEALTHCARE SAAS',
-    url: 'https://smilecraft.pedromedina.dev',
+    url: 'http://127.0.0.1:5173',
     launcher: 'run_dental.bat',
-    port: 'localhost:5173',
+    port: '127.0.0.1:5173',
     stack: ['React 18', 'Python Flask', 'SQLite', 'JWT'],
     desc: 'Full-stack dental practice management platform with role-based JWT security, specialist scheduling, and treatment quotes.',
     previewHtml: `
@@ -304,10 +304,10 @@ export const PORTFOLIO_APPS = [
     name: 'PulseOps & PyStack Core',
     category: 'infra',
     badge: 'INFRASTRUCTURE & AUTH',
-    url: 'http://127.0.0.1:5000',
+    url: 'http://127.0.0.1:5178',
     launcher: 'run_pulseops_frontend.bat',
-    port: '127.0.0.1:5000',
-    stack: ['Python Flask', 'SQLite', 'PBKDF2-SHA256'],
+    port: '127.0.0.1:5178',
+    stack: ['React 18', 'Python Flask', 'PBKDF2-SHA256'],
     desc: 'Observability and cryptographic authentication core featuring HTTP header hardening, incident SLA tracking, and sub-12ms latency.',
     previewHtml: `
       <div class="preview-chrome-bar"><span>CLUSTER STATUS</span><span class="preview-pill-ok">99.98% SLA</span></div>
@@ -774,6 +774,8 @@ export function initPortfolioDemos() {
     const app = PORTFOLIO_APPS.find((a) => a.slug === slug);
     if (!app) return;
     document.getElementById('demo-url-text').textContent = app.url;
+    const liveLink = document.getElementById('demo-open-live-link');
+    if (liveLink) liveLink.href = app.url;
     document.getElementById('demo-modal-badge').textContent = `${app.id} · ${app.badge}`;
     document.getElementById('demo-modal-title').textContent = app.name;
     document.getElementById('demo-modal-desc').textContent = app.desc;
